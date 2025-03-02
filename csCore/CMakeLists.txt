@@ -22,7 +22,7 @@ cs_target_sources(csCore
 
 cs_target_link_libraries(csCore
 	INTERFACE
-		csCoreLib::csCoreLibBaseInclude
+		csCoreLib::csCoreLib_csCMakeDefault
 )
 
 cs_install_target(csCore csCore DEFAULT)
