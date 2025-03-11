@@ -32,16 +32,18 @@ function(csAssertGenerateProject PROJECT_NAME)
     set(P_DEBUG "${${PROJECT_NAME}_CS_ASSERT_LEVEL_CONFIG_DEBUG}") # helper variable
     set(CS_ASSERT_LEVEL "$<$<CONFIG:Debug>:${P_DEBUG}>$<$<CONFIG:Release>:${P_RELEASE}>")
 
-    # first, configure a file in build directory
+    # first, configure a file in a common directory
+    cs_get_generate_folder_common(COMMON_FOLDER)
     configure_file(
     "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/../templates/ProjectAssert.hpp.in"
-    "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Assert.hpp.in"
+    "${COMMON_FOLDER}/${PROJECT_NAME}Assert.hpp.in"
     )
 
     # then generate, to resolve generator expression according to the specific config
+    cs_get_generate_folder_config(SPECIFIC_FOLDER)
     file(GENERATE
-    OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Assert.hpp"
-    INPUT "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Assert.hpp.in"
+    OUTPUT "${SPECIFIC_FOLDER}/${PROJECT_NAME}Assert.hpp"
+    INPUT "${COMMON_FOLDER}/${PROJECT_NAME}Assert.hpp.in"
     )
 
 
