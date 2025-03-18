@@ -14,6 +14,7 @@ cs_target_sources(assert
 cs_target_link_libraries(assert
 	INTERFACE
 		csCoreLib::csCoreLib_csCMakeBaseInclude
+		csCoreLib::csCoreLib_csCMakeCompileOptionsDefault
 		libassert::assert
 )
 

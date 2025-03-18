@@ -6,15 +6,8 @@ include(csCMake)
 
 cs_initialize_project(csCoreLib)
 
-# create a project assert include
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/csCore/assert/cmake/")
-include(csAssert)
-csAssertGenerateProject(csCore)
-
 # add libs, executables, etc
-add_subdirectory(csCore/assert)
-add_subdirectory(csCore/core)
-# add_subdirectory(...)
+add_subdirectory(csCore)
 
 # remember to add this at the end of the main cmake file
 cs_finalize_project(csCore)
