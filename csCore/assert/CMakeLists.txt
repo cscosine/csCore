@@ -18,6 +18,15 @@ cs_target_link_libraries(assert
 		libassert::assert
 )
 
+# install the cmake file to be available for client libraries
+set(SOURCE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/csAssert.cmake)
+set(DEST_PATH ${CMAKE_INSTALL_PREFIX}/cmake/csCore/assert)
+install(FILES ${SOURCE_PATH} DESTINATION ${DEST_PATH})
+# installe the template file
+set(SOURCE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/ProjectAssert.hpp.in)
+set(DEST_PATH ${CMAKE_INSTALL_PREFIX}/cmake/csCore/assert/templates)
+install(FILES ${SOURCE_PATH} DESTINATION ${DEST_PATH})
+
 # install to a non default component assert
 cs_install_target(assert assert)
 

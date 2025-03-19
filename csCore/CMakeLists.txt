@@ -4,6 +4,7 @@ project(csCoreMain LANGUAGES CXX)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/assert/cmake/")
 include(csAssert)
 csAssertGenerateProject(csCore csCore) #generate target csCore::csCoreAssert
+list(POP_BACK CMAKE_MODULE_PATH)
 
 # add libs, executables, etc
 add_subdirectory(assert)

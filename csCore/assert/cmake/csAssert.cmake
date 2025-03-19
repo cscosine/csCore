@@ -12,7 +12,7 @@ function(_csCreateDefineEnabledName CS_ASSERT_PROJECT_NAME DEFINE_TOPIC DEFINE_N
     set(${OUTPUT_NAME} ${FULL_NAME} PARENT_SCOPE)
 endfunction()
 
-function(csAssertDefaultOnForConfig PROJECT_NAME DEFINE_TOPIC DEFINE_NAME CONFIG)
+function(_csAssertDefaultOnForConfig PROJECT_NAME DEFINE_TOPIC DEFINE_NAME CONFIG)
     string(TOUPPER ${PROJECT_NAME} CS_ASSERT_PROJECT_NAME)
     set(${CS_ASSERT_PROJECT_NAME}_${DEFINE_TOPIC}_${DEFINE_NAME}_CONFIG_${CONFIG}_DEFAULT ON PARENT_SCOPE)
 endfunction()
@@ -23,14 +23,14 @@ function(csAssertGenerateProject PROJECT_NAME TARGET_NAMESPACE)
     # define default values mapping for different build types
 
     # in Debug enable DEBUG and DEFENSIVE
-    csAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT DEBUG Debug)
-    csAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT DEFENSIVE Debug)
-    csAssertDefaultOnForConfig(${PROJECT_NAME} CONTRACT DEBUG Debug)
-    csAssertDefaultOnForConfig(${PROJECT_NAME} CONTRACT DEFENSIVE Debug)
+    _csAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT DEBUG Debug)
+    _csAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT DEFENSIVE Debug)
+    _csAssertDefaultOnForConfig(${PROJECT_NAME} CONTRACT DEBUG Debug)
+    _csAssertDefaultOnForConfig(${PROJECT_NAME} CONTRACT DEFENSIVE Debug)
 
     # in RelWithDebInfo enable DEBUG only
-    csAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT DEBUG RelWithDebInfo)
-    csAssertDefaultOnForConfig(${PROJECT_NAME} CONTRACT DEBUG RelWithDebInfo)
+    _csAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT DEBUG RelWithDebInfo)
+    _csAssertDefaultOnForConfig(${PROJECT_NAME} CONTRACT DEBUG RelWithDebInfo)
 
     # no default enablement in other cases (e.g. Release)
 
@@ -122,7 +122,7 @@ function(csAssertGenerateProject PROJECT_NAME TARGET_NAMESPACE)
         # first, configure a file in a common directory
         cs_get_generate_folder_common(COMMON_FOLDER)
         configure_file(
-          "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/../templates/ProjectAssert.hpp.in"
+          "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/templates/ProjectAssert.hpp.in"
           "${COMMON_FOLDER}/${PROJECT_NAME}Assert.hpp.in"
         )
 
@@ -157,7 +157,7 @@ function(csAssertGenerateProject PROJECT_NAME TARGET_NAMESPACE)
         # finally, configure the file directly, no need for intermediate generators
         cs_get_generate_folder_config(SPECIFIC_FOLDER)
         configure_file(
-          "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/../templates/ProjectAssert.hpp.in"
+          "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/templates/ProjectAssert.hpp.in"
           "${SPECIFIC_FOLDER}/${CURRENT_RELATIVE_PATH}/${PROJECT_NAME}Assert.hpp"
         )
 
