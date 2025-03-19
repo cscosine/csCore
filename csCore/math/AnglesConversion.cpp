@@ -14,13 +14,17 @@
 namespace csCore {
     namespace math {
 
-        template <class T> T degToRad(T in) {
+        template <class T, class RetType = T> 
+        std::enable_if_t<csCore::core::is_float32_or_64_t<T>::value, RetType>
+        degToRad(T in) {
             CSCORE_CONTRACT_DEFENSIVE(std::isfinite(in));
 
             return in * static_cast<T>(M_PI) / static_cast<T>(180.0);
         }
 
-        template <class T> T radToDeg(T in) {
+        template <class T, class RetType = T> 
+        std::enable_if_t<csCore::core::is_float32_or_64_t<T>::value, RetType>
+        radToDeg(T in) {
             CSCORE_CONTRACT_DEFENSIVE(std::isfinite(in));
 
             return in / static_cast<T>(M_PI) * static_cast<T>(180.0);

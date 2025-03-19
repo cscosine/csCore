@@ -1,9 +1,10 @@
 #include <catch2/catch_all.hpp>
+#include <libassert/assert-catch2.hpp>
 
 #include <csCore/math/AnglesConversion.hpp>
 #include <csCore/core/BasicTypes.hpp>
 
-#include <Eigen/Core>
+#include <csCore/csCoreAssert.hpp>
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -15,7 +16,7 @@ namespace math {
   
 TEMPLATE_TEST_CASE("Angles Conversion", "[math]", float32_t, float64_t) {
     using S = TestType;
-    S const PRECISION = Eigen::NumTraits<S>::dummy_precision();
+    S const PRECISION = std::numeric_limits<S>::epsilon() * 10.0;
 
     REQUIRE_THAT(degToRad<S>(-450), Catch::Matchers::WithinAbs(-5.0 * M_PI / 2.0, PRECISION));
     REQUIRE_THAT(degToRad<S>(-360), Catch::Matchers::WithinAbs(-2.0 * M_PI, PRECISION));
@@ -45,9 +46,13 @@ TEMPLATE_TEST_CASE("Angles Conversion", "[math]", float32_t, float64_t) {
 
 TEMPLATE_TEST_CASE("Angles Conversion Contracts", "[math]", float32_t, float64_t) {
     using S = TestType;
-    S const PRECISION = Eigen::NumTraits<S>::dummy_precision();
 
-    radToDeg<S>(std::numeric_limits<S>::quiet_NaN());
+    #ifdef CSCORE_CONTRACT_DEFENSIVE_ENABLED
+    REQUIRE_ASSERT(radToDeg<S>(std::numeric_limits<S>::quiet_NaN()));
+    #endif
+
+    // radToDeg<int>(90); //does not compile
+    // radToDeg(90); //does not compile
 
 }
 

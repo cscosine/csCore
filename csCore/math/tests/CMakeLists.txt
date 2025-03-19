@@ -1,12 +1,11 @@
 project(mathTest  LANGUAGES CXX)
 
 cs_add_executable(mathTest)
+cs_find_package(assert PUBLIC libassert REQUIRED CONFIG)
 
 include(CTest)
 cs_find_package(mathTest PUBLIC Catch2 3 REQUIRED CONFIG)
 include(Catch)
-
-cs_find_package(mathTest PUBLIC Eigen3 REQUIRED CONFIG)
 
 cs_target_sources(mathTest 
 	PRIVATE
@@ -19,7 +18,8 @@ cs_target_link_libraries(mathTest
   csCoreLib::csCoreLib_csCMakeBaseInclude
   csCoreLib::csCoreLib_csCMakeCompileOptionsDefault
   Catch2::Catch2WithMain
-  Eigen3::Eigen)
+  libassert::assert
+)
   
 # add to tests
 catch_discover_tests(mathTest)
