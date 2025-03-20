@@ -11,10 +11,9 @@ cs_target_sources(core
 
 cs_target_link_libraries(core
 	INTERFACE
-		csCoreLib::csCoreLib_csCMakeBaseInclude
-		csCoreLib::csCoreLib_csCMakeCompileOptionsDefault
+		csCore::csCore
 )
 
-cs_install_target(core core DEFAULT)
+cs_install_target(core core)
 
 cs_finalize_target(core)

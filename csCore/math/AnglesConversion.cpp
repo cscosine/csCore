@@ -2,8 +2,6 @@
 
 #include <csCore/core/BasicTypes.hpp>
 
-#include <csCore/csCoreAssert.hpp>
-
 #include <type_traits>
 
 #define _USE_MATH_DEFINES

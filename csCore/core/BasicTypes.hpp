@@ -1,4 +1,5 @@
 #pragma once
+#include <csCore/csCore.hpp>
 
 #include <type_traits>
 

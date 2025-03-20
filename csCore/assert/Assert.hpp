@@ -1,4 +1,6 @@
 #pragma once
+#include <csCore/csCore.hpp>
+
 #include <libassert/assert.hpp>
 
 // just a overload of libassert defines

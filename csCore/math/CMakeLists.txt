@@ -12,12 +12,8 @@ cs_target_sources(math
 
 cs_target_link_libraries(math
 	PUBLIC
-		csCoreLib::csCoreLib_csCMakeBaseInclude
-		csCoreLib::csCoreLib_csCMakeCompileOptionsDefault
-	PRIVATE
-		csCore::csCoreAssert
 		csCore::core
-)
+	)
 
 add_subdirectory(tests)
 

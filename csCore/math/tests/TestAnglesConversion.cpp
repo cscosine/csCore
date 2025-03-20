@@ -4,7 +4,7 @@
 #include <csCore/math/AnglesConversion.hpp>
 #include <csCore/core/BasicTypes.hpp>
 
-#include <csCore/csCoreAssert.hpp>
+#include <csCore/csCore.hpp>
 
 #define _USE_MATH_DEFINES
 #include <math.h>

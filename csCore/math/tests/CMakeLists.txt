@@ -15,8 +15,6 @@ cs_target_sources(mathTest
 cs_target_link_libraries(mathTest 
   PRIVATE 
   csCore::math 
-  csCoreLib::csCoreLib_csCMakeBaseInclude
-  csCoreLib::csCoreLib_csCMakeCompileOptionsDefault
   Catch2::Catch2WithMain
   libassert::assert
 )
