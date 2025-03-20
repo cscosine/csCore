@@ -45,9 +45,9 @@ TEMPLATE_TEST_CASE("Angles Conversion", "[math]", float32_t, float64_t) {
 }
 
 TEMPLATE_TEST_CASE("Angles Conversion Contracts", "[math]", float32_t, float64_t) {
-    using S = TestType;
-
+    
     #ifdef CSCORE_CONTRACT_DEFENSIVE_ENABLED
+    using S = TestType;
     REQUIRE_ASSERT(radToDeg<S>(std::numeric_limits<S>::quiet_NaN()));
     #endif
 

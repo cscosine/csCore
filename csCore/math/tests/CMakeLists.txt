@@ -7,6 +7,9 @@ include(CTest)
 cs_find_package(mathTest PUBLIC Catch2 3 REQUIRED CONFIG)
 include(Catch)
 
+# add /Zc:preprocessor
+target_compile_options(mathTest PUBLIC "$<$<CXX_COMPILER_ID:MSVC>:/Zc:preprocessor>")  
+
 cs_target_sources(mathTest 
 	PRIVATE
   TestAnglesConversion.cpp
