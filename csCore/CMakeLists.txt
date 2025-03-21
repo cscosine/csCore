@@ -10,14 +10,12 @@ cs_add_library(csCore INTERFACE)
 cs_add_library(csCore::csCore ALIAS csCore)
 
 cs_target_sources(csCore
-	PRIVATE_INSTALL 
-        csCore.hpp
+	PRIVATE_INSTALL         
 	PRIVATE
-    )
+)
 
 cs_target_link_libraries(csCore
 	INTERFACE
-        csCore::csCoreAssert
 		csCoreLib::csCoreLib_csCMakeBaseInclude
 		csCoreLib::csCoreLib_csCMakeCompileOptionsDefault
 )

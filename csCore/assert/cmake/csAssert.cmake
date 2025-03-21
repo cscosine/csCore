@@ -19,6 +19,7 @@ endfunction()
 
 function(csAssertGenerateProject PROJECT_NAME TARGET_NAMESPACE)
     string(TOUPPER ${PROJECT_NAME} CS_ASSERT_PROJECT_NAME)
+    set(CS_ASSERT_PROJECT_NAME_NOCAPS ${PROJECT_NAME})
 
     # define default values mapping for different build types
 
@@ -93,8 +94,11 @@ function(csAssertGenerateProject PROJECT_NAME TARGET_NAMESPACE)
     endif()
 
     # finally, generate the header file
+    set(HEADER_DEFINITIONS "")
     if(GENERATOR_IS_MULTI_CONFIG)
-        
+    
+        set(HEADER_DEFINITIONS "// Header generated for MULTI CONFIG generator, CONFIG is $<CONFIG>\n\n")
+    
         # multi config, create all single variables and add a default level based on the default defined above,
         foreach(DEFINE_TOPIC ${DEFINE_TOPICS})
             foreach(DEFINE_NAME ${DEFINE_NAMES})
@@ -102,21 +106,26 @@ function(csAssertGenerateProject PROJECT_NAME TARGET_NAMESPACE)
                 _csCreateDefineEnabledName(${CS_ASSERT_PROJECT_NAME} ${DEFINE_TOPIC} ${DEFINE_NAME} DEFINE_FULL_NAME)
                 set(ENABLED_DEFINE "#define ${DEFINE_FULL_NAME}")
                 set(NOT_ENABLED_DEFINE "// #define ${DEFINE_FULL_NAME}")
+                
+                set(ENABLED_DEFINE_VALUE "#define ${DEFINE_FULL_NAME}_VALUE")
 
                 set(EXPRESSION "")
+                set(EXPRESSION_VALUE "")
                 foreach(CONFIG_TYPE ${CMAKE_CONFIGURATION_TYPES})
 
                     if(${${DEFINE_FULL_NAME}_CONFIG_${CONFIG_TYPE}})
                         set(EXPRESSION "${EXPRESSION}$<$<CONFIG:${CONFIG_TYPE}>:${ENABLED_DEFINE}>")
+                        set(EXPRESSION_VALUE "${EXPRESSION_VALUE}$<$<CONFIG:${CONFIG_TYPE}>:${ENABLED_DEFINE_VALUE} true>")
                     else()
                         set(EXPRESSION "${EXPRESSION}$<$<CONFIG:${CONFIG_TYPE}>:${NOT_ENABLED_DEFINE}>")
+                        set(EXPRESSION_VALUE "${EXPRESSION_VALUE}$<$<CONFIG:${CONFIG_TYPE}>:${ENABLED_DEFINE_VALUE} false>")
                     endif()
 
                     
                 endforeach()
-                set(HEADER_DEFINITIONS "${HEADER_DEFINITIONS}\n${EXPRESSION}")
+                set(HEADER_DEFINITIONS "${HEADER_DEFINITIONS}\n${EXPRESSION}\n${EXPRESSION_VALUE}\n")
             endforeach()
-            set(HEADER_DEFINITIONS "${HEADER_DEFINITIONS}\n\n")
+            set(HEADER_DEFINITIONS "${HEADER_DEFINITIONS}\n")
         endforeach()
 
         # first, configure a file in a common directory
@@ -138,20 +147,24 @@ function(csAssertGenerateProject PROJECT_NAME TARGET_NAMESPACE)
 
     else()
         # text to be written in the header file, with all the definitions in place
-        set(HEADER_DEFINITIONS "")
+        set(HEADER_DEFINITIONS "// Header generated for SINGLE CONFIG generator, CONFIG is ${CMAKE_BUILD_TYPE}\n\n")
         foreach(DEFINE_TOPIC ${DEFINE_TOPICS})
             foreach(DEFINE_NAME ${DEFINE_NAMES})
                 _csCreateDefineEnabledName(${CS_ASSERT_PROJECT_NAME} ${DEFINE_TOPIC} ${DEFINE_NAME} DEFINE_FULL_NAME)
                 set(ENABLED_DEFINE "#define ${DEFINE_FULL_NAME}")
                 set(NOT_ENABLED_DEFINE "// #define ${DEFINE_FULL_NAME}")
 
+                set(ENABLED_DEFINE_VALUE "#define ${DEFINE_FULL_NAME}_VALUE")
+
                 if(${${DEFINE_FULL_NAME}})
                     set(HEADER_DEFINITIONS "${HEADER_DEFINITIONS}\n${ENABLED_DEFINE}")
+                    set(HEADER_DEFINITIONS "${HEADER_DEFINITIONS}\n${ENABLED_DEFINE_VALUE} true\n")
                 else()
                     set(HEADER_DEFINITIONS "${HEADER_DEFINITIONS}\n${NOT_ENABLED_DEFINE}")
+                    set(HEADER_DEFINITIONS "${HEADER_DEFINITIONS}\n${ENABLED_DEFINE_VALUE} false\n")
                 endif()
             endforeach()
-            set(HEADER_DEFINITIONS "${HEADER_DEFINITIONS}\n\n")
+            set(HEADER_DEFINITIONS "${HEADER_DEFINITIONS}\n")
         endforeach()
 
         # finally, configure the file directly, no need for intermediate generators

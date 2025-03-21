@@ -3,8 +3,7 @@
 
 #include <csCore/math/AnglesConversion.hpp>
 #include <csCore/core/BasicTypes.hpp>
-
-#include <csCore/csCore.hpp>
+#include <csCore/csCoreAssert.hpp>
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -46,10 +45,10 @@ TEMPLATE_TEST_CASE("Angles Conversion", "[math]", float32_t, float64_t) {
 
 TEMPLATE_TEST_CASE("Angles Conversion Contracts", "[math]", float32_t, float64_t) {
     
-    #ifdef CSCORE_CONTRACT_DEFENSIVE_ENABLED
-    using S = TestType;
-    REQUIRE_ASSERT(radToDeg<S>(std::numeric_limits<S>::quiet_NaN()));
-    #endif
+    if(csCoreAsserts::isAssertDebugEnabled()) {
+      using S = TestType;
+      REQUIRE_ASSERT(radToDeg<S>(std::numeric_limits<S>::quiet_NaN()));  
+    }
 
     // radToDeg<int>(90); //does not compile
     // radToDeg(90); //does not compile

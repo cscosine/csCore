@@ -13,6 +13,7 @@ cs_target_sources(math
 cs_target_link_libraries(math
 	PUBLIC
 		csCore::core
+		csCore::csCoreAssert
 	)
 
 add_subdirectory(tests)

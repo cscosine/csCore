@@ -1,6 +1,4 @@
 #pragma once
-#include <csCore/csCore.hpp>
-
 #include <csCore/core/BasicTypes.hpp>
 
 namespace csCore {
