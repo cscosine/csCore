@@ -1,5 +1,4 @@
-#include <catch2/catch_all.hpp>
-#include <libassert/assert-catch2.hpp>
+#include <csCore/testUtils/AssertCatch2.hpp>
 
 #include <csCore/math/AnglesConversion.hpp>
 #include <csCore/core/BasicTypes.hpp>
