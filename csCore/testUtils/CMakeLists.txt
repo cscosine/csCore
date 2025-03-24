@@ -12,14 +12,15 @@ cs_target_sources(testUtils
 	PRIVATE
     )
 
+# add /Zc:preprocessor
+target_compile_options(testUtils INTERFACE /Zc:preprocessor)  
+
 cs_target_link_libraries(testUtils
 	INTERFACE
 	csCore::csCore
 	libassert::assert
+	Catch2::Catch2
 )
-
-# add /Zc:preprocessor
-target_compile_options(testUtils INTERFACE "$<$<CXX_COMPILER_ID:MSVC>:/Zc:preprocessor>")  
 
 # install to a non default component assert
 cs_install_target(testUtils testUtils)
