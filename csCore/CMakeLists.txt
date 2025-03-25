@@ -27,6 +27,6 @@ cs_finalize_target(csCore)
 # add libs, executables, etc
 add_subdirectory(assert)
 add_subdirectory(core)
-add_subdirectory(math)
 add_subdirectory(testUtils)
+add_subdirectory(math)
 # add_subdirectory(...)

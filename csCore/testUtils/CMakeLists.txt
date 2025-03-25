@@ -1,7 +1,7 @@
 project(testUtils LANGUAGES CXX)
 
 cs_add_library(testUtils INTERFACE)
-cs_add_library(csCore::testUtils ALIAS assert)
+cs_add_library(csCore::testUtils ALIAS testUtils)
 
 cs_find_package(testUtils PUBLIC libassert REQUIRED CONFIG)
 cs_find_package(testUtils PUBLIC Catch2 3 REQUIRED CONFIG)
