@@ -13,7 +13,7 @@ cs_target_sources(testUtils
     )
 
 # add /Zc:preprocessor
-target_compile_options(testUtils INTERFACE /Zc:preprocessor)  
+target_compile_options(testUtils INTERFACE "$<$<CXX_COMPILER_ID:MSVC>:/Zc:preprocessor>")  
 
 cs_target_link_libraries(testUtils
 	INTERFACE
