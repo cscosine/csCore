@@ -14,7 +14,8 @@ cs_target_sources(eigenUtilsTest
 
 cs_target_link_libraries(eigenUtilsTest 
   PRIVATE 
-  csCore::math 
+  csCore::core
+  csCore::eigenUtils 
   csCore::testUtils
   Catch2::Catch2WithMain
 )
