@@ -5,9 +5,9 @@ cs_add_library(csCore::math ALIAS math)
 
 cs_target_sources(math 
 	PRIVATE_INSTALL 
-		AnglesConversion.hpp
+		Angles.hpp
 	PRIVATE
-		AnglesConversion.cpp
+		Angles.cpp
     )
 
 cs_target_link_libraries(math

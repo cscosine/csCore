@@ -8,7 +8,7 @@ include(Catch)
 
 cs_target_sources(mathTest 
 	PRIVATE
-  TestAnglesConversion.cpp
+  TestAngles.cpp
 )
 
 cs_target_link_libraries(mathTest 
