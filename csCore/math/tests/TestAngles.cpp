@@ -69,7 +69,7 @@ TEMPLATE_TEST_CASE("Angles Conversion", "[math]", float32_t, float64_t) {
 
 TEMPLATE_TEST_CASE("Angles Conversion Contracts", "[math]", float32_t, float64_t) {
     
-    if(csCoreAsserts::isAssertDebugEnabled()) {
+    if(csCoreAsserts::isAssertDefensiveEnabled()) {
       using S = TestType;
       REQUIRE_ASSERT(radToDeg<S>(std::numeric_limits<S>::quiet_NaN()));  
 
