@@ -8,12 +8,15 @@ cs_initialize_project(csCoreLib
     # add the default configurations supported by this project
     DEFAULT_CONFIG Debug
     DEFAULT_CONFIG Release
-    DEFAULT_CONFIG RelWithDebInfo
+    DEFAULT_CONFIG_MAPPED RelWithDebInfo MAPPED_TO "RelWithDebInfo,Release,"
     # and the custom configurations supported by this project, 
     # specifiying on which base configuration they are based as second value, 
     # e.g. CUSTOM_CONFIG Paranoid Debug
     CUSTOM_CONFIG Paranoid BASED_ON "Debug,Release," POSTFIX "dp"
 )
+
+  set(CMAKE_MAP_IMPORTED_CONFIG_RELWITHDEBINFO "Release;" CACHE STRING "value for custom build CMAKE_MAP_IMPORTED_CONFIG_RELWITHDEBINFO" FORCE)
+
 
 # add libs, executables, etc
 add_subdirectory(csCore)
