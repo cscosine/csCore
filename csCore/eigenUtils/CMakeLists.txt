@@ -1,6 +1,6 @@
 project(eigenUtils LANGUAGES CXX)
 
-cs_add_library(eigenUtils STATIC)
+cs_add_library(eigenUtils INTERFACE)
 cs_add_library(csCore::eigenUtils ALIAS eigenUtils)
 
 cs_find_package(eigenUtils PUBLIC Eigen3 REQUIRED CONFIG)
@@ -8,14 +8,14 @@ cs_find_package(eigenUtils PUBLIC Eigen3 REQUIRED CONFIG)
 cs_target_sources(eigenUtils 
 	PRIVATE_INSTALL 
 		MatrixShape.hpp
+		MatrixShape_impl.hpp
 		RotationMatrix.hpp
+		RotationMatrix_impl.hpp
 	PRIVATE
-		MatrixShape.hpp
-		RotationMatrix.cpp
     )
 
 cs_target_link_libraries(eigenUtils
-	PUBLIC
+	INTERFACE
 		csCore::core
 		csCore::csCoreAssert
 		Eigen3::Eigen

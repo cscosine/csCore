@@ -1,6 +1,6 @@
 #include <csCore/testUtils/AssertCatch2.hpp>
 
-#include <csCore/eigenUtils/MatrixShape.hpp>
+#include <csCore/eigenUtils/MatrixShape_impl.hpp>
 #include <csCore/csCoreAssert.hpp>
 
 #include <csCore/core/BasicTypes.hpp>
