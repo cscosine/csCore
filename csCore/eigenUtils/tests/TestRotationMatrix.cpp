@@ -27,7 +27,7 @@ namespace eigenUtils {
     REQUIRE(isValidRotationMatrix2D(rI, 10.0));
 
     // contracts
-    if(csCoreAsserts::isAssertDebugEnabled()) {
+    if(csCore::Asserts::isAssertStandardEnabled()) {
       REQUIRE_ASSERT(isValidRotationMatrix2D(rI, -10.0));
       REQUIRE_ASSERT(isValidRotationMatrix2D(Eigen::MatrixX<S>(3,3)));
     }

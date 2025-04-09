@@ -24,29 +24,35 @@ function(csAssertGenerateProject PROJECT_NAME TARGET_NAMESPACE)
 
     # define default values mapping for different (standard) build types
 
-    # in Debug enable DEBUG and DEFENSIVE
-    csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT DEBUG Debug ON)
+    # in Release enable only LITE
+    csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT LITE Release ON)
+    csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT STANDARD Release OFF)
+    csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT DEFENSIVE Release OFF)
+    csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT PARANOID Release OFF)
+    csSetAssertDefaultOnForConfig(${PROJECT_NAME} CONTRACT LITE Release ON)
+    csSetAssertDefaultOnForConfig(${PROJECT_NAME} CONTRACT STANDARD Release OFF)
+    csSetAssertDefaultOnForConfig(${PROJECT_NAME} CONTRACT DEFENSIVE Release OFF)
+    csSetAssertDefaultOnForConfig(${PROJECT_NAME} CONTRACT PARANOID Release OFF)
+
+    # in Debug enable LITE, STANDARD and DEFENSIVE
+    csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT LITE Debug ON)
+    csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT STANDARD Debug ON)
     csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT DEFENSIVE Debug ON)
     csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT PARANOID Debug OFF)
-    csSetAssertDefaultOnForConfig(${PROJECT_NAME} CONTRACT DEBUG Debug ON)
+    csSetAssertDefaultOnForConfig(${PROJECT_NAME} CONTRACT LITE Debug ON)
+    csSetAssertDefaultOnForConfig(${PROJECT_NAME} CONTRACT STANDARD Debug ON)
     csSetAssertDefaultOnForConfig(${PROJECT_NAME} CONTRACT DEFENSIVE Debug ON)
     csSetAssertDefaultOnForConfig(${PROJECT_NAME} CONTRACT PARANOID Debug OFF)
 
-    # in RelWithDebInfo enable DEBUG only
-    csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT DEBUG RelWithDebInfo ON)
+    # in RelWithDebInfo enable LITE and STANDARD
+    csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT LITE RelWithDebInfo ON)
+    csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT STANDARD RelWithDebInfo ON)
     csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT DEFENSIVE RelWithDebInfo OFF)
     csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT PARANOID RelWithDebInfo OFF)
-    csSetAssertDefaultOnForConfig(${PROJECT_NAME} CONTRACT DEBUG RelWithDebInfo ON)
+    csSetAssertDefaultOnForConfig(${PROJECT_NAME} CONTRACT LITE RelWithDebInfo ON)
+    csSetAssertDefaultOnForConfig(${PROJECT_NAME} CONTRACT STANDARD RelWithDebInfo ON)
     csSetAssertDefaultOnForConfig(${PROJECT_NAME} CONTRACT DEFENSIVE RelWithDebInfo OFF)
     csSetAssertDefaultOnForConfig(${PROJECT_NAME} CONTRACT PARANOID RelWithDebInfo OFF)
-
-    # no default enablement for release
-    csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT DEBUG Release OFF)
-    csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT DEFENSIVE Release OFF)
-    csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT PARANOID Release OFF)
-    csSetAssertDefaultOnForConfig(${PROJECT_NAME} CONTRACT DEBUG Release OFF)
-    csSetAssertDefaultOnForConfig(${PROJECT_NAME} CONTRACT DEFENSIVE Release OFF)
-    csSetAssertDefaultOnForConfig(${PROJECT_NAME} CONTRACT PARANOID Release OFF)
 
     # get the relative path to the cmake source dir
     SET(CURRENT_RELATIVE_PATH ${CMAKE_CURRENT_SOURCE_DIR})
@@ -54,7 +60,7 @@ function(csAssertGenerateProject PROJECT_NAME TARGET_NAMESPACE)
 
     # lists to loop on
     set(DEFINE_TOPICS ASSERT CONTRACT)
-    set(DEFINE_NAMES DEBUG DEFENSIVE PARANOID)
+    set(DEFINE_NAMES LITE STANDARD DEFENSIVE PARANOID)
 
     get_property(GENERATOR_IS_MULTI_CONFIG GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
 
@@ -109,7 +115,7 @@ function(csAssertGenerateProject PROJECT_NAME TARGET_NAMESPACE)
     # finally, generate the header file(s)
 
     # need to configure the file with the project name 
-    set(CS_ASSERT_PROJECT_NAME_NOCAPS ${PROJECT_NAME})
+    set(CS_ASSERT_NAMESPACE ${PROJECT_NAME})
 
     set(HEADER_DEFINITIONS "")
     if(GENERATOR_IS_MULTI_CONFIG)

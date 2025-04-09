@@ -8,40 +8,62 @@
 
 @HEADER_DEFINITIONS@
 
-class @CS_ASSERT_PROJECT_NAME_NOCAPS@Asserts {
-public:
-  static constexpr bool isAssertDebugEnabled() {
-    return @CS_ASSERT_PROJECT_NAME@_ASSERT_DEBUG_ENABLED_VALUE;
-  }
-  static constexpr bool isAssertDefensiveEnabled() {
-    return @CS_ASSERT_PROJECT_NAME@_ASSERT_DEFENSIVE_ENABLED_VALUE;
-  }
-  static constexpr bool isAssertParanoidEnabled() {
-    return @CS_ASSERT_PROJECT_NAME@_ASSERT_PARANOID_ENABLED_VALUE;
-  }
+namespace @CS_ASSERT_NAMESPACE@ {
 
-  static constexpr bool isContractDebugEnabled() {
-    return @CS_ASSERT_PROJECT_NAME@_CONTRACT_DEBUG_ENABLED_VALUE;
-  }
-  static constexpr bool isContractDefensiveEnabled() {
-    return @CS_ASSERT_PROJECT_NAME@_CONTRACT_DEFENSIVE_ENABLED_VALUE;
-  }
-  static constexpr bool isContractParanoidEnabled() {
-    return @CS_ASSERT_PROJECT_NAME@_CONTRACT_PARANOID_ENABLED_VALUE;
-  }
+  class Asserts {
+    public:
+    static constexpr bool isAssertLiteEnabled() {
+      return @CS_ASSERT_PROJECT_NAME@_ASSERT_LITE_ENABLED_VALUE;
+    }
+    static constexpr bool isAssertStandardEnabled() {
+      return @CS_ASSERT_PROJECT_NAME@_ASSERT_STANDARD_ENABLED_VALUE;
+    }
+    static constexpr bool isAssertDefensiveEnabled() {
+      return @CS_ASSERT_PROJECT_NAME@_ASSERT_DEFENSIVE_ENABLED_VALUE;
+    }
+    static constexpr bool isAssertParanoidEnabled() {
+      return @CS_ASSERT_PROJECT_NAME@_ASSERT_PARANOID_ENABLED_VALUE;
+    }
+  
+    static constexpr bool isContractLiteEnabled() {
+      return @CS_ASSERT_PROJECT_NAME@_CONTRACT_LITE_ENABLED_VALUE;
+    }
+    static constexpr bool isContractStandardEnabled() {
+      return @CS_ASSERT_PROJECT_NAME@_CONTRACT_STANDARD_ENABLED_VALUE;
+    }
+    static constexpr bool isContractDefensiveEnabled() {
+      return @CS_ASSERT_PROJECT_NAME@_CONTRACT_DEFENSIVE_ENABLED_VALUE;
+    }
+    static constexpr bool isContractParanoidEnabled() {
+      return @CS_ASSERT_PROJECT_NAME@_CONTRACT_PARANOID_ENABLED_VALUE;
+    }
+    
+  };
 
-};
+}
 
 // define project assert and contracts macros
-#ifdef @CS_ASSERT_PROJECT_NAME@_ASSERT_DEBUG_ENABLED
-    #define @CS_ASSERT_PROJECT_NAME@_ASSERT_DEBUG(expr, ...) LIBASSERT_INVOKE(expr, "DEBUG_ASSERT", debug_assertion, , __VA_ARGS__)
+
+#ifdef @CS_ASSERT_PROJECT_NAME@_ASSERT_LITE_ENABLED
+    #define @CS_ASSERT_PROJECT_NAME@_ASSERT_LITE(expr, ...) LIBASSERT_INVOKE(expr, "DEBUG_ASSERT", debug_assertion, , __VA_ARGS__)
 #else
-    #define @CS_ASSERT_PROJECT_NAME@_ASSERT_DEBUG(expr, ...) (void)0
+    #define @CS_ASSERT_PROJECT_NAME@_ASSERT_LITE(expr, ...) (void)0
 #endif
-#ifdef @CS_ASSERT_PROJECT_NAME@_CONTRACT_DEBUG_ENABLED
-    #define @CS_ASSERT_PROJECT_NAME@_CONTRACT_DEBUG(expr, ...) LIBASSERT_INVOKE(expr, "DEBUG_ASSERT", debug_assertion, , __VA_ARGS__)
+#ifdef @CS_ASSERT_PROJECT_NAME@_CONTRACT_LITE_ENABLED
+    #define @CS_ASSERT_PROJECT_NAME@_CONTRACT_LITE(expr, ...) LIBASSERT_INVOKE(expr, "DEBUG_ASSERT", debug_assertion, , __VA_ARGS__)
 #else
-    #define @CS_ASSERT_PROJECT_NAME@_CONTRACT_DEBUG(expr, ...) (void)0
+    #define @CS_ASSERT_PROJECT_NAME@_CONTRACT_LITE(expr, ...) (void)0
+#endif
+
+#ifdef @CS_ASSERT_PROJECT_NAME@_ASSERT_STANDARD_ENABLED
+    #define @CS_ASSERT_PROJECT_NAME@_ASSERT_STANDARD(expr, ...) LIBASSERT_INVOKE(expr, "DEBUG_ASSERT", debug_assertion, , __VA_ARGS__)
+#else
+    #define @CS_ASSERT_PROJECT_NAME@_ASSERT_STANDARD(expr, ...) (void)0
+#endif
+#ifdef @CS_ASSERT_PROJECT_NAME@_CONTRACT_STANDARD_ENABLED
+    #define @CS_ASSERT_PROJECT_NAME@_CONTRACT_STANDARD(expr, ...) LIBASSERT_INVOKE(expr, "DEBUG_ASSERT", debug_assertion, , __VA_ARGS__)
+#else
+    #define @CS_ASSERT_PROJECT_NAME@_CONTRACT_STANDARD(expr, ...) (void)0
 #endif
 
 #ifdef @CS_ASSERT_PROJECT_NAME@_ASSERT_DEFENSIVE_ENABLED
