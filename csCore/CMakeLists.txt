@@ -3,6 +3,15 @@ project(csCore LANGUAGES CXX)
 # create a project assert include
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/assert/cmake/")
 include(csAssert)
+
+# set defaults for Paranoid additional configuration
+csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT DEBUG Paranoid ON)
+csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT DEFENSIVE Paranoid ON)
+csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT PARANOID Paranoid ON)
+csSetAssertDefaultOnForConfig(${PROJECT_NAME} CONTRACT DEBUG Paranoid ON)
+csSetAssertDefaultOnForConfig(${PROJECT_NAME} CONTRACT DEFENSIVE Paranoid ON)
+csSetAssertDefaultOnForConfig(${PROJECT_NAME} CONTRACT PARANOID Paranoid ON)
+
 csAssertGenerateProject(csCore csCore) #generate target csCore::csCoreAssert
 list(POP_BACK CMAKE_MODULE_PATH)
 

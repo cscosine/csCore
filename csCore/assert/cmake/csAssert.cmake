@@ -1,6 +1,8 @@
 include_guard(GLOBAL)
 include(GNUInstallDirs)
 
+# Important note: if you change the defaults of the assert values (eg csSetAssertDefaultOnForConfig) you need to remove the BUILD directory and build from scratch, otherwise the generated headers are not updated
+
 function(_csCreateDefineName CS_ASSERT_PROJECT_NAME DEFINE_TOPIC DEFINE_NAME OUTPUT_NAME)
     set(FULL_NAME "${CS_ASSERT_PROJECT_NAME}_${DEFINE_TOPIC}_${DEFINE_NAME}")
     set(${OUTPUT_NAME} ${FULL_NAME} PARENT_SCOPE)
@@ -12,28 +14,39 @@ function(_csCreateDefineEnabledName CS_ASSERT_PROJECT_NAME DEFINE_TOPIC DEFINE_N
     set(${OUTPUT_NAME} ${FULL_NAME} PARENT_SCOPE)
 endfunction()
 
-function(_csAssertDefaultOnForConfig PROJECT_NAME DEFINE_TOPIC DEFINE_NAME CONFIG)
+function(csSetAssertDefaultOnForConfig PROJECT_NAME DEFINE_TOPIC DEFINE_NAME CONFIG VALUE) 
     string(TOUPPER ${PROJECT_NAME} CS_ASSERT_PROJECT_NAME)
-    set(${CS_ASSERT_PROJECT_NAME}_${DEFINE_TOPIC}_${DEFINE_NAME}_CONFIG_${CONFIG}_DEFAULT ON PARENT_SCOPE)
+    set(${CS_ASSERT_PROJECT_NAME}_${DEFINE_TOPIC}_${DEFINE_NAME}_CONFIG_${CONFIG}_DEFAULT "${VALUE}" CACHE BOOL "${DEFINE_TOPIC} ${DEFINE_NAME} default value" FORCE)
 endfunction()
 
 function(csAssertGenerateProject PROJECT_NAME TARGET_NAMESPACE)
     string(TOUPPER ${PROJECT_NAME} CS_ASSERT_PROJECT_NAME)
-    set(CS_ASSERT_PROJECT_NAME_NOCAPS ${PROJECT_NAME})
 
-    # define default values mapping for different build types
+    # define default values mapping for different (standard) build types
 
     # in Debug enable DEBUG and DEFENSIVE
-    _csAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT DEBUG Debug)
-    _csAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT DEFENSIVE Debug)
-    _csAssertDefaultOnForConfig(${PROJECT_NAME} CONTRACT DEBUG Debug)
-    _csAssertDefaultOnForConfig(${PROJECT_NAME} CONTRACT DEFENSIVE Debug)
+    csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT DEBUG Debug ON)
+    csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT DEFENSIVE Debug ON)
+    csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT PARANOID Debug OFF)
+    csSetAssertDefaultOnForConfig(${PROJECT_NAME} CONTRACT DEBUG Debug ON)
+    csSetAssertDefaultOnForConfig(${PROJECT_NAME} CONTRACT DEFENSIVE Debug ON)
+    csSetAssertDefaultOnForConfig(${PROJECT_NAME} CONTRACT PARANOID Debug OFF)
 
     # in RelWithDebInfo enable DEBUG only
-    _csAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT DEBUG RelWithDebInfo)
-    _csAssertDefaultOnForConfig(${PROJECT_NAME} CONTRACT DEBUG RelWithDebInfo)
+    csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT DEBUG RelWithDebInfo ON)
+    csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT DEFENSIVE RelWithDebInfo OFF)
+    csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT PARANOID RelWithDebInfo OFF)
+    csSetAssertDefaultOnForConfig(${PROJECT_NAME} CONTRACT DEBUG RelWithDebInfo ON)
+    csSetAssertDefaultOnForConfig(${PROJECT_NAME} CONTRACT DEFENSIVE RelWithDebInfo OFF)
+    csSetAssertDefaultOnForConfig(${PROJECT_NAME} CONTRACT PARANOID RelWithDebInfo OFF)
 
-    # no default enablement in other cases (e.g. Release)
+    # no default enablement for release
+    csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT DEBUG Release OFF)
+    csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT DEFENSIVE Release OFF)
+    csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT PARANOID Release OFF)
+    csSetAssertDefaultOnForConfig(${PROJECT_NAME} CONTRACT DEBUG Release OFF)
+    csSetAssertDefaultOnForConfig(${PROJECT_NAME} CONTRACT DEFENSIVE Release OFF)
+    csSetAssertDefaultOnForConfig(${PROJECT_NAME} CONTRACT PARANOID Release OFF)
 
     # get the relative path to the cmake source dir
     SET(CURRENT_RELATIVE_PATH ${CMAKE_CURRENT_SOURCE_DIR})
@@ -55,14 +68,14 @@ function(csAssertGenerateProject PROJECT_NAME TARGET_NAMESPACE)
 
                 foreach(CONFIG_TYPE ${CMAKE_CONFIGURATION_TYPES})
 
-                    # retrieve default value (if any)
+                    # retrieve default value
                     _csCreateDefineName(${CS_ASSERT_PROJECT_NAME} ${DEFINE_TOPIC} ${DEFINE_NAME} DEFINE_BASE_NAME)
                     set(DEFAULT_VALUE_NAME "${DEFINE_BASE_NAME}_CONFIG_${CONFIG_TYPE}_DEFAULT")
 
-                    if(${DEFAULT_VALUE_NAME})
+                    if(DEFINED ${DEFAULT_VALUE_NAME})
                         set(DEFAULT_VALUE ${${DEFAULT_VALUE_NAME}})
                     else()
-                        set(DEFAULT_VALUE OFF)
+                        message(FATAL_ERROR "no default value for configuration ${CONFIG_TYPE}, variable ${DEFINE_BASE_NAME}_CONFIG_${CONFIG_TYPE}_DEFAULT does not exist, maybe you forgot to use csSetAssertDefaultOnForConfig for ${CONFIG_TYPE} before calling csAssertGenerateProject")
                     endif()
                     
                     # create a option in the cmake cache (configurable via GUI too)
@@ -93,7 +106,11 @@ function(csAssertGenerateProject PROJECT_NAME TARGET_NAMESPACE)
         endforeach()
     endif()
 
-    # finally, generate the header file
+    # finally, generate the header file(s)
+
+    # need to configure the file with the project name 
+    set(CS_ASSERT_PROJECT_NAME_NOCAPS ${PROJECT_NAME})
+
     set(HEADER_DEFINITIONS "")
     if(GENERATOR_IS_MULTI_CONFIG)
     

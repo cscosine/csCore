@@ -15,9 +15,6 @@ cs_initialize_project(csCoreLib
     CUSTOM_CONFIG Paranoid BASED_ON "Debug,Release," POSTFIX "dp"
 )
 
-  set(CMAKE_MAP_IMPORTED_CONFIG_RELWITHDEBINFO "Release;" CACHE STRING "value for custom build CMAKE_MAP_IMPORTED_CONFIG_RELWITHDEBINFO" FORCE)
-
-
 # add libs, executables, etc
 add_subdirectory(csCore)
 
