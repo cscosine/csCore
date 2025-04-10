@@ -51,7 +51,7 @@ namespace @CS_ASSERT_NAMESPACE@ {
     static constexpr bool isAssertSafeMathEnabled() {
       return @CS_ASSERT_PROJECT_NAME@_ASSERT_SAFE_MATH_ENABLED_VALUE;
     }
-      
+
   };
 
 }

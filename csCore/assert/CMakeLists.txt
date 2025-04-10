@@ -5,8 +5,8 @@ cs_add_library(csCore::assert ALIAS assert)
 
 cs_find_package(assert PUBLIC libassert REQUIRED CONFIG)
 
-cs_target_sources(assert 
-	PRIVATE_INSTALL 
+cs_target_sources(assert
+	PRIVATE_INSTALL
 		Assert.hpp
 	PRIVATE
     )

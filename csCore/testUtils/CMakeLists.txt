@@ -6,14 +6,14 @@ cs_add_library(csCore::testUtils ALIAS testUtils)
 cs_find_package(testUtils PUBLIC libassert REQUIRED CONFIG)
 cs_find_package(testUtils PUBLIC Catch2 3 REQUIRED CONFIG)
 
-cs_target_sources(testUtils 
-	PRIVATE_INSTALL 
+cs_target_sources(testUtils
+	PRIVATE_INSTALL
 		AssertCatch2.hpp
 	PRIVATE
     )
 
 # add /Zc:preprocessor
-target_compile_options(testUtils INTERFACE "$<$<CXX_COMPILER_ID:MSVC>:/Zc:preprocessor>")  
+target_compile_options(testUtils INTERFACE "$<$<CXX_COMPILER_ID:MSVC>:/Zc:preprocessor>")
 
 cs_target_link_libraries(testUtils
 	INTERFACE

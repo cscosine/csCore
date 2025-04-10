@@ -5,8 +5,8 @@ cs_add_library(csCore::eigenUtils ALIAS eigenUtils)
 
 cs_find_package(eigenUtils PUBLIC Eigen3 REQUIRED CONFIG)
 
-cs_target_sources(eigenUtils 
-	PRIVATE_INSTALL 
+cs_target_sources(eigenUtils
+	PRIVATE_INSTALL
 		MatrixShape.hpp
 		MatrixShape_impl.hpp
 		RotationMatrix.hpp

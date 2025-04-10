@@ -14,7 +14,7 @@ function(_csCreateDefineEnabledName CS_ASSERT_PROJECT_NAME DEFINE_TOPIC DEFINE_N
     set(${OUTPUT_NAME} ${FULL_NAME} PARENT_SCOPE)
 endfunction()
 
-function(csSetAssertDefaultOnForConfig PROJECT_NAME DEFINE_TOPIC DEFINE_NAME CONFIG VALUE) 
+function(csSetAssertDefaultOnForConfig PROJECT_NAME DEFINE_TOPIC DEFINE_NAME CONFIG VALUE)
     string(TOUPPER ${PROJECT_NAME} CS_ASSERT_PROJECT_NAME)
     set(${CS_ASSERT_PROJECT_NAME}_${DEFINE_TOPIC}_${DEFINE_NAME}_CONFIG_${CONFIG}_DEFAULT "${VALUE}" CACHE BOOL "${DEFINE_TOPIC} ${DEFINE_NAME} default value" FORCE)
 endfunction()
@@ -74,7 +74,7 @@ function(csAssertGenerateProject PROJECT_NAME TARGET_NAMESPACE)
                     else()
                         message(FATAL_ERROR "no default value for configuration ${CONFIG_TYPE}, variable ${DEFINE_BASE_NAME}_CONFIG_${CONFIG_TYPE}_DEFAULT does not exist, maybe you forgot to use csSetAssertDefaultOnForConfig for ${CONFIG_TYPE} before calling csAssertGenerateProject")
                     endif()
-                    
+
                     # create a option in the cmake cache (configurable via GUI too)
                     option(${DEFINE_FULL_NAME_ENABLED}_CONFIG_${CONFIG_TYPE} "enable definition of ${DEFINE_FULL_NAME_ENABLED} for config ${CONFIG_TYPE}" ${DEFAULT_VALUE})
                 endforeach()
@@ -96,7 +96,7 @@ function(csAssertGenerateProject PROJECT_NAME TARGET_NAMESPACE)
                 else()
                     set(DEFAULT_VALUE OFF)
                 endif()
-                
+
                 # create a option in the cmake cache (configurable via GUI too)
                 option(${DEFINE_FULL_NAME_ENABLED} "enable definition of ${DEFINE_FULL_NAME_ENABLED}" ${DEFAULT_VALUE})
             endforeach()
@@ -105,14 +105,14 @@ function(csAssertGenerateProject PROJECT_NAME TARGET_NAMESPACE)
 
     # finally, generate the header file(s)
 
-    # need to configure the file with the project name 
+    # need to configure the file with the project name
     set(CS_ASSERT_NAMESPACE ${PROJECT_NAME})
 
     set(HEADER_DEFINITIONS "")
     if(GENERATOR_IS_MULTI_CONFIG)
-    
+
         set(HEADER_DEFINITIONS "// Header generated for MULTI CONFIG generator, CONFIG is $<CONFIG>\n\n")
-    
+
         # multi config, create all single variables and add a default level based on the default defined above,
         foreach(DEFINE_TOPIC ${DEFINE_TOPICS})
             foreach(DEFINE_NAME ${DEFINE_NAMES})
@@ -120,7 +120,7 @@ function(csAssertGenerateProject PROJECT_NAME TARGET_NAMESPACE)
                 _csCreateDefineEnabledName(${CS_ASSERT_PROJECT_NAME} ${DEFINE_TOPIC} ${DEFINE_NAME} DEFINE_FULL_NAME)
                 set(ENABLED_DEFINE "#define ${DEFINE_FULL_NAME}")
                 set(NOT_ENABLED_DEFINE "// #define ${DEFINE_FULL_NAME}")
-                
+
                 set(ENABLED_DEFINE_VALUE "#define ${DEFINE_FULL_NAME}_VALUE")
 
                 set(EXPRESSION "")
@@ -135,7 +135,7 @@ function(csAssertGenerateProject PROJECT_NAME TARGET_NAMESPACE)
                         set(EXPRESSION_VALUE "${EXPRESSION_VALUE}$<$<CONFIG:${CONFIG_TYPE}>:${ENABLED_DEFINE_VALUE} false>")
                     endif()
 
-                    
+
                 endforeach()
                 set(HEADER_DEFINITIONS "${HEADER_DEFINITIONS}\n${EXPRESSION}\n${EXPRESSION_VALUE}\n")
             endforeach()
@@ -222,4 +222,3 @@ function(csAssertGenerateProject PROJECT_NAME TARGET_NAMESPACE)
     cs_finalize_target(${TARGET_NAME})
 
 endfunction()
-

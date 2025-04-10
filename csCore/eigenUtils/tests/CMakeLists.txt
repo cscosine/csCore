@@ -6,20 +6,20 @@ include(CTest)
 cs_find_package(eigenUtilsTest PUBLIC Catch2 3 REQUIRED CONFIG)
 include(Catch)
 
-cs_target_sources(eigenUtilsTest 
+cs_target_sources(eigenUtilsTest
 	PRIVATE
   TestMatrixShape.cpp
   TestRotationMatrix.cpp
 )
 
-cs_target_link_libraries(eigenUtilsTest 
-  PRIVATE 
+cs_target_link_libraries(eigenUtilsTest
+  PRIVATE
   csCore::core
-  csCore::eigenUtils 
+  csCore::eigenUtils
   csCore::testUtils
   Catch2::Catch2WithMain
 )
-  
+
 # add to tests
 catch_discover_tests(eigenUtilsTest DISCOVERY_MODE "PRE_TEST")
 

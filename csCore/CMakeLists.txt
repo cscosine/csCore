@@ -18,7 +18,7 @@ cs_add_library(csCore INTERFACE)
 cs_add_library(csCore::csCore ALIAS csCore)
 
 cs_target_sources(csCore
-	PRIVATE_INSTALL         
+	PRIVATE_INSTALL
 	PRIVATE
 )
 
