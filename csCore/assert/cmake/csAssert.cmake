@@ -29,38 +29,29 @@ function(csAssertGenerateProject PROJECT_NAME TARGET_NAMESPACE)
     csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT STANDARD Release OFF)
     csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT DEFENSIVE Release OFF)
     csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT PARANOID Release OFF)
-    csSetAssertDefaultOnForConfig(${PROJECT_NAME} CONTRACT LITE Release ON)
-    csSetAssertDefaultOnForConfig(${PROJECT_NAME} CONTRACT STANDARD Release OFF)
-    csSetAssertDefaultOnForConfig(${PROJECT_NAME} CONTRACT DEFENSIVE Release OFF)
-    csSetAssertDefaultOnForConfig(${PROJECT_NAME} CONTRACT PARANOID Release OFF)
+    csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT SAFE_MATH Release OFF)
 
     # in Debug enable LITE, STANDARD and DEFENSIVE
     csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT LITE Debug ON)
     csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT STANDARD Debug ON)
     csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT DEFENSIVE Debug ON)
     csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT PARANOID Debug OFF)
-    csSetAssertDefaultOnForConfig(${PROJECT_NAME} CONTRACT LITE Debug ON)
-    csSetAssertDefaultOnForConfig(${PROJECT_NAME} CONTRACT STANDARD Debug ON)
-    csSetAssertDefaultOnForConfig(${PROJECT_NAME} CONTRACT DEFENSIVE Debug ON)
-    csSetAssertDefaultOnForConfig(${PROJECT_NAME} CONTRACT PARANOID Debug OFF)
+    csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT SAFE_MATH Debug OFF)
 
     # in RelWithDebInfo enable LITE and STANDARD
     csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT LITE RelWithDebInfo ON)
     csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT STANDARD RelWithDebInfo ON)
     csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT DEFENSIVE RelWithDebInfo OFF)
     csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT PARANOID RelWithDebInfo OFF)
-    csSetAssertDefaultOnForConfig(${PROJECT_NAME} CONTRACT LITE RelWithDebInfo ON)
-    csSetAssertDefaultOnForConfig(${PROJECT_NAME} CONTRACT STANDARD RelWithDebInfo ON)
-    csSetAssertDefaultOnForConfig(${PROJECT_NAME} CONTRACT DEFENSIVE RelWithDebInfo OFF)
-    csSetAssertDefaultOnForConfig(${PROJECT_NAME} CONTRACT PARANOID RelWithDebInfo OFF)
+    csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT SAFE_MATH RelWithDebInfo OFF)
 
     # get the relative path to the cmake source dir
     SET(CURRENT_RELATIVE_PATH ${CMAKE_CURRENT_SOURCE_DIR})
     cmake_path(RELATIVE_PATH CURRENT_RELATIVE_PATH BASE_DIRECTORY ${CMAKE_SOURCE_DIR})
 
     # lists to loop on
-    set(DEFINE_TOPICS ASSERT CONTRACT)
-    set(DEFINE_NAMES LITE STANDARD DEFENSIVE PARANOID)
+    set(DEFINE_TOPICS ASSERT) # so far only ASSERT topic, but keep the list so that if we need to add a new topic (e.g. CONTRACTS) everything is already in place
+    set(DEFINE_NAMES LITE STANDARD DEFENSIVE PARANOID SAFE_MATH)
 
     get_property(GENERATOR_IS_MULTI_CONFIG GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
 

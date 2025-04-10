@@ -26,8 +26,8 @@ namespace eigenUtils {
     // change precision to a big value
     REQUIRE(isValidRotationMatrix2D(rI, 10.0));
 
-    // contracts
-    if(csCore::Asserts::isAssertStandardEnabled()) {
+    // input parameters asserts
+    if(csCore::Asserts::isAssertDefensiveEnabled()) {
       REQUIRE_ASSERT(isValidRotationMatrix2D(rI, -10.0));
       REQUIRE_ASSERT(isValidRotationMatrix2D(Eigen::MatrixX<S>(3,3)));
     }

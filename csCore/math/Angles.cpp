@@ -17,7 +17,7 @@ namespace csCore {
         template <class T, class RetType> 
         std::enable_if_t<csCore::core::is_float32_or_64_t<T>::value, RetType>
         degToRad(T in) {
-            CSCORE_CONTRACT_DEFENSIVE(std::isfinite(in));
+            CSCORE_ASSERT_SAFE_MATH(std::isfinite(in));
 
             return in * static_cast<T>(M_PI) / static_cast<T>(180.0);
         }
@@ -25,7 +25,7 @@ namespace csCore {
         template <class T, class RetType> 
         std::enable_if_t<csCore::core::is_float32_or_64_t<T>::value, RetType>
         radToDeg(T in) {
-            CSCORE_CONTRACT_DEFENSIVE(std::isfinite(in));
+            CSCORE_ASSERT_SAFE_MATH(std::isfinite(in));
 
             return in / static_cast<T>(M_PI) * static_cast<T>(180.0);
         }
@@ -33,7 +33,7 @@ namespace csCore {
         template <class T, class RetType> 
         std::enable_if_t<csCore::core::is_float32_or_64_t<T>::value, RetType>
         wrapToPi(T in) {
-            CSCORE_CONTRACT_DEFENSIVE(std::isfinite(in));
+            CSCORE_ASSERT_SAFE_MATH(std::isfinite(in));
 
             return std::atan2(std::sin(in), std::cos(in));
         }
@@ -41,8 +41,8 @@ namespace csCore {
         template <class T, class RetType> 
         std::enable_if_t<csCore::core::is_float32_or_64_t<T>::value, RetType>
         angleDistance(T reference, T target) {
-            CSCORE_CONTRACT_DEFENSIVE(std::isfinite(reference));
-            CSCORE_CONTRACT_DEFENSIVE(std::isfinite(target));
+            CSCORE_ASSERT_SAFE_MATH(std::isfinite(reference));
+            CSCORE_ASSERT_SAFE_MATH(std::isfinite(target));
 
             // equivalent to create R(a)^T * R(b) and then take the log, but without matrices
 

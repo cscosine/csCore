@@ -9,10 +9,7 @@ csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT LITE Paranoid ON)
 csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT STANDARD Paranoid ON)
 csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT DEFENSIVE Paranoid ON)
 csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT PARANOID Paranoid ON)
-csSetAssertDefaultOnForConfig(${PROJECT_NAME} CONTRACT LITE Paranoid ON)
-csSetAssertDefaultOnForConfig(${PROJECT_NAME} CONTRACT STANDARD Paranoid ON)
-csSetAssertDefaultOnForConfig(${PROJECT_NAME} CONTRACT DEFENSIVE Paranoid ON)
-csSetAssertDefaultOnForConfig(${PROJECT_NAME} CONTRACT PARANOID Paranoid ON)
+csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT SAFE_MATH Paranoid ON)
 
 csAssertGenerateProject(csCore csCore) #generate target csCore::csCoreAssert
 list(POP_BACK CMAKE_MODULE_PATH)

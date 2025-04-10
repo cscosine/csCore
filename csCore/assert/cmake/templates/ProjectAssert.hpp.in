@@ -6,28 +6,31 @@
 // Any manual edit will be overwritten at the next project configuration
 // ---------------------------------------------------------------------
 
-@HEADER_DEFINITIONS@
 // default enablement per configuration
-//                 | LITE | STANDARD | DEFENSIVE | PARANOID |
-// ----------------+------+----------+-----------+----------+
-// Release         | YES  |    NO    |     NO    |    NO    |
-// RelWithDebInfo  | YES  |   YES    |     NO    |    NO    |
-// Debug           | YES  |   YES    |    YES    |    NO    |
-// Paranoid        | YES  |   YES    |    YES    |    YES   |
+//                 | LITE | STANDARD | DEFENSIVE | PARANOID |  | SAFE_MATH |
+// ----------------+------+----------+-----------+----------+  + ----------|
+// Release         | YES  |    NO    |     NO    |    NO    |  |    NO     |
+// RelWithDebInfo  | YES  |   YES    |     NO    |    NO    |  |    NO     |
+// Debug           | YES  |   YES    |    YES    |    NO    |  |    NO     |
+// Paranoid        | YES  |   YES    |    YES    |    YES   |  |    YES    |
 // note(1): those values can be changed via CMake variables, this represents only the expected default configuration
 // note(2): Paranoid is not a standard configuration and needs to be added to the project supported configs
+// note(3): SAFE_MATH is a separate ASSERT which might be used by the user to explicitly check if a floating point variable / matrix is finite
+//            it is not enabled in any of the default configurations, but we reccomend to enable it in the Paranoid custom config
 
-// best practices / suggested use:
-// use LITE asserts and contracts for extremely low cost overhead checks, which you can accept in Release configs
-//    e.g., on a function with high computation time, add a CONTRACT_LITE on some input parameters is ok
+// -- best practices / suggested use --
+// use LITE asserts for extremely low cost overhead checks, which you can accept in Release configs
+//    e.g., on a function with high computation time, add a ASSERT_LITE on some input parameters is ok
 //          on a very small function this is discouraged, because it will affect runtime performances in release
-// use STANDARD asserts and contracts for middle cost overhead checks, which you can accept in RelWithDebInfo configs
+// use STANDARD asserts for middle cost overhead checks, which you can accept in RelWithDebInfo configs
 //    e.g., check the matrix size in input to a computationally expensive function
-// use DEFENSIVE asserts and contracts for high cost overhead checks, which you can accept in Debug configs
+// use DEFENSIVE asserts for high cost overhead checks, which you can accept in Debug configs
 //    e.g., check the matrix size in input to a non-computationally expensive function
 //    e.g., check if a matrix is a rotation matrix
-// use PARANOID asserts and contracts for extremely high cost overhead checks, which you can accept in Paranoid configs
+// use PARANOID asserts for extremely high cost overhead checks, which you can accept in Paranoid configs
 //    e.g., check if the vector used in a binary search is effectively sorted
+
+@HEADER_DEFINITIONS@
 
 namespace @CS_ASSERT_NAMESPACE@ {
 
@@ -45,35 +48,20 @@ namespace @CS_ASSERT_NAMESPACE@ {
     static constexpr bool isAssertParanoidEnabled() {
       return @CS_ASSERT_PROJECT_NAME@_ASSERT_PARANOID_ENABLED_VALUE;
     }
-  
-    static constexpr bool isContractLiteEnabled() {
-      return @CS_ASSERT_PROJECT_NAME@_CONTRACT_LITE_ENABLED_VALUE;
+    static constexpr bool isAssertSafeMathEnabled() {
+      return @CS_ASSERT_PROJECT_NAME@_ASSERT_SAFE_MATH_ENABLED_VALUE;
     }
-    static constexpr bool isContractStandardEnabled() {
-      return @CS_ASSERT_PROJECT_NAME@_CONTRACT_STANDARD_ENABLED_VALUE;
-    }
-    static constexpr bool isContractDefensiveEnabled() {
-      return @CS_ASSERT_PROJECT_NAME@_CONTRACT_DEFENSIVE_ENABLED_VALUE;
-    }
-    static constexpr bool isContractParanoidEnabled() {
-      return @CS_ASSERT_PROJECT_NAME@_CONTRACT_PARANOID_ENABLED_VALUE;
-    }
-    
+      
   };
 
 }
 
-// define project assert and contracts macros
+// define project assert macros
 
 #ifdef @CS_ASSERT_PROJECT_NAME@_ASSERT_LITE_ENABLED
     #define @CS_ASSERT_PROJECT_NAME@_ASSERT_LITE(expr, ...) LIBASSERT_INVOKE(expr, "DEBUG_ASSERT", debug_assertion, , __VA_ARGS__)
 #else
     #define @CS_ASSERT_PROJECT_NAME@_ASSERT_LITE(expr, ...) (void)0
-#endif
-#ifdef @CS_ASSERT_PROJECT_NAME@_CONTRACT_LITE_ENABLED
-    #define @CS_ASSERT_PROJECT_NAME@_CONTRACT_LITE(expr, ...) LIBASSERT_INVOKE(expr, "DEBUG_ASSERT", debug_assertion, , __VA_ARGS__)
-#else
-    #define @CS_ASSERT_PROJECT_NAME@_CONTRACT_LITE(expr, ...) (void)0
 #endif
 
 #ifdef @CS_ASSERT_PROJECT_NAME@_ASSERT_STANDARD_ENABLED
@@ -81,21 +69,11 @@ namespace @CS_ASSERT_NAMESPACE@ {
 #else
     #define @CS_ASSERT_PROJECT_NAME@_ASSERT_STANDARD(expr, ...) (void)0
 #endif
-#ifdef @CS_ASSERT_PROJECT_NAME@_CONTRACT_STANDARD_ENABLED
-    #define @CS_ASSERT_PROJECT_NAME@_CONTRACT_STANDARD(expr, ...) LIBASSERT_INVOKE(expr, "DEBUG_ASSERT", debug_assertion, , __VA_ARGS__)
-#else
-    #define @CS_ASSERT_PROJECT_NAME@_CONTRACT_STANDARD(expr, ...) (void)0
-#endif
 
 #ifdef @CS_ASSERT_PROJECT_NAME@_ASSERT_DEFENSIVE_ENABLED
     #define @CS_ASSERT_PROJECT_NAME@_ASSERT_DEFENSIVE(expr, ...) LIBASSERT_INVOKE(expr, "DEBUG_ASSERT", debug_assertion, , __VA_ARGS__)
 #else
     #define @CS_ASSERT_PROJECT_NAME@_ASSERT_DEFENSIVE(expr, ...) (void)0
-#endif
-#ifdef @CS_ASSERT_PROJECT_NAME@_CONTRACT_DEFENSIVE_ENABLED
-    #define @CS_ASSERT_PROJECT_NAME@_CONTRACT_DEFENSIVE(expr, ...) LIBASSERT_INVOKE(expr, "DEBUG_ASSERT", debug_assertion, , __VA_ARGS__)
-#else
-    #define @CS_ASSERT_PROJECT_NAME@_CONTRACT_DEFENSIVE(expr, ...) (void)0
 #endif
 
 #ifdef @CS_ASSERT_PROJECT_NAME@_ASSERT_PARANOID_ENABLED
@@ -104,9 +82,9 @@ namespace @CS_ASSERT_NAMESPACE@ {
     #define @CS_ASSERT_PROJECT_NAME@_ASSERT_PARANOID(expr, ...) (void)0
 #endif
 
-#ifdef @CS_ASSERT_PROJECT_NAME@_CONTRACT_PARANOID_ENABLED
-    #define @CS_ASSERT_PROJECT_NAME@_CONTRACT_PARANOID(expr, ...) LIBASSERT_INVOKE(expr, "DEBUG_ASSERT", debug_assertion, , __VA_ARGS__)
-#else
-    #define @CS_ASSERT_PROJECT_NAME@_CONTRACT_PARANOID(expr, ...) (void)0
-#endif
 
+#ifdef @CS_ASSERT_PROJECT_NAME@_ASSERT_SAFE_MATH_ENABLED
+    #define @CS_ASSERT_PROJECT_NAME@_ASSERT_SAFE_MATH(expr, ...) LIBASSERT_INVOKE(expr, "DEBUG_ASSERT", debug_assertion, , __VA_ARGS__)
+#else
+    #define @CS_ASSERT_PROJECT_NAME@_ASSERT_SAFE_MATH(expr, ...) (void)0
+#endif
