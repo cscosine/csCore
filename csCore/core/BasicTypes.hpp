@@ -6,8 +6,8 @@ using float64_t = double;
 
 namespace csCore {
 namespace core {
-template <class T>
 
+template <class T>
 struct is_float32_t
     : std::integral_constant<
           bool,
