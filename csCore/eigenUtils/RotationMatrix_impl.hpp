@@ -15,8 +15,8 @@ namespace csCore {
           using S = typename Derived::Scalar;
       
           using M22 = Eigen::Matrix<S, 2, 2>;
-          CSCORE_ASSERT_DEFENSIVE(precision >= static_cast<S>(0.0), "precision needs to be non negative");
-          CSCORE_ASSERT_DEFENSIVE(csCore::eigenUtils::isSameSizeStaticOrDynamic(rot, M22()), "rot required to be 2x2");
+          CSCORE_ASSERT_DEBUG(precision >= static_cast<S>(0.0), "precision needs to be non negative");
+          CSCORE_ASSERT_DEBUG(csCore::eigenUtils::isSameSizeStaticOrDynamic(rot, M22()), "rot required to be 2x2");
       
           S const det{rot.determinant()};
           if(std::abs(det - static_cast<S>(1.0)) >= precision) {

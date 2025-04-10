@@ -24,24 +24,24 @@ function(csAssertGenerateProject PROJECT_NAME TARGET_NAMESPACE)
 
     # define default values mapping for different (standard) build types
 
-    # in Release enable only LITE
-    csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT LITE Release ON)
-    csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT STANDARD Release OFF)
-    csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT DEFENSIVE Release OFF)
+    # in Release enable only RELEASE
+    csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT RELEASE Release ON)
+    csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT RELWITHDEBINFO Release OFF)
+    csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT DEBUG Release OFF)
     csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT PARANOID Release OFF)
     csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT SAFE_MATH Release OFF)
 
-    # in Debug enable LITE, STANDARD and DEFENSIVE
-    csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT LITE Debug ON)
-    csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT STANDARD Debug ON)
-    csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT DEFENSIVE Debug ON)
+    # in Debug enable RELEASE, RELWITHDEBINFO and DEBUG
+    csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT RELEASE Debug ON)
+    csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT RELWITHDEBINFO Debug ON)
+    csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT DEBUG Debug ON)
     csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT PARANOID Debug OFF)
     csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT SAFE_MATH Debug OFF)
 
-    # in RelWithDebInfo enable LITE and STANDARD
-    csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT LITE RelWithDebInfo ON)
-    csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT STANDARD RelWithDebInfo ON)
-    csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT DEFENSIVE RelWithDebInfo OFF)
+    # in RelWithDebInfo enable RELEASE and RELWITHDEBINFO
+    csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT RELEASE RelWithDebInfo ON)
+    csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT RELWITHDEBINFO RelWithDebInfo ON)
+    csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT DEBUG RelWithDebInfo OFF)
     csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT PARANOID RelWithDebInfo OFF)
     csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT SAFE_MATH RelWithDebInfo OFF)
 
@@ -51,7 +51,7 @@ function(csAssertGenerateProject PROJECT_NAME TARGET_NAMESPACE)
 
     # lists to loop on
     set(DEFINE_TOPICS ASSERT) # so far only ASSERT topic, but keep the list so that if we need to add a new topic (e.g. CONTRACTS) everything is already in place
-    set(DEFINE_NAMES LITE STANDARD DEFENSIVE PARANOID SAFE_MATH)
+    set(DEFINE_NAMES RELEASE RELWITHDEBINFO DEBUG PARANOID SAFE_MATH)
 
     get_property(GENERATOR_IS_MULTI_CONFIG GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
 

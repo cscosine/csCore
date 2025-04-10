@@ -7,24 +7,24 @@
 // ---------------------------------------------------------------------
 
 // default enablement per configuration
-//                 | LITE | STANDARD | DEFENSIVE | PARANOID |  | SAFE_MATH |
-// ----------------+------+----------+-----------+----------+  + ----------|
-// Release         | YES  |    NO    |     NO    |    NO    |  |    NO     |
-// RelWithDebInfo  | YES  |   YES    |     NO    |    NO    |  |    NO     |
-// Debug           | YES  |   YES    |    YES    |    NO    |  |    NO     |
-// Paranoid        | YES  |   YES    |    YES    |    YES   |  |    YES    |
+//                 | RELEASE | RELWITHDEBINFO | DEBUG | PARANOID |  | SAFE_MATH |
+// ----------------+---------+----------------+-------+----------+  + ----------|
+// Release         | YES     |    NO          |  NO   |    NO    |  |    NO     |
+// RelWithDebInfo  | YES     |   YES          |  NO   |    NO    |  |    NO     |
+// Debug           | YES     |   YES          | YES   |    NO    |  |    NO     |
+// Paranoid        | YES     |   YES          | YES   |    YES   |  |    YES    |
 // note(1): those values can be changed via CMake variables, this represents only the expected default configuration
 // note(2): Paranoid is not a standard configuration and needs to be added to the project supported configs
 // note(3): SAFE_MATH is a separate ASSERT which might be used by the user to explicitly check if a floating point variable / matrix is finite
 //            it is not enabled in any of the default configurations, but we reccomend to enable it in the Paranoid custom config
 
 // -- best practices / suggested use --
-// use LITE asserts for extremely low cost overhead checks, which you can accept in Release configs
-//    e.g., on a function with high computation time, add a ASSERT_LITE on some input parameters is ok
+// use RELEASE asserts for extremely low cost overhead checks, which you can accept in Release configs
+//    e.g., on a function with high computation time, add a ASSERT_RELEASE on some input parameters is ok
 //          on a very small function this is discouraged, because it will affect runtime performances in release
-// use STANDARD asserts for middle cost overhead checks, which you can accept in RelWithDebInfo configs
+// use RELWITHDEBINFO asserts for middle cost overhead checks, which you can accept in RelWithDebInfo configs
 //    e.g., check the matrix size in input to a computationally expensive function
-// use DEFENSIVE asserts for high cost overhead checks, which you can accept in Debug configs
+// use DEBUG asserts for high cost overhead checks, which you can accept in Debug configs
 //    e.g., check the matrix size in input to a non-computationally expensive function
 //    e.g., check if a matrix is a rotation matrix
 // use PARANOID asserts for extremely high cost overhead checks, which you can accept in Paranoid configs
@@ -36,14 +36,14 @@ namespace @CS_ASSERT_NAMESPACE@ {
 
   class Asserts {
     public:
-    static constexpr bool isAssertLiteEnabled() {
-      return @CS_ASSERT_PROJECT_NAME@_ASSERT_LITE_ENABLED_VALUE;
+    static constexpr bool isAssertReleaseEnabled() {
+      return @CS_ASSERT_PROJECT_NAME@_ASSERT_RELEASE_ENABLED_VALUE;
     }
-    static constexpr bool isAssertStandardEnabled() {
-      return @CS_ASSERT_PROJECT_NAME@_ASSERT_STANDARD_ENABLED_VALUE;
+    static constexpr bool isAssertRelWithDebInfoEnabled() {
+      return @CS_ASSERT_PROJECT_NAME@_ASSERT_RELWITHDEBINFO_ENABLED_VALUE;
     }
-    static constexpr bool isAssertDefensiveEnabled() {
-      return @CS_ASSERT_PROJECT_NAME@_ASSERT_DEFENSIVE_ENABLED_VALUE;
+    static constexpr bool isAssertDebugEnabled() {
+      return @CS_ASSERT_PROJECT_NAME@_ASSERT_DEBUG_ENABLED_VALUE;
     }
     static constexpr bool isAssertParanoidEnabled() {
       return @CS_ASSERT_PROJECT_NAME@_ASSERT_PARANOID_ENABLED_VALUE;
@@ -58,22 +58,22 @@ namespace @CS_ASSERT_NAMESPACE@ {
 
 // define project assert macros
 
-#ifdef @CS_ASSERT_PROJECT_NAME@_ASSERT_LITE_ENABLED
-    #define @CS_ASSERT_PROJECT_NAME@_ASSERT_LITE(expr, ...) LIBASSERT_INVOKE(expr, "DEBUG_ASSERT", debug_assertion, , __VA_ARGS__)
+#ifdef @CS_ASSERT_PROJECT_NAME@_ASSERT_RELEASE_ENABLED
+    #define @CS_ASSERT_PROJECT_NAME@_ASSERT_RELEASE(expr, ...) LIBASSERT_INVOKE(expr, "DEBUG_ASSERT", debug_assertion, , __VA_ARGS__)
 #else
-    #define @CS_ASSERT_PROJECT_NAME@_ASSERT_LITE(expr, ...) (void)0
+    #define @CS_ASSERT_PROJECT_NAME@_ASSERT_RELEASE(expr, ...) (void)0
 #endif
 
-#ifdef @CS_ASSERT_PROJECT_NAME@_ASSERT_STANDARD_ENABLED
-    #define @CS_ASSERT_PROJECT_NAME@_ASSERT_STANDARD(expr, ...) LIBASSERT_INVOKE(expr, "DEBUG_ASSERT", debug_assertion, , __VA_ARGS__)
+#ifdef @CS_ASSERT_PROJECT_NAME@_ASSERT_RELWITHDEBINFO_ENABLED
+    #define @CS_ASSERT_PROJECT_NAME@_ASSERT_RELWITHDEBINFO(expr, ...) LIBASSERT_INVOKE(expr, "DEBUG_ASSERT", debug_assertion, , __VA_ARGS__)
 #else
-    #define @CS_ASSERT_PROJECT_NAME@_ASSERT_STANDARD(expr, ...) (void)0
+    #define @CS_ASSERT_PROJECT_NAME@_ASSERT_RELWITHDEBINFO(expr, ...) (void)0
 #endif
 
-#ifdef @CS_ASSERT_PROJECT_NAME@_ASSERT_DEFENSIVE_ENABLED
-    #define @CS_ASSERT_PROJECT_NAME@_ASSERT_DEFENSIVE(expr, ...) LIBASSERT_INVOKE(expr, "DEBUG_ASSERT", debug_assertion, , __VA_ARGS__)
+#ifdef @CS_ASSERT_PROJECT_NAME@_ASSERT_DEBUG_ENABLED
+    #define @CS_ASSERT_PROJECT_NAME@_ASSERT_DEBUG(expr, ...) LIBASSERT_INVOKE(expr, "DEBUG_ASSERT", debug_assertion, , __VA_ARGS__)
 #else
-    #define @CS_ASSERT_PROJECT_NAME@_ASSERT_DEFENSIVE(expr, ...) (void)0
+    #define @CS_ASSERT_PROJECT_NAME@_ASSERT_DEBUG(expr, ...) (void)0
 #endif
 
 #ifdef @CS_ASSERT_PROJECT_NAME@_ASSERT_PARANOID_ENABLED
