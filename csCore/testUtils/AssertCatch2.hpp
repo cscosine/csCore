@@ -14,7 +14,7 @@
     } catch (const ::libassert::assertion_info& info) {               \
       did_assert = true;                                              \
       FAIL("Expected no assertion failure from " #expr                \
-           " however none happened");                                 \
+           " however it happened");                                   \
     }                                                                 \
     if (!did_assert) {                                                \
       SUCCEED();                                                      \
