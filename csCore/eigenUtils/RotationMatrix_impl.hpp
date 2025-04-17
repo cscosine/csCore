@@ -7,33 +7,55 @@
 namespace csCore {
 namespace eigenUtils {
 
-template <class Derived>
-bool isValidRotationMatrix2D(Eigen::MatrixBase<Derived> const& rot,
-                             typename Derived::Scalar precision) {
+namespace _private {
+template <Eigen::Index size, class Derived>
+bool isValidRotationMatrix(Eigen::MatrixBase<Derived> const& rot,
+                           typename Derived::Scalar precision) {
   using S = typename Derived::Scalar;
 
-  using M22 = Eigen::Matrix<S, 2, 2>;
   CSCORE_ASSERT_DEBUG(precision >= static_cast<S>(0.0),
                       "precision needs to be non negative");
-  CSCORE_ASSERT_DEBUG(csCore::eigenUtils::isSameSizeStaticOrDynamic(rot, M22()),
-                      "rot required to be 2x2");
 
   S const det{rot.determinant()};
+
   if (std::abs(det - static_cast<S>(1.0)) >= precision) {
     return false;
   }
 
-  if (!(rot * rot.transpose() - Eigen::Matrix2<S>::Identity())
+  if (!(rot * rot.transpose() - Eigen::Matrix<S, size, size>::Identity())
            .isZero(precision)) {
     return false;
   }
 
-  if (!(rot.transpose() * rot - Eigen::Matrix2<S>::Identity())
+  if (!(rot.transpose() * rot - Eigen::Matrix<S, size, size>::Identity())
            .isZero(precision)) {
     return false;
   }
-
   return true;
+}
+
+}  // namespace _private
+
+template <class Derived>
+bool isValidRotationMatrix2D(Eigen::MatrixBase<Derived> const& rot,
+                             typename Derived::Scalar precision) {
+  using S = typename Derived::Scalar;
+  using M22 = Eigen::Matrix<S, 2, 2>;
+  CSCORE_ASSERT_DEBUG(csCore::eigenUtils::isSameSizeStaticOrDynamic(rot, M22()),
+                      "rot required to be 2x2");
+
+  return _private::isValidRotationMatrix<2>(rot, precision);
+}
+
+template <class Derived>
+bool isValidRotationMatrix3D(Eigen::MatrixBase<Derived> const& rot,
+                             typename Derived::Scalar precision) {
+  using S = typename Derived::Scalar;
+  using M33 = Eigen::Matrix<S, 3, 3>;
+  CSCORE_ASSERT_DEBUG(csCore::eigenUtils::isSameSizeStaticOrDynamic(rot, M33()),
+                      "rot required to be 2x2");
+
+  return _private::isValidRotationMatrix<3>(rot, precision);
 }
 
 }  // namespace eigenUtils
