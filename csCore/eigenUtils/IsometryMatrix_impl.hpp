@@ -18,7 +18,7 @@ bool isValidIsometryMatrix(Eigen::MatrixBase<Derived> const& transf,
                       "precision needs to be non negative");
 
   bool const validRot = _private::isValidRotationMatrix<size>(
-      transf.template block<size, size>(0, 0), precision);
+      transf.template topLeftCorner<size, size>(), precision);
 
   if (!validRot) {
     return false;
