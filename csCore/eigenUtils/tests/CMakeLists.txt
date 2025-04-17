@@ -10,6 +10,7 @@ cs_target_sources(eigenUtilsTest
 	PRIVATE
   TestMatrixShape.cpp
   TestRotationMatrix.cpp
+  TestIsometryMatrix.cpp
 )
 
 cs_target_link_libraries(eigenUtilsTest

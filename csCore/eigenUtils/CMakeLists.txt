@@ -11,6 +11,8 @@ cs_target_sources(eigenUtils
 		MatrixShape_impl.hpp
 		RotationMatrix.hpp
 		RotationMatrix_impl.hpp
+		IsometryMatrix.hpp
+		IsometryMatrix_impl.hpp
 	PRIVATE
     )
 
