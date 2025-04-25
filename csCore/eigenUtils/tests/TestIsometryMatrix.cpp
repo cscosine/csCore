@@ -45,6 +45,10 @@ TEST_CASE("Isometry Matrix 2D", "[eigenUtils]") {
     REQUIRE_ASSERT(isValidIsometryMatrix2D(rI, -10.0));
     REQUIRE_ASSERT(isValidIsometryMatrix2D(Eigen::MatrixX<S>(4, 4)));
   }
+
+  // isometry
+  REQUIRE(isValidIsometryMatrix2D(
+      Eigen::Transform<S, 2, Eigen::Isometry>::Identity()));
 }
 
 TEST_CASE("Isometry Matrix 3D", "[eigenUtils]") {
@@ -86,6 +90,10 @@ TEST_CASE("Isometry Matrix 3D", "[eigenUtils]") {
     REQUIRE_ASSERT(isValidIsometryMatrix3D(rI, -10.0));
     REQUIRE_ASSERT(isValidIsometryMatrix3D(Eigen::MatrixX<S>(3, 3)));
   }
+
+  // isometry
+  REQUIRE(isValidIsometryMatrix3D(
+      Eigen::Transform<S, 3, Eigen::Isometry>::Identity()));
 }
 
 }  // namespace eigenUtils

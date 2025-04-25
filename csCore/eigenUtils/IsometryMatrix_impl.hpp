@@ -57,6 +57,12 @@ bool isValidIsometryMatrix2D(Eigen::MatrixBase<Derived> const& transf,
   return _private::isValidIsometryMatrix<2>(transf, precision);
 }
 
+template <class S>
+bool isValidIsometryMatrix2D(
+    Eigen::Transform<S, 2, Eigen::Isometry> const& transf, S precision) {
+  return isValidIsometryMatrix2D(transf.matrix(), precision);
+}
+
 template <class Derived>
 bool isValidIsometryMatrix3D(Eigen::MatrixBase<Derived> const& transf,
                              typename Derived::Scalar precision) {
@@ -67,6 +73,13 @@ bool isValidIsometryMatrix3D(Eigen::MatrixBase<Derived> const& transf,
       "transf required to be 4x4");
 
   return _private::isValidIsometryMatrix<3>(transf, precision);
+}
+
+/// @brief isValidIsometryMatrix3D accepting a Eigen::Transform
+template <class S>
+bool isValidIsometryMatrix3D(
+    Eigen::Transform<S, 3, Eigen::Isometry> const& transf, S precision) {
+  return isValidIsometryMatrix3D(transf.matrix(), precision);
 }
 
 }  // namespace eigenUtils
