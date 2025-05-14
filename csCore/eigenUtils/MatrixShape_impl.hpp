@@ -6,14 +6,12 @@ namespace csCore {
 namespace eigenUtils {
 
 template <class Derived>
-bool checkSizeEqual(Eigen::EigenBase<Derived> const& matrix, Eigen::Index rows,
-                    Eigen::Index cols) {
+bool checkSizeEqual(Eigen::EigenBase<Derived> const& matrix, Eigen::Index rows, Eigen::Index cols) {
   return (matrix.rows() == rows) && (matrix.cols() == cols);
 }
 
 template <class DerivedA, class DerivedB>
-bool isSameSizeStaticOrDynamic(Eigen::EigenBase<DerivedA> const& matrixA,
-                               Eigen::EigenBase<DerivedB> const& matrixB) {
+bool isSameSizeStaticOrDynamic(Eigen::EigenBase<DerivedA> const& matrixA, Eigen::EigenBase<DerivedB> const& matrixB) {
   EIGEN_STATIC_ASSERT_SAME_MATRIX_SIZE(DerivedA, DerivedB);
   return checkSizeEqual(matrixA, matrixB.rows(), matrixB.cols());
 }
@@ -25,5 +23,5 @@ bool isSameSizeStaticOrDynamic(Eigen::EigenBase<DerivedA> const& matrixA) {
   return checkSizeEqual(matrixA, rows, cols);
 }
 
-}  // namespace eigenUtils
-}  // namespace csCore
+} // namespace eigenUtils
+} // namespace csCore

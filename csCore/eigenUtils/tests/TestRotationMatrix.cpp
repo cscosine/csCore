@@ -56,5 +56,5 @@ TEST_CASE("Rotation Matrix 3D", "[eigenUtils]") {
   }
 }
 
-}  // namespace eigenUtils
-}  // namespace csCore
+} // namespace eigenUtils
+} // namespace csCore

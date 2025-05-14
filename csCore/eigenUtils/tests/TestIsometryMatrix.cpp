@@ -47,8 +47,7 @@ TEST_CASE("Isometry Matrix 2D", "[eigenUtils]") {
   }
 
   // isometry
-  REQUIRE(isValidIsometryMatrix2D(
-      Eigen::Transform<S, 2, Eigen::Isometry>::Identity()));
+  REQUIRE(isValidIsometryMatrix2D(Eigen::Transform<S, 2, Eigen::Isometry>::Identity()));
 }
 
 TEST_CASE("Isometry Matrix 3D", "[eigenUtils]") {
@@ -92,9 +91,8 @@ TEST_CASE("Isometry Matrix 3D", "[eigenUtils]") {
   }
 
   // isometry
-  REQUIRE(isValidIsometryMatrix3D(
-      Eigen::Transform<S, 3, Eigen::Isometry>::Identity()));
+  REQUIRE(isValidIsometryMatrix3D(Eigen::Transform<S, 3, Eigen::Isometry>::Identity()));
 }
 
-}  // namespace eigenUtils
-}  // namespace csCore
+} // namespace eigenUtils
+} // namespace csCore
