@@ -1,4 +1,4 @@
 #pragma once
 
-#include <pipes/base.hpp>
 #include <csCore/pipes/PipesCore.hpp>
+#include <pipes/base.hpp>

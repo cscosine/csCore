@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import os
-import shutil
 import re
 
 # Define the source directory
@@ -32,7 +31,9 @@ for cpp_file in cpp_files:
     content = content.replace("pipes::", "csCore::pipes::")
 
     # Replace #include "pipes/..." with #include <csCore/pipes/...>
-    content = re.sub(r'#include\s+"pipes/(.*?)"', r'#include <csCore/pipes/\1>', content)
+    content = re.sub(
+        r'#include\s+"pipes/(.*?)"', r"#include <csCore/pipes/\1>", content
+    )
 
     # Write modified content to new file
     with open(dst_path, "w") as dst:

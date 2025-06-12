@@ -3,14 +3,12 @@
 
 #include <vector>
 
-TEST_CASE("dead_end_iterator")
-{
-    const std::vector<int> input = {1, 2, 3, 4, 5};
-    
-    std::copy(begin(input), end(input), csCore::pipes::dev_null());
+TEST_CASE("dead_end_iterator") {
+  const std::vector<int> input = {1, 2, 3, 4, 5};
+
+  std::copy(begin(input), end(input), csCore::pipes::dev_null());
 }
 
-TEST_CASE("dead_end_iterator::operator=")
-{
-    csCore::pipes::dev_null() = csCore::pipes::dev_null(); // should compile
+TEST_CASE("dead_end_iterator::operator=") {
+  csCore::pipes::dev_null() = csCore::pipes::dev_null(); // should compile
 }

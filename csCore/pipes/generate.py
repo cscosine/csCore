@@ -31,11 +31,13 @@ for root, _, files in os.walk(source_dir):
             # Write the new header file
             with open(output_path, "w") as f:
                 f.write("#pragma once\n\n")
-                f.write(f"#include <pipes/{rel_path.replace(os.sep, '/')}>\n")  # Use forward slashes
+                f.write(
+                    f"#include <pipes/{rel_path.replace(os.sep, '/')}>\n"
+                )  # Use forward slashes
                 f.write("#include <csCore/pipes/PipesCore.hpp>\n")
 
             # Track generated file
-            generated_files.append(rel_path.replace(os.sep, '/'))
+            generated_files.append(rel_path.replace(os.sep, "/"))
 
             print(f"Generated: {output_path}")
 

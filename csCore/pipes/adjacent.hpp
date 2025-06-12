@@ -1,4 +1,4 @@
 #pragma once
 
-#include <pipes/adjacent.hpp>
 #include <csCore/pipes/PipesCore.hpp>
+#include <pipes/adjacent.hpp>

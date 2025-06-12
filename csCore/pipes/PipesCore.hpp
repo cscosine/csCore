@@ -1,9 +1,7 @@
 #pragma once
 
-namespace pipes {
-    
-}
+namespace pipes {}
 
 namespace csCore {
-    namespace pipes = ::pipes;
+namespace pipes = ::pipes;
 }

@@ -1,4 +1,4 @@
 #pragma once
 
-#include <pipes/stride.hpp>
 #include <csCore/pipes/PipesCore.hpp>
+#include <pipes/stride.hpp>

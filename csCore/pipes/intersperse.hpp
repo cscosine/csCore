@@ -1,4 +1,4 @@
 #pragma once
 
-#include <pipes/intersperse.hpp>
 #include <csCore/pipes/PipesCore.hpp>
+#include <pipes/intersperse.hpp>

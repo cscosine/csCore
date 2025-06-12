@@ -8,7 +8,7 @@ cs_find_package(pipes PUBLIC pipes REQUIRED CONFIG)
 cs_target_sources(pipes
 	PRIVATE_INSTALL
 		PipesCore.hpp
-	# copy of list.txt 
+	# copy of list.txt
 		drop_while.hpp
 		fork.hpp
 		send.hpp

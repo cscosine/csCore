@@ -1,4 +1,4 @@
 #pragma once
 
-#include <pipes/cartesian_product.hpp>
 #include <csCore/pipes/PipesCore.hpp>
+#include <pipes/cartesian_product.hpp>
