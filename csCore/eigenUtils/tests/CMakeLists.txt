@@ -24,6 +24,6 @@ cs_target_link_libraries(eigenUtilsTest
 # add to tests
 catch_discover_tests(eigenUtilsTest DISCOVERY_MODE "PRE_TEST")
 
-cs_install_target(eigenUtilsTest eigenUtilsTestExport)
+cs_install_target(eigenUtilsTest eigenUtilsTest)
 
 cs_finalize_target(eigenUtilsTest)
