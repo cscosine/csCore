@@ -1,10 +1,10 @@
 cmake_minimum_required(VERSION 3.31)
-project(csCoreLib VERSION 1.0.0 LANGUAGES CXX)
+project(csCoreSol VERSION 1.0.0 LANGUAGES CXX)
 
 # add the csCMake system
 include(csCMake)
 
-cs_initialize_project(csCoreLib
+cs_initialize_project(csCoreSol
     # add the default configurations supported by this project
     DEFAULT_CONFIG Debug
     DEFAULT_CONFIG Release
