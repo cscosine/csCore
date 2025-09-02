@@ -20,9 +20,13 @@ cs_target_link_libraries(testUtils
 	csCore::csCore
 	libassert::assert
 	Catch2::Catch2
+  	csCoreSol::csCoreSol_csCMakeCompileOptionsDefault
 )
 
 # install to a non default component assert
 cs_install_target(testUtils testUtils)
 
 cs_finalize_target(testUtils)
+
+# compile each single header in standalone, ensures includes are self contained
+cs_compileEachInstalledInclude(testUtils csCoreSol::csCoreSol_csCMakeCompileOptionsStrict)

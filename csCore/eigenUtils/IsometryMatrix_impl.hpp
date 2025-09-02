@@ -11,9 +11,7 @@ namespace eigenUtils {
 namespace _private {
 template <Eigen::Index size, class Derived>
 bool isValidIsometryMatrix(Eigen::MatrixBase<Derived> const& transf, typename Derived::Scalar precision) {
-  using S = typename Derived::Scalar;
-
-  CSCORE_ASSERT_DEBUG(precision >= static_cast<S>(0.0), "precision needs to be non negative");
+  CSCORE_ASSERT_DEBUG(precision >= static_cast<typename Derived::Scalar>(0.0), "precision needs to be non negative");
 
   bool const validRot = _private::isValidRotationMatrix<size>(transf.template topLeftCorner<size, size>(), precision);
 
@@ -44,9 +42,8 @@ bool isValidIsometryMatrix(Eigen::MatrixBase<Derived> const& transf, typename De
 
 template <class Derived>
 bool isValidIsometryMatrix2D(Eigen::MatrixBase<Derived> const& transf, typename Derived::Scalar precision) {
-  using S = typename Derived::Scalar;
-  using M33 = Eigen::Matrix<S, 3, 3>;
-  CSCORE_ASSERT_DEBUG(csCore::eigenUtils::isSameSizeStaticOrDynamic(transf, M33()), "transf required to be 4x4");
+  CSCORE_ASSERT_DEBUG(csCore::eigenUtils::isSameSizeStaticOrDynamic(transf, (Eigen::Matrix<typename Derived::Scalar, 3, 3>())),
+                      "transf required to be 4x4");
 
   return _private::isValidIsometryMatrix<2>(transf, precision);
 }
@@ -58,9 +55,8 @@ bool isValidIsometryMatrix2D(Eigen::Transform<S, 2, Eigen::Isometry> const& tran
 
 template <class Derived>
 bool isValidIsometryMatrix3D(Eigen::MatrixBase<Derived> const& transf, typename Derived::Scalar precision) {
-  using S = typename Derived::Scalar;
-  using M44 = Eigen::Matrix<S, 4, 4>;
-  CSCORE_ASSERT_DEBUG(csCore::eigenUtils::isSameSizeStaticOrDynamic(transf, M44()), "transf required to be 4x4");
+  CSCORE_ASSERT_DEBUG(csCore::eigenUtils::isSameSizeStaticOrDynamic(transf, (Eigen::Matrix<typename Derived::Scalar, 4, 4>())),
+                      "transf required to be 4x4");
 
   return _private::isValidIsometryMatrix<3>(transf, precision);
 }

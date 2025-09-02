@@ -15,6 +15,7 @@ cs_target_link_libraries(namedTypeTest
   PRIVATE
   csCore::namedType
   Catch2::Catch2WithMain
+  csCoreSol::csCoreSol_csCMakeCompileOptionsDefault
 )
 
 # add to tests

@@ -28,3 +28,6 @@ add_subdirectory(tests)
 cs_install_target(eigenUtils eigenUtils)
 
 cs_finalize_target(eigenUtils)
+
+# compile each single header in standalone, ensures includes are self contained
+cs_compileEachInstalledInclude(eigenUtils csCoreSol::csCoreSol_csCMakeCompileOptionsStrict)

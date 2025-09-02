@@ -25,3 +25,6 @@ add_subdirectory(tests)
 cs_install_target(language language)
 
 cs_finalize_target(language)
+
+# compile each single header in standalone, ensures includes are self contained
+cs_compileEachInstalledInclude(language csCoreSol::csCoreSol_csCMakeCompileOptionsStrict)

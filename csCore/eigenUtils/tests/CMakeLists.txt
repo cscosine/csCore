@@ -19,6 +19,7 @@ cs_target_link_libraries(eigenUtilsTest
   csCore::eigenUtils
   csCore::testUtils
   Catch2::Catch2WithMain
+  csCoreSol::csCoreSol_csCMakeCompileOptionsDefault
 )
 
 # add to tests

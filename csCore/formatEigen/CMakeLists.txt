@@ -23,3 +23,6 @@ cs_target_link_libraries(formatEigen
 cs_install_target(formatEigen formatEigen)
 
 cs_finalize_target(formatEigen)
+
+# compile each single header in standalone, ensures includes are self contained
+cs_compileEachInstalledInclude(formatEigen csCoreSol::csCoreSol_csCMakeCompileOptionsStrict)

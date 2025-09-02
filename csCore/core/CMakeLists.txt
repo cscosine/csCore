@@ -17,3 +17,6 @@ cs_target_link_libraries(core
 cs_install_target(core core)
 
 cs_finalize_target(core)
+
+# compile each single header in standalone, ensures includes are self contained
+cs_compileEachInstalledInclude(core csCoreSol::csCoreSol_csCMakeCompileOptionsStrict)

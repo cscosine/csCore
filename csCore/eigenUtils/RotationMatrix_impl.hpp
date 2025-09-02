@@ -34,18 +34,16 @@ bool isValidRotationMatrix(Eigen::MatrixBase<Derived> const& rot, typename Deriv
 
 template <class Derived>
 bool isValidRotationMatrix2D(Eigen::MatrixBase<Derived> const& rot, typename Derived::Scalar precision) {
-  using S = typename Derived::Scalar;
-  using M22 = Eigen::Matrix<S, 2, 2>;
-  CSCORE_ASSERT_DEBUG(csCore::eigenUtils::isSameSizeStaticOrDynamic(rot, M22()), "rot required to be 2x2");
+  CSCORE_ASSERT_DEBUG(csCore::eigenUtils::isSameSizeStaticOrDynamic(rot, (Eigen::Matrix<typename Derived::Scalar, 2, 2>())),
+                      "rot required to be 2x2");
 
   return _private::isValidRotationMatrix<2>(rot, precision);
 }
 
 template <class Derived>
 bool isValidRotationMatrix3D(Eigen::MatrixBase<Derived> const& rot, typename Derived::Scalar precision) {
-  using S = typename Derived::Scalar;
-  using M33 = Eigen::Matrix<S, 3, 3>;
-  CSCORE_ASSERT_DEBUG(csCore::eigenUtils::isSameSizeStaticOrDynamic(rot, M33()), "rot required to be 2x2");
+  CSCORE_ASSERT_DEBUG(csCore::eigenUtils::isSameSizeStaticOrDynamic(rot, (Eigen::Matrix<typename Derived::Scalar, 3, 3>())),
+                      "rot required to be 2x2");
 
   return _private::isValidRotationMatrix<3>(rot, precision);
 }

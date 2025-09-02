@@ -65,3 +65,6 @@ add_subdirectory(tests)
 cs_install_target(pipes pipes)
 
 cs_finalize_target(pipes)
+
+# compile each single header in standalone, ensures includes are self contained
+cs_compileEachInstalledInclude(pipes csCoreSol::csCoreSol_csCMakeCompileOptionsStrict)

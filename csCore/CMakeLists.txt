@@ -25,7 +25,6 @@ cs_target_sources(csCore
 cs_target_link_libraries(csCore
 	INTERFACE
 		csCoreSol::csCoreSol_csCMakeBaseInclude
-		csCoreSol::csCoreSol_csCMakeCompileOptionsDefault
 )
 
 cs_install_target(csCore csCore)

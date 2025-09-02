@@ -14,6 +14,8 @@ cs_target_link_libraries(math
 	PUBLIC
 		csCore::core
 		csCore::csCoreAssert
+	PRIVATE
+  		csCoreSol::csCoreSol_csCMakeCompileOptionsStrict
 	)
 
 add_subdirectory(tests)
@@ -21,3 +23,6 @@ add_subdirectory(tests)
 cs_install_target(math math)
 
 cs_finalize_target(math)
+
+# compile each single header in standalone, ensures includes are self contained
+cs_compileEachInstalledInclude(math csCoreSol::csCoreSol_csCMakeCompileOptionsStrict)

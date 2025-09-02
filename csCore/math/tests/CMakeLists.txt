@@ -16,6 +16,7 @@ cs_target_link_libraries(mathTest
   csCore::math
   csCore::testUtils
   Catch2::Catch2WithMain
+  csCoreSol::csCoreSol_csCMakeCompileOptionsDefault
 )
 
 # add to tests

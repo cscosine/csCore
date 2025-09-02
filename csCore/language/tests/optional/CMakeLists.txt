@@ -29,6 +29,7 @@ cs_target_link_libraries(optionalTest
   PRIVATE
   csCore::language
   Catch2::Catch2WithMain
+  csCoreSol::csCoreSol_csCMakeCompileOptionsDefault
 )
 
 # add to tests

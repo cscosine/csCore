@@ -43,6 +43,7 @@ cs_target_link_libraries(pipesTest
   PRIVATE
   csCore::pipes
   Catch2::Catch2WithMain
+  csCoreSol::csCoreSol_csCMakeCompileOptionsDefault
 )
 
 # add to tests

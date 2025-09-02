@@ -221,4 +221,7 @@ function(csAssertGenerateProject PROJECT_NAME TARGET_NAMESPACE)
 
     cs_finalize_target(${TARGET_NAME})
 
+    # compile each single header in standalone, ensures includes are self contained
+    cs_compileEachInstalledInclude(${TARGET_NAME} csCoreSol::csCoreSol_csCMakeCompileOptionsStrict)
+
 endfunction()

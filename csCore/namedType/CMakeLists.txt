@@ -22,3 +22,6 @@ add_subdirectory(tests)
 cs_install_target(namedType namedType)
 
 cs_finalize_target(namedType)
+
+# compile each single header in standalone, ensures includes are self contained
+cs_compileEachInstalledInclude(namedType csCoreSol::csCoreSol_csCMakeCompileOptionsStrict)
