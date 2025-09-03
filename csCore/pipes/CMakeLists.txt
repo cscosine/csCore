@@ -2,6 +2,7 @@ project(pipes LANGUAGES CXX)
 
 cs_add_library(pipes INTERFACE)
 cs_add_library(csCore::pipes ALIAS pipes)
+cs_exec_clang_tidy(pipes)
 
 cs_find_package(pipes PUBLIC pipes REQUIRED CONFIG)
 

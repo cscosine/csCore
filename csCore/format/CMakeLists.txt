@@ -2,6 +2,7 @@ project(format LANGUAGES CXX)
 
 cs_add_library(format INTERFACE)
 cs_add_library(csCore::format ALIAS format)
+cs_exec_clang_tidy(format)
 
 cs_find_package(format PUBLIC fmt REQUIRED CONFIG)
 

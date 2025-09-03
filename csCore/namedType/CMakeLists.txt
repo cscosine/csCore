@@ -2,6 +2,7 @@ project(namedType LANGUAGES CXX)
 
 cs_add_library(namedType INTERFACE)
 cs_add_library(csCore::namedType ALIAS namedType)
+cs_exec_clang_tidy(namedType)
 
 cs_find_package(namedType PUBLIC NamedType REQUIRED CONFIG)
 

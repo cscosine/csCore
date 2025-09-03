@@ -2,6 +2,7 @@ project(core LANGUAGES CXX)
 
 cs_add_library(core INTERFACE)
 cs_add_library(csCore::core ALIAS core)
+cs_exec_clang_tidy(core)
 
 cs_target_sources(core
 	PRIVATE_INSTALL
@@ -13,6 +14,7 @@ cs_target_link_libraries(core
 	INTERFACE
 		csCore::csCore
 )
+
 
 cs_install_target(core core)
 

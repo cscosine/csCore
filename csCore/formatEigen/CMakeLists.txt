@@ -2,6 +2,7 @@ project(formatEigen LANGUAGES CXX)
 
 cs_add_library(formatEigen INTERFACE)
 cs_add_library(csCore::formatEigen ALIAS formatEigen)
+cs_exec_clang_tidy(formatEigen)
 
 cs_find_package(formatEigen PUBLIC fmt REQUIRED CONFIG)
 cs_find_package(formatEigen PUBLIC fmt-eigen REQUIRED CONFIG)

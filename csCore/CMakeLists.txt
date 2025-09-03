@@ -16,6 +16,7 @@ list(POP_BACK CMAKE_MODULE_PATH)
 
 cs_add_library(csCore INTERFACE)
 cs_add_library(csCore::csCore ALIAS csCore)
+cs_exec_clang_tidy(csCore)
 
 cs_target_sources(csCore
 	PRIVATE_INSTALL
@@ -26,6 +27,7 @@ cs_target_link_libraries(csCore
 	INTERFACE
 		csCoreSol::csCoreSol_csCMakeBaseInclude
 )
+
 
 cs_install_target(csCore csCore)
 

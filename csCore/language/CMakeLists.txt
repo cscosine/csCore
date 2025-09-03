@@ -2,6 +2,7 @@ project(language LANGUAGES CXX)
 
 cs_add_library(language INTERFACE)
 cs_add_library(csCore::language ALIAS language)
+cs_exec_clang_tidy(language)
 
 cs_find_package(language PUBLIC tl-optional REQUIRED CONFIG)
 cs_find_package(language PUBLIC tl-expected REQUIRED CONFIG)

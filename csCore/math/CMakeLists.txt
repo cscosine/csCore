@@ -2,6 +2,7 @@ project(math LANGUAGES CXX)
 
 cs_add_library(math STATIC)
 cs_add_library(csCore::math ALIAS math)
+cs_exec_clang_tidy(math)
 
 cs_target_sources(math
 	PRIVATE_INSTALL

@@ -2,6 +2,7 @@ project(assert LANGUAGES CXX)
 
 cs_add_library(assert INTERFACE)
 cs_add_library(csCore::assert ALIAS assert)
+cs_exec_clang_tidy(assert)
 
 cs_find_package(assert PUBLIC libassert REQUIRED CONFIG)
 

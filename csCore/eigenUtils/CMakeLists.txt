@@ -2,6 +2,7 @@ project(eigenUtils LANGUAGES CXX)
 
 cs_add_library(eigenUtils INTERFACE)
 cs_add_library(csCore::eigenUtils ALIAS eigenUtils)
+cs_exec_clang_tidy(eigenUtils)
 
 cs_find_package(eigenUtils PUBLIC Eigen3 REQUIRED CONFIG)
 
