@@ -13,29 +13,29 @@ namespace math {
 
 template <class T, class RetType>
 std::enable_if_t<csCore::core::is_float32_or_64_t<T>::value, RetType> degToRad(T in) {
-  CSCORE_ASSERT_SAFE_MATH(std::isfinite(in));
+  CSCORE_ASSERT_SAFE_MATH(std::isfinite(in), "degToRad: input must be a finite number");
 
   return in * static_cast<T>(M_PI) / static_cast<T>(180.0);
 }
 
 template <class T, class RetType>
 std::enable_if_t<csCore::core::is_float32_or_64_t<T>::value, RetType> radToDeg(T in) {
-  CSCORE_ASSERT_SAFE_MATH(std::isfinite(in));
+  CSCORE_ASSERT_SAFE_MATH(std::isfinite(in), "radToDeg: input must be a finite number");
 
   return in / static_cast<T>(M_PI) * static_cast<T>(180.0);
 }
 
 template <class T, class RetType>
 std::enable_if_t<csCore::core::is_float32_or_64_t<T>::value, RetType> wrapToPi(T in) {
-  CSCORE_ASSERT_SAFE_MATH(std::isfinite(in));
+  CSCORE_ASSERT_SAFE_MATH(std::isfinite(in), "wrapToPi: input must be a finite number");
 
   return std::atan2(std::sin(in), std::cos(in));
 }
 
 template <class T, class RetType>
 std::enable_if_t<csCore::core::is_float32_or_64_t<T>::value, RetType> angleDistance(T reference, T target) {
-  CSCORE_ASSERT_SAFE_MATH(std::isfinite(reference));
-  CSCORE_ASSERT_SAFE_MATH(std::isfinite(target));
+  CSCORE_ASSERT_SAFE_MATH(std::isfinite(reference), "angleDistance: reference must be a finite number");
+  CSCORE_ASSERT_SAFE_MATH(std::isfinite(target), "angleDistance: target must be a finite number");
 
   // equivalent to create R(a)^T * R(b) and then take the log, but without
   // matrices
