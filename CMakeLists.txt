@@ -4,7 +4,7 @@ project(csCoreSol VERSION 1.0.0 LANGUAGES CXX)
 # add the csCMake system
 include(csCMake)
 
-cs_initialize_project(csCoreSol
+cs_initialize_project(csCoreSol CXX_STANDARD 17
     # add the default configurations supported by this project
     DEFAULT_CONFIG Debug
     DEFAULT_CONFIG Release
