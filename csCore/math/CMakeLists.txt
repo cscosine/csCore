@@ -11,6 +11,9 @@ cs_target_sources(math
 		Angles.cpp
     )
 
+set_source_files_properties(Angles.cpp PROPERTIES COMPILE_OPTIONS "$<$<AND:$<PLATFORM_ID:Windows>,$<CXX_COMPILER_ID:Clang>>:-Wno-reserved-macro-identifier;-Wall>")
+
+
 cs_target_link_libraries(math
 	PUBLIC
 		csCore::core
