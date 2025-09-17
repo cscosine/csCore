@@ -33,4 +33,4 @@ cs_install_target(assert assert)
 cs_finalize_target(assert)
 
 # compile each single header in standalone, ensures includes are self contained
-cs_compileEachInstalledInclude(csCore::assert csCoreSol::csCoreSol_csCMakeCompileOptionsStrict)
+cs_compileEachInstalledInclude(assert csCoreSol::csCoreSol_csCMakeCompileOptionsStrict)
