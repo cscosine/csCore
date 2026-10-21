@@ -35,6 +35,3 @@ cs_target_link_libraries(optionalTest
 # add to tests
 catch_discover_tests(optionalTest DISCOVERY_MODE "PRE_TEST")
 
-cs_install_target(optionalTest optionalTest)
-
-cs_finalize_target(optionalTest)

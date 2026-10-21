@@ -21,6 +21,4 @@ cs_target_link_libraries(namedTypeTest
 # add to tests
 catch_discover_tests(namedTypeTest DISCOVERY_MODE "PRE_TEST")
 
-cs_install_target(namedTypeTest namedTypeTest)
-
 cs_finalize_target(namedTypeTest)
