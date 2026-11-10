@@ -1,6 +1,6 @@
 {
     "version": 10,
     "include": [
-        "${sourceParentDir}/csCMake/presets/csCMakeProjectSetup-shortBuildPath.json"
+        "${sourceParentDir}/csCMake/presets/layout/sibling-short.json"
     ]
 }

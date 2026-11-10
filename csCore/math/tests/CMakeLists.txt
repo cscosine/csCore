@@ -3,7 +3,7 @@ project(mathTest  LANGUAGES CXX)
 cs_add_executable(mathTest)
 
 include(CTest)
-cs_find_package(mathTest PUBLIC Catch2 3 REQUIRED CONFIG)
+cs_find_package(mathTest PRIVATE Catch2 3 REQUIRED CONFIG)
 include(Catch)
 
 cs_target_sources(mathTest
@@ -16,10 +16,10 @@ cs_target_link_libraries(mathTest
   csCore::math
   csCore::testUtils
   Catch2::Catch2WithMain
-  csCoreSol::csCoreSol_csCMakeCompileOptionsDefault
 )
 
 # add to tests
 catch_discover_tests(mathTest DISCOVERY_MODE "PRE_TEST")
+
 
 cs_finalize_target(mathTest)

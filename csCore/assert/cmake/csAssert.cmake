@@ -143,14 +143,14 @@ function(csAssertGenerateProject PROJECT_NAME TARGET_NAMESPACE)
         endforeach()
 
         # first, configure a file in a common directory
-        cs_get_generate_folder_common(COMMON_FOLDER)
+        cs_get_generated_dir(COMMON_FOLDER)
         configure_file(
           "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/templates/ProjectAssert.hpp.in"
           "${COMMON_FOLDER}/${PROJECT_NAME}Assert.hpp.in"
         )
 
         # then generate, to resolve generator expression according to the specific config
-        cs_get_generate_folder_config(SPECIFIC_FOLDER)
+        cs_get_generated_config_dir(SPECIFIC_FOLDER)
         file(GENERATE
           OUTPUT "${SPECIFIC_FOLDER}/${CURRENT_RELATIVE_PATH}/${PROJECT_NAME}Assert.hpp"
           INPUT "${COMMON_FOLDER}/${PROJECT_NAME}Assert.hpp.in"
@@ -182,7 +182,7 @@ function(csAssertGenerateProject PROJECT_NAME TARGET_NAMESPACE)
         endforeach()
 
         # finally, configure the file directly, no need for intermediate generators
-        cs_get_generate_folder_config(SPECIFIC_FOLDER)
+        cs_get_generated_config_dir(SPECIFIC_FOLDER)
         configure_file(
           "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/templates/ProjectAssert.hpp.in"
           "${SPECIFIC_FOLDER}/${CURRENT_RELATIVE_PATH}/${PROJECT_NAME}Assert.hpp"
@@ -222,6 +222,6 @@ function(csAssertGenerateProject PROJECT_NAME TARGET_NAMESPACE)
     cs_finalize_target(${TARGET_NAME})
 
     # compile each single header in standalone, ensures includes are self contained
-    cs_compileEachInstalledInclude(${TARGET_NAME} csCoreSol::csCoreSol_csCMakeCompileOptionsStrict)
+    cs_target_check_installed_headers(${TARGET_NAME} COMPILE_PROFILES cscmake_strict_warnings)
 
 endfunction()

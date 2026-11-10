@@ -2,7 +2,6 @@ project(format LANGUAGES CXX)
 
 cs_add_library(format INTERFACE)
 cs_add_library(csCore::format ALIAS format)
-cs_exec_clang_tidy(format)
 
 cs_find_package(format PUBLIC fmt REQUIRED CONFIG)
 
@@ -37,4 +36,4 @@ cs_install_target(format format)
 cs_finalize_target(format)
 
 # compile each single header in standalone, ensures includes are self contained
-cs_compileEachInstalledInclude(format csCoreSol::csCoreSol_csCMakeCompileOptionsStrict)
+cs_target_check_installed_headers(format COMPILE_PROFILES cscmake_strict_warnings)

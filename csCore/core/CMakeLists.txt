@@ -2,7 +2,6 @@ project(core LANGUAGES CXX)
 
 cs_add_library(core INTERFACE)
 cs_add_library(csCore::core ALIAS core)
-cs_exec_clang_tidy(core)
 
 cs_target_sources(core
 	PRIVATE_INSTALL
@@ -21,4 +20,4 @@ cs_install_target(core core)
 cs_finalize_target(core)
 
 # compile each single header in standalone, ensures includes are self contained
-cs_compileEachInstalledInclude(core csCoreSol::csCoreSol_csCMakeCompileOptionsStrict)
+cs_target_check_installed_headers(core COMPILE_PROFILES cscmake_strict_warnings)

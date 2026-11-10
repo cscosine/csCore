@@ -3,7 +3,7 @@ project(eigenUtilsTest  LANGUAGES CXX)
 cs_add_executable(eigenUtilsTest)
 
 include(CTest)
-cs_find_package(eigenUtilsTest PUBLIC Catch2 3 REQUIRED CONFIG)
+cs_find_package(eigenUtilsTest PRIVATE Catch2 3 REQUIRED CONFIG)
 include(Catch)
 
 cs_target_sources(eigenUtilsTest
@@ -19,10 +19,10 @@ cs_target_link_libraries(eigenUtilsTest
   csCore::eigenUtils
   csCore::testUtils
   Catch2::Catch2WithMain
-  csCoreSol::csCoreSol_csCMakeCompileOptionsDefault
 )
 
 # add to tests
 catch_discover_tests(eigenUtilsTest DISCOVERY_MODE "PRE_TEST")
+
 
 cs_finalize_target(eigenUtilsTest)

@@ -2,7 +2,6 @@ project(language LANGUAGES CXX)
 
 cs_add_library(language INTERFACE)
 cs_add_library(csCore::language ALIAS language)
-cs_exec_clang_tidy(language)
 
 cs_find_package(language PUBLIC tl-optional REQUIRED CONFIG)
 cs_find_package(language PUBLIC tl-expected REQUIRED CONFIG)
@@ -28,4 +27,4 @@ cs_install_target(language language)
 cs_finalize_target(language)
 
 # compile each single header in standalone, ensures includes are self contained
-cs_compileEachInstalledInclude(language csCoreSol::csCoreSol_csCMakeCompileOptionsStrict)
+cs_target_check_installed_headers(language COMPILE_PROFILES cscmake_strict_warnings)
