@@ -2,7 +2,6 @@ project(testUtils LANGUAGES CXX)
 
 cs_add_library(testUtils INTERFACE)
 cs_add_library(csCore::testUtils ALIAS testUtils)
-cs_exec_clang_tidy(testUtils)
 
 cs_find_package(testUtils PUBLIC libassert REQUIRED CONFIG)
 cs_find_package(testUtils PUBLIC Catch2 3 REQUIRED CONFIG)
@@ -21,7 +20,6 @@ cs_target_link_libraries(testUtils
 	csCore::csCore
 	libassert::assert
 	Catch2::Catch2
-  	csCoreSol::csCoreSol_csCMakeCompileOptionsDefault
 )
 
 # install to a non default component assert
@@ -30,4 +28,4 @@ cs_install_target(testUtils testUtils)
 cs_finalize_target(testUtils)
 
 # compile each single header in standalone, ensures includes are self contained
-cs_compileEachInstalledInclude(testUtils csCoreSol::csCoreSol_csCMakeCompileOptionsStrict)
+cs_target_check_installed_headers(testUtils COMPILE_PROFILES cscmake_strict_warnings)

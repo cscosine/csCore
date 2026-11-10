@@ -2,7 +2,6 @@ project(pipes LANGUAGES CXX)
 
 cs_add_library(pipes INTERFACE)
 cs_add_library(csCore::pipes ALIAS pipes)
-cs_exec_clang_tidy(pipes)
 
 cs_find_package(pipes PUBLIC pipes REQUIRED CONFIG)
 
@@ -68,4 +67,4 @@ cs_install_target(pipes pipes)
 cs_finalize_target(pipes)
 
 # compile each single header in standalone, ensures includes are self contained
-cs_compileEachInstalledInclude(pipes csCoreSol::csCoreSol_csCMakeCompileOptionsStrict)
+cs_target_check_installed_headers(pipes COMPILE_PROFILES cscmake_strict_warnings)

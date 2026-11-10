@@ -2,7 +2,6 @@ project(assert LANGUAGES CXX)
 
 cs_add_library(assert INTERFACE)
 cs_add_library(csCore::assert ALIAS assert)
-cs_exec_clang_tidy(assert)
 
 cs_find_package(assert PUBLIC libassert REQUIRED CONFIG)
 
@@ -33,4 +32,4 @@ cs_install_target(assert assert)
 cs_finalize_target(assert)
 
 # compile each single header in standalone, ensures includes are self contained
-cs_compileEachInstalledInclude(assert csCoreSol::csCoreSol_csCMakeCompileOptionsStrict)
+cs_target_check_installed_headers(assert COMPILE_PROFILES cscmake_strict_warnings)

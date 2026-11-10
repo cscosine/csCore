@@ -3,7 +3,7 @@ project(expectedTest  LANGUAGES CXX)
 cs_add_executable(expectedTest)
 
 include(CTest)
-cs_find_package(expectedTest PUBLIC Catch2 3 REQUIRED CONFIG)
+cs_find_package(expectedTest PRIVATE Catch2 3 REQUIRED CONFIG)
 include(Catch)
 
 cs_target_sources(expectedTest
@@ -26,12 +26,10 @@ cs_target_link_libraries(expectedTest
   PRIVATE
   csCore::language
   Catch2::Catch2WithMain
-  csCoreSol::csCoreSol_csCMakeCompileOptionsDefault
 )
 
 # add to tests
 catch_discover_tests(expectedTest DISCOVERY_MODE "PRE_TEST")
 
-cs_install_target(expectedTest expectedTest)
 
 cs_finalize_target(expectedTest)

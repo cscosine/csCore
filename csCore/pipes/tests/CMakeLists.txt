@@ -3,7 +3,7 @@ project(pipesTest  LANGUAGES CXX)
 cs_add_executable(pipesTest)
 
 include(CTest)
-cs_find_package(pipesTest PUBLIC Catch2 3 REQUIRED CONFIG)
+cs_find_package(pipesTest PRIVATE Catch2 3 REQUIRED CONFIG)
 include(Catch)
 
 cs_target_sources(pipesTest
@@ -43,12 +43,10 @@ cs_target_link_libraries(pipesTest
   PRIVATE
   csCore::pipes
   Catch2::Catch2WithMain
-  csCoreSol::csCoreSol_csCMakeCompileOptionsDefault
 )
 
 # add to tests
 catch_discover_tests(pipesTest DISCOVERY_MODE "PRE_TEST")
 
-cs_install_target(pipesTest pipesTest)
 
 cs_finalize_target(pipesTest)

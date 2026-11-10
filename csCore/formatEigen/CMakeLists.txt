@@ -2,7 +2,6 @@ project(formatEigen LANGUAGES CXX)
 
 cs_add_library(formatEigen INTERFACE)
 cs_add_library(csCore::formatEigen ALIAS formatEigen)
-cs_exec_clang_tidy(formatEigen)
 
 cs_find_package(formatEigen PUBLIC fmt REQUIRED CONFIG)
 cs_find_package(formatEigen PUBLIC fmt-eigen REQUIRED CONFIG)
@@ -26,4 +25,4 @@ cs_install_target(formatEigen formatEigen)
 cs_finalize_target(formatEigen)
 
 # compile each single header in standalone, ensures includes are self contained
-cs_compileEachInstalledInclude(formatEigen csCoreSol::csCoreSol_csCMakeCompileOptionsStrict)
+cs_target_check_installed_headers(formatEigen COMPILE_PROFILES cscmake_strict_warnings)
