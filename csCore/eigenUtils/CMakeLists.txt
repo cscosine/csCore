@@ -25,9 +25,7 @@ cs_target_link_libraries(eigenUtils
 
 add_subdirectory(tests)
 
-cs_install_target(eigenUtils eigenUtils)
-
-cs_finalize_target(eigenUtils)
+cs_install_target(eigenUtils COMPONENT eigenUtils)
 
 # compile each single header in standalone, ensures includes are self contained
 cs_target_check_installed_headers(eigenUtils COMPILE_PROFILES cscmake_strict_warnings)

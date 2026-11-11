@@ -62,9 +62,7 @@ cs_target_link_libraries(pipes
 
 add_subdirectory(tests)
 
-cs_install_target(pipes pipes)
-
-cs_finalize_target(pipes)
+cs_install_target(pipes COMPONENT pipes)
 
 # compile each single header in standalone, ensures includes are self contained
 cs_target_check_installed_headers(pipes COMPILE_PROFILES cscmake_strict_warnings)

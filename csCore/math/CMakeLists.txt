@@ -23,9 +23,7 @@ cs_target_use_compile_profiles(math cscmake_strict_warnings)
 
 add_subdirectory(tests)
 
-cs_install_target(math math)
-
-cs_finalize_target(math)
+cs_install_target(math COMPONENT math)
 
 # compile each single header in standalone, ensures includes are self contained
 cs_target_check_installed_headers(math COMPILE_PROFILES cscmake_strict_warnings)

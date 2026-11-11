@@ -31,9 +31,7 @@ cs_target_link_libraries(format
 		fmt::fmt
 )
 
-cs_install_target(format format)
-
-cs_finalize_target(format)
+cs_install_target(format COMPONENT format)
 
 # compile each single header in standalone, ensures includes are self contained
 cs_target_check_installed_headers(format COMPILE_PROFILES cscmake_strict_warnings)

@@ -19,9 +19,7 @@ cs_target_link_libraries(namedType
 
 add_subdirectory(tests)
 
-cs_install_target(namedType namedType)
-
-cs_finalize_target(namedType)
+cs_install_target(namedType COMPONENT namedType)
 
 # compile each single header in standalone, ensures includes are self contained
 cs_target_check_installed_headers(namedType COMPILE_PROFILES cscmake_strict_warnings)

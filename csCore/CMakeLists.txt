@@ -27,9 +27,7 @@ cs_target_link_libraries(csCore
 )
 
 
-cs_install_target(csCore csCore)
-
-cs_finalize_target(csCore)
+cs_install_target(csCore COMPONENT csCore)
 
 # add libs, executables, etc
 add_subdirectory(assert)

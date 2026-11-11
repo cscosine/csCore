@@ -47,6 +47,3 @@ cs_target_link_libraries(pipesTest
 
 # add to tests
 catch_discover_tests(pipesTest DISCOVERY_MODE "PRE_TEST")
-
-
-cs_finalize_target(pipesTest)

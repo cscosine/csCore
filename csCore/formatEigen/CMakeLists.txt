@@ -20,9 +20,7 @@ cs_target_link_libraries(formatEigen
 		fmt-eigen::fmt-eigen
 )
 
-cs_install_target(formatEigen formatEigen)
-
-cs_finalize_target(formatEigen)
+cs_install_target(formatEigen COMPONENT formatEigen)
 
 # compile each single header in standalone, ensures includes are self contained
 cs_target_check_installed_headers(formatEigen COMPILE_PROFILES cscmake_strict_warnings)

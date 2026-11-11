@@ -23,9 +23,7 @@ cs_target_link_libraries(testUtils
 )
 
 # install to a non default component assert
-cs_install_target(testUtils testUtils)
-
-cs_finalize_target(testUtils)
+cs_install_target(testUtils COMPONENT testUtils)
 
 # compile each single header in standalone, ensures includes are self contained
 cs_target_check_installed_headers(testUtils COMPILE_PROFILES cscmake_strict_warnings)

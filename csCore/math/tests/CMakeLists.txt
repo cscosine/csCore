@@ -20,6 +20,3 @@ cs_target_link_libraries(mathTest
 
 # add to tests
 catch_discover_tests(mathTest DISCOVERY_MODE "PRE_TEST")
-
-
-cs_finalize_target(mathTest)

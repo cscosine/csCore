@@ -27,9 +27,7 @@ set(DEST_PATH ${CMAKE_INSTALL_PREFIX}/cmake/csCore/assert/templates)
 install(FILES ${SOURCE_PATH} DESTINATION ${DEST_PATH})
 
 # install to a non default component assert
-cs_install_target(assert assert)
-
-cs_finalize_target(assert)
+cs_install_target(assert COMPONENT assert)
 
 # compile each single header in standalone, ensures includes are self contained
 cs_target_check_installed_headers(assert COMPILE_PROFILES cscmake_strict_warnings)

@@ -22,9 +22,7 @@ cs_target_link_libraries(language
 
 add_subdirectory(tests)
 
-cs_install_target(language language)
-
-cs_finalize_target(language)
+cs_install_target(language COMPONENT language)
 
 # compile each single header in standalone, ensures includes are self contained
 cs_target_check_installed_headers(language COMPILE_PROFILES cscmake_strict_warnings)

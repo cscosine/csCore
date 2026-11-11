@@ -30,6 +30,3 @@ cs_target_link_libraries(expectedTest
 
 # add to tests
 catch_discover_tests(expectedTest DISCOVERY_MODE "PRE_TEST")
-
-
-cs_finalize_target(expectedTest)

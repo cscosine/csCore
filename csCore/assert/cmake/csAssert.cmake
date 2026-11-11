@@ -217,9 +217,7 @@ function(csAssertGenerateProject PROJECT_NAME TARGET_NAMESPACE)
     )
 
     # install to a default component
-    cs_install_target(${TARGET_NAME} ${TARGET_NAME} DEFAULT)
-
-    cs_finalize_target(${TARGET_NAME})
+    cs_install_target(${TARGET_NAME} COMPONENT ${TARGET_NAME} DEFAULT)
 
     # compile each single header in standalone, ensures includes are self contained
     cs_target_check_installed_headers(${TARGET_NAME} COMPILE_PROFILES cscmake_strict_warnings)
