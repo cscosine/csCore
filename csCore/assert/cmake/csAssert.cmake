@@ -103,95 +103,55 @@ function(csAssertGenerateProject PROJECT_NAME TARGET_NAMESPACE)
         endforeach()
     endif()
 
-    # finally, generate the header file(s)
-
-    # need to configure the file with the project name
+    # finally, generate the header (templates/ProjectAssert.hpp.in): the same for every configuration (no
+    # per-configuration source, which the Xcode generator does not support), the levels enabled are the compile
+    # definitions <PROJECT>_ASSERT_<LEVEL>_ENABLED of the target, per configuration (below); the header defines their
+    # <...>_ENABLED_VALUE (true / false). A new level: here (DEFINE_NAMES) and in the template.
     set(CS_ASSERT_NAMESPACE ${PROJECT_NAME})
 
-    set(HEADER_DEFINITIONS "")
-    if(GENERATOR_IS_MULTI_CONFIG)
+    set(ASSERT_COMPILE_DEFINITIONS "")
+    foreach(DEFINE_TOPIC ${DEFINE_TOPICS})
+        foreach(DEFINE_NAME ${DEFINE_NAMES})
+            _csCreateDefineEnabledName(${CS_ASSERT_PROJECT_NAME} ${DEFINE_TOPIC} ${DEFINE_NAME} DEFINE_FULL_NAME)
 
-        set(HEADER_DEFINITIONS "// Header generated for MULTI CONFIG generator, CONFIG is $<CONFIG>\n\n")
-
-        # multi config, create all single variables and add a default level based on the default defined above,
-        foreach(DEFINE_TOPIC ${DEFINE_TOPICS})
-            foreach(DEFINE_NAME ${DEFINE_NAMES})
-                # retrieve the option name (equivalent to the define name) and prepare value for enabled or not enabled case
-                _csCreateDefineEnabledName(${CS_ASSERT_PROJECT_NAME} ${DEFINE_TOPIC} ${DEFINE_NAME} DEFINE_FULL_NAME)
-                set(ENABLED_DEFINE "#define ${DEFINE_FULL_NAME}")
-                set(NOT_ENABLED_DEFINE "// #define ${DEFINE_FULL_NAME}")
-
-                set(ENABLED_DEFINE_VALUE "#define ${DEFINE_FULL_NAME}_VALUE")
-
-                set(EXPRESSION "")
-                set(EXPRESSION_VALUE "")
+            # the configurations of the level: $<$<CONFIG:c1,c2,...>:<define>>, evaluated in the configuration of the
+            # build, also for the consumers of the installed package (in their own configuration)
+            set(ENABLED_CONFIGS "")
+            if(GENERATOR_IS_MULTI_CONFIG)
                 foreach(CONFIG_TYPE ${CMAKE_CONFIGURATION_TYPES})
-
                     if(${${DEFINE_FULL_NAME}_CONFIG_${CONFIG_TYPE}})
-                        set(EXPRESSION "${EXPRESSION}$<$<CONFIG:${CONFIG_TYPE}>:${ENABLED_DEFINE}>")
-                        set(EXPRESSION_VALUE "${EXPRESSION_VALUE}$<$<CONFIG:${CONFIG_TYPE}>:${ENABLED_DEFINE_VALUE} true>")
-                    else()
-                        set(EXPRESSION "${EXPRESSION}$<$<CONFIG:${CONFIG_TYPE}>:${NOT_ENABLED_DEFINE}>")
-                        set(EXPRESSION_VALUE "${EXPRESSION_VALUE}$<$<CONFIG:${CONFIG_TYPE}>:${ENABLED_DEFINE_VALUE} false>")
+                        list(APPEND ENABLED_CONFIGS ${CONFIG_TYPE})
                     endif()
-
-
                 endforeach()
-                set(HEADER_DEFINITIONS "${HEADER_DEFINITIONS}\n${EXPRESSION}\n${EXPRESSION_VALUE}\n")
-            endforeach()
-            set(HEADER_DEFINITIONS "${HEADER_DEFINITIONS}\n")
-        endforeach()
-
-        # first, configure a file in a common directory
-        cs_get_generated_dir(COMMON_FOLDER)
-        configure_file(
-          "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/templates/ProjectAssert.hpp.in"
-          "${COMMON_FOLDER}/${PROJECT_NAME}Assert.hpp.in"
-        )
-
-        # then generate, to resolve generator expression according to the specific config
-        cs_get_generated_config_dir(SPECIFIC_FOLDER)
-        file(GENERATE
-          OUTPUT "${SPECIFIC_FOLDER}/${CURRENT_RELATIVE_PATH}/${PROJECT_NAME}Assert.hpp"
-          INPUT "${COMMON_FOLDER}/${PROJECT_NAME}Assert.hpp.in"
-        )
-
-        set(GENERATED_FILE "${SPECIFIC_FOLDER}/${CURRENT_RELATIVE_PATH}/${PROJECT_NAME}Assert.hpp")
-        set(GENERATED_FILE_FOLDER "${SPECIFIC_FOLDER}")
-
-    else()
-        # text to be written in the header file, with all the definitions in place
-        set(HEADER_DEFINITIONS "// Header generated for SINGLE CONFIG generator, CONFIG is ${CMAKE_BUILD_TYPE}\n\n")
-        foreach(DEFINE_TOPIC ${DEFINE_TOPICS})
-            foreach(DEFINE_NAME ${DEFINE_NAMES})
-                _csCreateDefineEnabledName(${CS_ASSERT_PROJECT_NAME} ${DEFINE_TOPIC} ${DEFINE_NAME} DEFINE_FULL_NAME)
-                set(ENABLED_DEFINE "#define ${DEFINE_FULL_NAME}")
-                set(NOT_ENABLED_DEFINE "// #define ${DEFINE_FULL_NAME}")
-
-                set(ENABLED_DEFINE_VALUE "#define ${DEFINE_FULL_NAME}_VALUE")
-
+            else()
+                # single config: the option of CMAKE_BUILD_TYPE, the defaults of the other configurations; every
+                # configuration is installed in the same package (one targets file), so the definitions must not
+                # depend on the configuration installed last
+                _csCreateDefineName(${CS_ASSERT_PROJECT_NAME} ${DEFINE_TOPIC} ${DEFINE_NAME} DEFINE_BASE_NAME)
                 if(${${DEFINE_FULL_NAME}})
-                    set(HEADER_DEFINITIONS "${HEADER_DEFINITIONS}\n${ENABLED_DEFINE}")
-                    set(HEADER_DEFINITIONS "${HEADER_DEFINITIONS}\n${ENABLED_DEFINE_VALUE} true\n")
-                else()
-                    set(HEADER_DEFINITIONS "${HEADER_DEFINITIONS}\n${NOT_ENABLED_DEFINE}")
-                    set(HEADER_DEFINITIONS "${HEADER_DEFINITIONS}\n${ENABLED_DEFINE_VALUE} false\n")
+                    list(APPEND ENABLED_CONFIGS ${CMAKE_BUILD_TYPE})
                 endif()
-            endforeach()
-            set(HEADER_DEFINITIONS "${HEADER_DEFINITIONS}\n")
+                get_cmake_property(CACHE_VARIABLES CACHE_VARIABLES)
+                foreach(CACHE_VARIABLE ${CACHE_VARIABLES})
+                    if(CACHE_VARIABLE MATCHES "^${DEFINE_BASE_NAME}_CONFIG_(.+)_DEFAULT$")
+                        set(CONFIG_TYPE ${CMAKE_MATCH_1})
+                        if(NOT CONFIG_TYPE STREQUAL CMAKE_BUILD_TYPE AND ${CACHE_VARIABLE})
+                            list(APPEND ENABLED_CONFIGS ${CONFIG_TYPE})
+                        endif()
+                    endif()
+                endforeach()
+            endif()
+            if(ENABLED_CONFIGS)
+                list(SORT ENABLED_CONFIGS)
+                list(JOIN ENABLED_CONFIGS "," ENABLED_CONFIGS)
+                list(APPEND ASSERT_COMPILE_DEFINITIONS "$<$<CONFIG:${ENABLED_CONFIGS}>:${DEFINE_FULL_NAME}>")
+            endif()
         endforeach()
+    endforeach()
 
-        # finally, configure the file directly, no need for intermediate generators
-        cs_get_generated_config_dir(SPECIFIC_FOLDER)
-        configure_file(
-          "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/templates/ProjectAssert.hpp.in"
-          "${SPECIFIC_FOLDER}/${CURRENT_RELATIVE_PATH}/${PROJECT_NAME}Assert.hpp"
-        )
-
-        set(GENERATED_FILE "${SPECIFIC_FOLDER}/${CURRENT_RELATIVE_PATH}/${PROJECT_NAME}Assert.hpp")
-        set(GENERATED_FILE_FOLDER "${SPECIFIC_FOLDER}")
-    endif()
-
+    cs_get_generated_dir(GENERATED_FILE_FOLDER)
+    set(GENERATED_FILE "${GENERATED_FILE_FOLDER}/${CURRENT_RELATIVE_PATH}/${PROJECT_NAME}Assert.hpp")
+    configure_file("${CMAKE_CURRENT_FUNCTION_LIST_DIR}/templates/ProjectAssert.hpp.in" "${GENERATED_FILE}")
 
     # define a target with the generate header
     set(TARGET_NAME ${PROJECT_NAME}Assert)
@@ -210,6 +170,9 @@ function(csAssertGenerateProject PROJECT_NAME TARGET_NAMESPACE)
         INTERFACE
             libassert::assert
     )
+
+    # the levels enabled, per configuration (see the header above)
+    target_compile_definitions(${TARGET_NAME} INTERFACE ${ASSERT_COMPILE_DEFINITIONS})
 
 	target_include_directories(${TARGET_NAME}
     INTERFACE

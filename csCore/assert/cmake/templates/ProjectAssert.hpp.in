@@ -30,7 +30,34 @@
 // use PARANOID asserts for extremely high cost overhead checks, which you can accept in Paranoid configs
 //    e.g., check if the vector used in a binary search is effectively sorted
 
-@HEADER_DEFINITIONS@
+// the levels enabled: the compile definitions @CS_ASSERT_PROJECT_NAME@_ASSERT_<LEVEL>_ENABLED of the target
+// @CS_ASSERT_NAMESPACE@::@CS_ASSERT_NAMESPACE@Assert, per configuration (the CMake options of csAssert); the header is
+// the same for every configuration
+#ifdef @CS_ASSERT_PROJECT_NAME@_ASSERT_RELEASE_ENABLED
+#define @CS_ASSERT_PROJECT_NAME@_ASSERT_RELEASE_ENABLED_VALUE true
+#else
+#define @CS_ASSERT_PROJECT_NAME@_ASSERT_RELEASE_ENABLED_VALUE false
+#endif
+#ifdef @CS_ASSERT_PROJECT_NAME@_ASSERT_RELWITHDEBINFO_ENABLED
+#define @CS_ASSERT_PROJECT_NAME@_ASSERT_RELWITHDEBINFO_ENABLED_VALUE true
+#else
+#define @CS_ASSERT_PROJECT_NAME@_ASSERT_RELWITHDEBINFO_ENABLED_VALUE false
+#endif
+#ifdef @CS_ASSERT_PROJECT_NAME@_ASSERT_DEBUG_ENABLED
+#define @CS_ASSERT_PROJECT_NAME@_ASSERT_DEBUG_ENABLED_VALUE true
+#else
+#define @CS_ASSERT_PROJECT_NAME@_ASSERT_DEBUG_ENABLED_VALUE false
+#endif
+#ifdef @CS_ASSERT_PROJECT_NAME@_ASSERT_PARANOID_ENABLED
+#define @CS_ASSERT_PROJECT_NAME@_ASSERT_PARANOID_ENABLED_VALUE true
+#else
+#define @CS_ASSERT_PROJECT_NAME@_ASSERT_PARANOID_ENABLED_VALUE false
+#endif
+#ifdef @CS_ASSERT_PROJECT_NAME@_ASSERT_SAFE_MATH_ENABLED
+#define @CS_ASSERT_PROJECT_NAME@_ASSERT_SAFE_MATH_ENABLED_VALUE true
+#else
+#define @CS_ASSERT_PROJECT_NAME@_ASSERT_SAFE_MATH_ENABLED_VALUE false
+#endif
 
 namespace @CS_ASSERT_NAMESPACE@ {
 
