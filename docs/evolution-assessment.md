@@ -187,7 +187,7 @@ Suggested names for option C:
 | `csCore::assert` | `csCore::assert` | unchanged name; simpler CMake API |
 | `csCore::testUtils` | `csCore::test` | precision and golden-image helpers |
 | `csCore::format` | `csCore::format` | optional component |
-| `csCore::pipes` | removed | |
+| `csCore::pipes` | removed (done 2026-11-16, with pipes in third_party_base_libs) | |
 
 Transition: keep the old targets as `ALIAS`es and the old headers as forwarding
 headers for one release, with a deprecation note.

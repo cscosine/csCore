@@ -1,5 +1,22 @@
 ## csCore
 
+## Assert levels (csAssert)
+
+`csAssertGenerateProject(<project> <namespace>)` (in `csCore/assert/cmake/csAssert.cmake`, installed with the package
+for the other projects) creates `<namespace>::<project>Assert` and its header `<project>/<project>Assert.hpp`, with the
+macros `<PROJECT>_ASSERT_<LEVEL>(...)` (levels `RELEASE`, `RELWITHDEBINFO`, `DEBUG`, `PARANOID`, `SAFE_MATH`) and
+`<namespace>::Asserts::is...Enabled()`.
+
+The header is the same for every configuration; the levels enabled are the compile definitions
+`<PROJECT>_ASSERT_<LEVEL>_ENABLED` of the target, per configuration: `$<$<CONFIG:c1,c2,...>:<define>>`, from the CMake
+options `<PROJECT>_ASSERT_<LEVEL>_ENABLED_CONFIG_<Config>` (multi-config) or `<PROJECT>_ASSERT_<LEVEL>_ENABLED`
+(single config: the configuration of the build; the defaults for the others, so that the installed package does not
+depend on the configuration installed last). The consumers of the installed package get the levels of their own
+configuration (or of the one CMake maps it to). No source of the target varies by configuration: the Xcode generator
+works (it does not support per-configuration sources, which the previous design, one header per configuration, had).
+The header is `csCore/assert/cmake/templates/ProjectAssert.hpp.in` (the project name substituted); a new level is
+added there and in `DEFINE_NAMES` of `csAssert.cmake`.
+
 ## TODO
 
 - **clang-tidy**: add a `.clang-tidy` with the checks of csCore and a compile profile rule running it (e.g. in Paranoid,
