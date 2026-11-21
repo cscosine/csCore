@@ -5,23 +5,19 @@ cs_add_library(csCore::eigenUtils ALIAS eigenUtils)
 
 cs_find_package(eigenUtils PUBLIC Eigen3 REQUIRED CONFIG)
 
-cs_target_sources(eigenUtils
-	PRIVATE_INSTALL
-		MatrixShape.hpp
-		MatrixShape_impl.hpp
-		RotationMatrix.hpp
-		RotationMatrix_impl.hpp
-		IsometryMatrix.hpp
-		IsometryMatrix_impl.hpp
-	PRIVATE
-    )
+cs_target_sources(
+  eigenUtils
+  PRIVATE_INSTALL
+    MatrixShape.hpp
+    MatrixShape_impl.hpp
+    RotationMatrix.hpp
+    RotationMatrix_impl.hpp
+    IsometryMatrix.hpp
+    IsometryMatrix_impl.hpp
+  PRIVATE
+)
 
-cs_target_link_libraries(eigenUtils
-	INTERFACE
-		csCore::core
-		csCore::csCoreAssert
-		Eigen3::Eigen
-	)
+cs_target_link_libraries(eigenUtils INTERFACE csCore::core csCore::csCoreAssert Eigen3::Eigen)
 
 add_subdirectory(tests)
 

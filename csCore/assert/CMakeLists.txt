@@ -5,17 +5,9 @@ cs_add_library(csCore::assert ALIAS assert)
 
 cs_find_package(assert PUBLIC libassert REQUIRED CONFIG)
 
-cs_target_sources(assert
-	PRIVATE_INSTALL
-		Assert.hpp
-	PRIVATE
-    )
+cs_target_sources(assert PRIVATE_INSTALL Assert.hpp PRIVATE)
 
-cs_target_link_libraries(assert
-	INTERFACE
-	csCore::csCore
-	libassert::assert
-)
+cs_target_link_libraries(assert INTERFACE csCore::csCore libassert::assert)
 
 # install the cmake file to be available for client libraries
 set(SOURCE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/csAssert.cmake)

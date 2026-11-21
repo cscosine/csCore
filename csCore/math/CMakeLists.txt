@@ -3,21 +3,15 @@ project(math LANGUAGES CXX)
 cs_add_library(math STATIC)
 cs_add_library(csCore::math ALIAS math)
 
-cs_target_sources(math
-	PRIVATE_INSTALL
-		Angles.hpp
-	PRIVATE
-		Angles.cpp
-    )
+cs_target_sources(math PRIVATE_INSTALL Angles.hpp PRIVATE Angles.cpp)
 
-set_source_files_properties(Angles.cpp PROPERTIES COMPILE_OPTIONS "$<$<AND:$<PLATFORM_ID:Windows>,$<CXX_COMPILER_ID:Clang>>:-Wno-reserved-macro-identifier;-Wall>")
+set_source_files_properties(
+  Angles.cpp
+  PROPERTIES
+    COMPILE_OPTIONS "$<$<AND:$<PLATFORM_ID:Windows>,$<CXX_COMPILER_ID:Clang>>:-Wno-reserved-macro-identifier;-Wall>"
+)
 
-
-cs_target_link_libraries(math
-	PUBLIC
-		csCore::core
-		csCore::csCoreAssert
-	)
+cs_target_link_libraries(math PUBLIC csCore::core csCore::csCoreAssert)
 
 cs_target_use_compile_profiles(math cscmake_strict_warnings)
 
