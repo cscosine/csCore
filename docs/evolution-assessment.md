@@ -72,7 +72,8 @@ whole foundation.
    `assert` component, append the module path, `include(csAssert)`, five
    `csSetAssertDefaultOnForConfig` calls, `csAssertGenerateProject`,
    `list(POP_BACK ...)`. These should be one call.
-2. **CMake naming is inconsistent** with csCMake: `csAssertGenerateProject` /
+2. **Fixed (2026-11-21)**: renamed `cs_assert_generate_project` / `cs_assert_set_default_on_for_config`, the camelCase
+   names kept as deprecated wrappers. Was: **CMake naming is inconsistent** with csCMake: `csAssertGenerateProject` /
    `csSetAssertDefaultOnForConfig` (camelCase) vs `cs_add_library` /
    `cs_target_*` (snake_case).
 3. **The cache uses `FORCE`**, so changing a default requires deleting the build

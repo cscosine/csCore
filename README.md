@@ -15,7 +15,7 @@ branch: `copier update --defaults`.
 
 ## Assert levels (csAssert)
 
-`csAssertGenerateProject(<project> <namespace>)` (in `csCore/assert/cmake/csAssert.cmake`, installed with the package
+`cs_assert_generate_project(<project> <namespace>)` (in `csCore/assert/cmake/csAssert.cmake`, installed with the package
 for the other projects) creates `<namespace>::<project>Assert` and its header `<project>/<project>Assert.hpp`, with the
 macros `<PROJECT>_ASSERT_<LEVEL>(...)` (levels `RELEASE`, `RELWITHDEBINFO`, `DEBUG`, `PARANOID`, `SAFE_MATH`) and
 `<namespace>::Asserts::is...Enabled()`.
