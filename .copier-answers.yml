@@ -1,0 +1,7 @@
+# Changes here will be overwritten by Copier; NEVER EDIT MANUALLY
+_commit: v0.2.5
+_src_path: gh:cscosine/cs-project-template
+description: 'Core C++ utilities: asserts, formatting, Eigen helpers, math, named
+    types, test utilities'
+kind: library
+project_name: csCore

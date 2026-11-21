@@ -22,32 +22,23 @@
 
 // Usage examples
 
-template <typename T>
-decltype(auto) tee(T&& value) {
+template <typename T> decltype(auto) tee(T &&value) {
   std::cout << value << '\n';
   return std::forward<T>(value);
 }
 
-using Meter =
-    csCore::namedType::NamedType<unsigned long long, struct MeterParameter, csCore::namedType::Addable, csCore::namedType::Comparable>;
-constexpr Meter operator"" _meter(unsigned long long value) {
-  return Meter(value);
-}
+using Meter = csCore::namedType::NamedType<unsigned long long, struct MeterParameter, csCore::namedType::Addable,
+                                           csCore::namedType::Comparable>;
+constexpr Meter operator"" _meter(unsigned long long value) { return Meter(value); }
 
 using Width = csCore::namedType::NamedType<Meter, struct WidthParameter>;
 using Height = csCore::namedType::NamedType<Meter, struct HeightParameter>;
 
 class Rectangle {
 public:
-  Rectangle(Width width, Height height)
-      : width_(width.get())
-      , height_(height.get()) {}
-  Meter getWidth() const {
-    return width_;
-  }
-  Meter getHeight() const {
-    return height_;
-  }
+  Rectangle(Width width, Height height) : width_(width.get()), height_(height.get()) {}
+  Meter getWidth() const { return width_; }
+  Meter getHeight() const { return height_; }
 
 private:
   Meter width_;
@@ -60,11 +51,9 @@ TEST_CASE("Basic usage") {
   REQUIRE(r.getHeight().get() == 12);
 }
 
-using NameRef = csCore::namedType::NamedType<std::string&, struct NameRefParameter>;
+using NameRef = csCore::namedType::NamedType<std::string &, struct NameRefParameter>;
 
-void changeValue(NameRef name) {
-  name.get() = "value2";
-}
+void changeValue(NameRef name) { name.get() = "value2"; }
 
 TEST_CASE("Passing a strong reference") {
   std::string value = "value1";
@@ -74,9 +63,7 @@ TEST_CASE("Passing a strong reference") {
 
 TEST_CASE("Construction of NamedType::ref from the underlying type") {
   using StrongInt = csCore::namedType::NamedType<int, struct StrongIntTag>;
-  auto addOne = [](StrongInt::ref si) {
-    ++(si.get());
-  };
+  auto addOne = [](StrongInt::ref si) { ++(si.get()); };
 
   int i = 42;
   addOne(StrongInt::ref(i));
@@ -85,9 +72,7 @@ TEST_CASE("Construction of NamedType::ref from the underlying type") {
 
 TEST_CASE("Implicit conversion of NamedType to NamedType::ref") {
   using StrongInt = csCore::namedType::NamedType<int, struct StrongIntTag>;
-  auto addOne = [](StrongInt::ref si) {
-    ++(si.get());
-  };
+  auto addOne = [](StrongInt::ref si) { ++(si.get()); };
 
   StrongInt i(42);
   addOne(i);
@@ -120,34 +105,32 @@ TEST_CASE("Default construction") {
 
   // Default constructible
   static_assert(std::is_default_constructible<StrongInt>::value, "StrongInt is not default constructible");
-  using StrongNonDefaultConstructible = csCore::namedType::NamedType<NonDefaultConstructible, struct StrongNonDefaultConstructibleTag>;
+  using StrongNonDefaultConstructible =
+      csCore::namedType::NamedType<NonDefaultConstructible, struct StrongNonDefaultConstructibleTag>;
   static_assert(!std::is_default_constructible<StrongNonDefaultConstructible>::value,
                 "StrongNonDefaultConstructible is default constructible");
 
   // Trivially constructible
   static_assert(std::is_trivially_constructible<StrongInt>::value, "StrongInt is not trivially constructible");
   using StrongUserProvided = csCore::namedType::NamedType<UserProvided, struct StrongUserProvidedTag>;
-  static_assert(!std::is_trivially_constructible<StrongUserProvided>::value, "StrongUserProvided is trivially constructible");
+  static_assert(!std::is_trivially_constructible<StrongUserProvided>::value,
+                "StrongUserProvided is trivially constructible");
 
   // Nothrow constructible
   static_assert(std::is_nothrow_constructible<StrongInt>::value, "StrongInt is not nothrow constructible");
-  using StrongPotentiallyThrowing = csCore::namedType::NamedType<PotentiallyThrowing, struct StrongPotentiallyThrowingTag>;
+  using StrongPotentiallyThrowing =
+      csCore::namedType::NamedType<PotentiallyThrowing, struct StrongPotentiallyThrowingTag>;
   static_assert(!std::is_nothrow_constructible<StrongPotentiallyThrowing>::value,
                 "StrongPotentiallyThrowing is nothrow constructible");
 }
 
-template <typename Function>
-using Comparator = csCore::namedType::NamedType<Function, struct ComparatorParameter>;
+template <typename Function> using Comparator = csCore::namedType::NamedType<Function, struct ComparatorParameter>;
 
-template <typename Function>
-std::string performAction(Comparator<Function> comp) {
-  return comp.get()();
-}
+template <typename Function> std::string performAction(Comparator<Function> comp) { return comp.get()(); }
 
 TEST_CASE("Strong generic type") {
-  REQUIRE(performAction(csCore::namedType::make_named<Comparator>([]() {
-            return std::string("compare");
-          })) == "compare");
+  REQUIRE(performAction(csCore::namedType::make_named<Comparator>([]() { return std::string("compare"); })) ==
+          "compare");
 }
 
 TEST_CASE("Addable") {
@@ -167,14 +150,16 @@ TEST_CASE("Addable constexpr") {
 }
 
 TEST_CASE("BinaryAddable") {
-  using BinaryAddableType = csCore::namedType::NamedType<int, struct BinaryAddableTag, csCore::namedType::BinaryAddable>;
+  using BinaryAddableType =
+      csCore::namedType::NamedType<int, struct BinaryAddableTag, csCore::namedType::BinaryAddable>;
   BinaryAddableType s1(12);
   BinaryAddableType s2(10);
   REQUIRE((s1 + s2).get() == 22);
 }
 
 TEST_CASE("BinaryAddable constexpr") {
-  using BinaryAddableType = csCore::namedType::NamedType<int, struct BinaryAddableTag, csCore::namedType::BinaryAddable>;
+  using BinaryAddableType =
+      csCore::namedType::NamedType<int, struct BinaryAddableTag, csCore::namedType::BinaryAddable>;
   constexpr BinaryAddableType s1(12);
   constexpr BinaryAddableType s2(10);
   static_assert((s1 + s2).get() == 22, "BinaryAddable is not constexpr");
@@ -182,7 +167,8 @@ TEST_CASE("BinaryAddable constexpr") {
 
 #if FLUENT_CPP17_PRESENT
 TEST_CASE("BinaryAddable constexpr C++17") {
-  using BinaryAddableType = csCore::namedType::NamedType<int, struct BinaryAddableTag, csCore::namedType::BinaryAddable>;
+  using BinaryAddableType =
+      csCore::namedType::NamedType<int, struct BinaryAddableTag, csCore::namedType::BinaryAddable>;
   constexpr BinaryAddableType s(10);
   static_assert(BinaryAddableType{12}.operator+=(s).get() == 22, "BinaryAddable is not constexpr");
 }
@@ -242,19 +228,22 @@ TEST_CASE("BinarySubtractable constexpr C++17") {
 #endif
 
 TEST_CASE("UnarySubtractable") {
-  using UnarySubtractableType = csCore::namedType::NamedType<int, struct UnarySubtractableTag, csCore::namedType::UnarySubtractable>;
+  using UnarySubtractableType =
+      csCore::namedType::NamedType<int, struct UnarySubtractableTag, csCore::namedType::UnarySubtractable>;
   UnarySubtractableType s(12);
   REQUIRE((-s).get() == -12);
 }
 
 TEST_CASE("UnarySubtractable constexpr") {
-  using UnarySubtractableType = csCore::namedType::NamedType<int, struct UnarySubtractableTag, csCore::namedType::UnarySubtractable>;
+  using UnarySubtractableType =
+      csCore::namedType::NamedType<int, struct UnarySubtractableTag, csCore::namedType::UnarySubtractable>;
   constexpr UnarySubtractableType s(12);
   static_assert((-s).get() == -12, "UnarySubtractable is not constexpr");
 }
 
 TEST_CASE("Multiplicable") {
-  using MultiplicableType = csCore::namedType::NamedType<int, struct MultiplicableTag, csCore::namedType::Multiplicable>;
+  using MultiplicableType =
+      csCore::namedType::NamedType<int, struct MultiplicableTag, csCore::namedType::Multiplicable>;
   MultiplicableType s1(12);
   MultiplicableType s2(10);
   REQUIRE((s1 * s2).get() == 120);
@@ -263,7 +252,8 @@ TEST_CASE("Multiplicable") {
 }
 
 TEST_CASE("Multiplicable constexpr") {
-  using MultiplicableType = csCore::namedType::NamedType<int, struct MultiplicableTag, csCore::namedType::Multiplicable>;
+  using MultiplicableType =
+      csCore::namedType::NamedType<int, struct MultiplicableTag, csCore::namedType::Multiplicable>;
   constexpr MultiplicableType s1(12);
   constexpr MultiplicableType s2(10);
   static_assert((s1 * s2).get() == 120, "Multiplicable is not constexpr");
@@ -271,7 +261,8 @@ TEST_CASE("Multiplicable constexpr") {
 
 #if FLUENT_CPP17_PRESENT
 TEST_CASE("Multiplicable constexpr C++17") {
-  using MultiplicableType = csCore::namedType::NamedType<int, struct MultiplicableTag, csCore::namedType::Multiplicable>;
+  using MultiplicableType =
+      csCore::namedType::NamedType<int, struct MultiplicableTag, csCore::namedType::Multiplicable>;
   constexpr MultiplicableType s(10);
   static_assert(MultiplicableType{12}.operator*=(s).get() == 120, "Multiplicable is not constexpr");
 }
@@ -326,19 +317,22 @@ TEST_CASE("Modulable constexpr C++17") {
 #endif
 
 TEST_CASE("BitWiseInvertable") {
-  using BitWiseInvertableType = csCore::namedType::NamedType<int, struct BitWiseInvertableTag, csCore::namedType::BitWiseInvertable>;
+  using BitWiseInvertableType =
+      csCore::namedType::NamedType<int, struct BitWiseInvertableTag, csCore::namedType::BitWiseInvertable>;
   BitWiseInvertableType s1(13);
   CHECK((~s1).get() == (~13));
 }
 
 TEST_CASE("BitWiseInvertable constexpr") {
-  using BitWiseInvertableType = csCore::namedType::NamedType<int, struct BitWiseInvertableTag, csCore::namedType::BitWiseInvertable>;
+  using BitWiseInvertableType =
+      csCore::namedType::NamedType<int, struct BitWiseInvertableTag, csCore::namedType::BitWiseInvertable>;
   constexpr BitWiseInvertableType s1(13);
   static_assert((~s1).get() == (~13), "BitWiseInvertable is not constexpr");
 }
 
 TEST_CASE("BitWiseAndable") {
-  using BitWiseAndableType = csCore::namedType::NamedType<int, struct BitWiseAndableTag, csCore::namedType::BitWiseAndable>;
+  using BitWiseAndableType =
+      csCore::namedType::NamedType<int, struct BitWiseAndableTag, csCore::namedType::BitWiseAndable>;
   BitWiseAndableType s1(2);
   BitWiseAndableType s2(64);
   CHECK((s1 & s2).get() == (2 & 64));
@@ -347,7 +341,8 @@ TEST_CASE("BitWiseAndable") {
 }
 
 TEST_CASE("BitWiseAndable constexpr") {
-  using BitWiseAndableType = csCore::namedType::NamedType<int, struct BitWiseAndableTag, csCore::namedType::BitWiseAndable>;
+  using BitWiseAndableType =
+      csCore::namedType::NamedType<int, struct BitWiseAndableTag, csCore::namedType::BitWiseAndable>;
   constexpr BitWiseAndableType s1(2);
   constexpr BitWiseAndableType s2(64);
   static_assert((s1 & s2).get() == (2 & 64), "BitWiseAndable is not constexpr");
@@ -355,14 +350,16 @@ TEST_CASE("BitWiseAndable constexpr") {
 
 #if FLUENT_CPP17_PRESENT
 TEST_CASE("BitWiseAndable constexpr C++17") {
-  using BitWiseAndableType = csCore::namedType::NamedType<int, struct BitWiseAndableTag, csCore::namedType::BitWiseAndable>;
+  using BitWiseAndableType =
+      csCore::namedType::NamedType<int, struct BitWiseAndableTag, csCore::namedType::BitWiseAndable>;
   constexpr BitWiseAndableType s(64);
   static_assert(BitWiseAndableType{2}.operator&=(s).get() == (2 & 64), "BitWiseAndable is not constexpr");
 }
 #endif
 
 TEST_CASE("BitWiseOrable") {
-  using BitWiseOrableType = csCore::namedType::NamedType<int, struct BitWiseOrableTag, csCore::namedType::BitWiseOrable>;
+  using BitWiseOrableType =
+      csCore::namedType::NamedType<int, struct BitWiseOrableTag, csCore::namedType::BitWiseOrable>;
   BitWiseOrableType s1(2);
   BitWiseOrableType s2(64);
   CHECK((s1 | s2).get() == (2 | 64));
@@ -371,7 +368,8 @@ TEST_CASE("BitWiseOrable") {
 }
 
 TEST_CASE("BitWiseOrable constexpr") {
-  using BitWiseOrableType = csCore::namedType::NamedType<int, struct BitWiseOrableTag, csCore::namedType::BitWiseOrable>;
+  using BitWiseOrableType =
+      csCore::namedType::NamedType<int, struct BitWiseOrableTag, csCore::namedType::BitWiseOrable>;
   constexpr BitWiseOrableType s1(2);
   constexpr BitWiseOrableType s2(64);
   static_assert((s1 | s2).get() == (2 | 64), "BitWiseOrable is not constexpr");
@@ -379,14 +377,16 @@ TEST_CASE("BitWiseOrable constexpr") {
 
 #if FLUENT_CPP17_PRESENT
 TEST_CASE("BitWiseOrable constexpr C++17") {
-  using BitWiseOrableType = csCore::namedType::NamedType<int, struct BitWiseOrableTag, csCore::namedType::BitWiseOrable>;
+  using BitWiseOrableType =
+      csCore::namedType::NamedType<int, struct BitWiseOrableTag, csCore::namedType::BitWiseOrable>;
   constexpr BitWiseOrableType s(64);
   static_assert(BitWiseOrableType{2}.operator|=(s).get() == (2 | 64), "BitWiseOrable is not constexpr");
 }
 #endif
 
 TEST_CASE("BitWiseXorable") {
-  using BitWiseXorableType = csCore::namedType::NamedType<int, struct BitWiseXorableTag, csCore::namedType::BitWiseXorable>;
+  using BitWiseXorableType =
+      csCore::namedType::NamedType<int, struct BitWiseXorableTag, csCore::namedType::BitWiseXorable>;
   BitWiseXorableType s1(2);
   BitWiseXorableType s2(64);
   CHECK((s1 ^ s2).get() == (2 ^ 64));
@@ -395,7 +395,8 @@ TEST_CASE("BitWiseXorable") {
 }
 
 TEST_CASE("BitWiseXorable constexpr") {
-  using BitWiseXorableType = csCore::namedType::NamedType<int, struct BitWiseXorableTag, csCore::namedType::BitWiseXorable>;
+  using BitWiseXorableType =
+      csCore::namedType::NamedType<int, struct BitWiseXorableTag, csCore::namedType::BitWiseXorable>;
   constexpr BitWiseXorableType s1(2);
   constexpr BitWiseXorableType s2(64);
   static_assert((s1 ^ s2).get() == 66, "BitWiseXorable is not constexpr");
@@ -403,7 +404,8 @@ TEST_CASE("BitWiseXorable constexpr") {
 
 #if FLUENT_CPP17_PRESENT
 TEST_CASE("BitWiseXorable constexpr C++17") {
-  using BitWiseXorableType = csCore::namedType::NamedType<int, struct BitWiseXorableTag, csCore::namedType::BitWiseXorable>;
+  using BitWiseXorableType =
+      csCore::namedType::NamedType<int, struct BitWiseXorableTag, csCore::namedType::BitWiseXorable>;
   constexpr BitWiseXorableType s(64);
   static_assert(BitWiseXorableType{2}.operator^=(s).get() == 66, "BitWiseXorable is not constexpr");
 }
@@ -459,7 +461,8 @@ TEST_CASE("BitWiseRightShiftable constexpr C++17") {
   using BitWiseRightShiftableType =
       csCore::namedType::NamedType<int, struct BitWiseRightShiftableTag, csCore::namedType::BitWiseRightShiftable>;
   constexpr BitWiseRightShiftableType s(3);
-  static_assert(BitWiseRightShiftableType{2}.operator>>=(s).get() == (2 >> 3), "BitWiseRightShiftable is not constexpr");
+  static_assert(BitWiseRightShiftableType{2}.operator>>=(s).get() == (2 >> 3),
+                "BitWiseRightShiftable is not constexpr");
 }
 #endif
 
@@ -499,21 +502,18 @@ TEST_CASE("Comparable constexpr") {
 
 TEST_CASE("ConvertibleWithOperator") {
   struct B {
-    B(int x_)
-        : x(x_) {}
+    B(int x_) : x(x_) {}
     int x;
   };
 
   struct A {
-    A(int x_)
-        : x(x_) {}
-    operator B() const {
-      return B(x);
-    }
+    A(int x_) : x(x_) {}
+    operator B() const { return B(x); }
     int x;
   };
 
-  using StrongA = csCore::namedType::NamedType<A, struct StrongATag, csCore::namedType::ImplicitlyConvertibleTo<B>::templ>;
+  using StrongA =
+      csCore::namedType::NamedType<A, struct StrongATag, csCore::namedType::ImplicitlyConvertibleTo<B>::templ>;
   StrongA strongA(A(42));
   B b = strongA;
   REQUIRE(b.x == 42);
@@ -521,21 +521,18 @@ TEST_CASE("ConvertibleWithOperator") {
 
 TEST_CASE("ConvertibleWithOperator constexpr") {
   struct B {
-    constexpr B(int x_)
-        : x(x_) {}
+    constexpr B(int x_) : x(x_) {}
     int x;
   };
 
   struct A {
-    constexpr A(int x_)
-        : x(x_) {}
-    constexpr operator B() const {
-      return B(x);
-    }
+    constexpr A(int x_) : x(x_) {}
+    constexpr operator B() const { return B(x); }
     int x;
   };
 
-  using StrongA = csCore::namedType::NamedType<A, struct StrongATag, csCore::namedType::ImplicitlyConvertibleTo<B>::templ>;
+  using StrongA =
+      csCore::namedType::NamedType<A, struct StrongATag, csCore::namedType::ImplicitlyConvertibleTo<B>::templ>;
   constexpr StrongA strongA(A(42));
   constexpr B b = strongA;
   static_assert(b.x == 42, "ImplicitlyConvertibleTo is not constexpr");
@@ -543,18 +540,17 @@ TEST_CASE("ConvertibleWithOperator constexpr") {
 
 TEST_CASE("ConvertibleWithConstructor") {
   struct A {
-    A(int x_)
-        : x(x_) {}
+    A(int x_) : x(x_) {}
     int x;
   };
 
   struct B {
-    B(A a)
-        : x(a.x) {}
+    B(A a) : x(a.x) {}
     int x;
   };
 
-  using StrongA = csCore::namedType::NamedType<A, struct StrongATag, csCore::namedType::ImplicitlyConvertibleTo<B>::templ>;
+  using StrongA =
+      csCore::namedType::NamedType<A, struct StrongATag, csCore::namedType::ImplicitlyConvertibleTo<B>::templ>;
   StrongA strongA(A(42));
   B b = strongA;
   REQUIRE(b.x == 42);
@@ -562,40 +558,41 @@ TEST_CASE("ConvertibleWithConstructor") {
 
 TEST_CASE("ConvertibleWithConstructor constexpr") {
   struct A {
-    constexpr A(int x_)
-        : x(x_) {}
+    constexpr A(int x_) : x(x_) {}
     int x;
   };
 
   struct B {
-    constexpr B(A a)
-        : x(a.x) {}
+    constexpr B(A a) : x(a.x) {}
     int x;
   };
 
-  using StrongA = csCore::namedType::NamedType<A, struct StrongATag, csCore::namedType::ImplicitlyConvertibleTo<B>::templ>;
+  using StrongA =
+      csCore::namedType::NamedType<A, struct StrongATag, csCore::namedType::ImplicitlyConvertibleTo<B>::templ>;
   constexpr StrongA strongA(A(42));
   constexpr B b = strongA;
   static_assert(b.x == 42, "ImplicitlyConvertibleTo is not constexpr");
 }
 
 TEST_CASE("ConvertibleToItself") {
-  using MyInt = csCore::namedType::NamedType<int, struct MyIntTag, csCore::namedType::ImplicitlyConvertibleTo<int>::templ>;
+  using MyInt =
+      csCore::namedType::NamedType<int, struct MyIntTag, csCore::namedType::ImplicitlyConvertibleTo<int>::templ>;
   MyInt myInt(42);
   int i = myInt;
   REQUIRE(i == 42);
 }
 
 TEST_CASE("ConvertibleToItself constexpr") {
-  using MyInt = csCore::namedType::NamedType<int, struct MyIntTag, csCore::namedType::ImplicitlyConvertibleTo<int>::templ>;
+  using MyInt =
+      csCore::namedType::NamedType<int, struct MyIntTag, csCore::namedType::ImplicitlyConvertibleTo<int>::templ>;
   constexpr MyInt myInt(42);
   constexpr int i = myInt;
   static_assert(i == 42, "ImplicitlyConvertibleTo is not constexpr");
 }
 
 TEST_CASE("Hash") {
-  using SerialNumber =
-      csCore::namedType::NamedType<std::string, struct SerialNumberTag, csCore::namedType::Comparable, csCore::namedType::Hashable>;
+  using SerialNumber = csCore::namedType::NamedType<std::string, struct SerialNumberTag, csCore::namedType::Comparable,
+                                                    csCore::namedType::Hashable>;
 
   std::unordered_map<SerialNumber, int> hashMap = {{SerialNumber{"AA11"}, 10}, {SerialNumber{"BB22"}, 20}};
   SerialNumber cc33{"CC33"};
@@ -606,31 +603,26 @@ TEST_CASE("Hash") {
 }
 
 struct testFunctionCallable_A {
-  testFunctionCallable_A(int x_)
-      : x(x_) {}
+  testFunctionCallable_A(int x_) : x(x_) {}
   // ensures that passing the argument to a function doesn't make a copy
-  testFunctionCallable_A(testFunctionCallable_A const&) = delete;
-  testFunctionCallable_A(testFunctionCallable_A&&) = default;
-  testFunctionCallable_A& operator+=(testFunctionCallable_A const& other) {
+  testFunctionCallable_A(testFunctionCallable_A const &) = delete;
+  testFunctionCallable_A(testFunctionCallable_A &&) = default;
+  testFunctionCallable_A &operator+=(testFunctionCallable_A const &other) {
     x += other.x;
     return *this;
   }
   int x;
 };
 
-testFunctionCallable_A operator+(testFunctionCallable_A const& a1, testFunctionCallable_A const& a2) {
+testFunctionCallable_A operator+(testFunctionCallable_A const &a1, testFunctionCallable_A const &a2) {
   return testFunctionCallable_A(a1.x + a2.x);
 }
 
-bool operator==(testFunctionCallable_A const& a1, testFunctionCallable_A const& a2) {
-  return a1.x == a2.x;
-}
+bool operator==(testFunctionCallable_A const &a1, testFunctionCallable_A const &a2) { return a1.x == a2.x; }
 
 TEST_CASE("Function callable") {
   using A = testFunctionCallable_A;
-  auto functionTakingA = [](A const& a) {
-    return a.x;
-  };
+  auto functionTakingA = [](A const &a) { return a.x; };
 
   using StrongA = csCore::namedType::NamedType<A, struct StrongATag, csCore::namedType::FunctionCallable>;
   StrongA strongA(A(42));
@@ -641,29 +633,24 @@ TEST_CASE("Function callable") {
 }
 
 struct testFunctionCallable_B {
-  constexpr testFunctionCallable_B(int x_)
-      : x(x_) {}
+  constexpr testFunctionCallable_B(int x_) : x(x_) {}
   // ensures that passing the argument to a function doesn't make a copy
-  testFunctionCallable_B(testFunctionCallable_B const&) = delete;
-  testFunctionCallable_B(testFunctionCallable_B&&) = default;
-  constexpr testFunctionCallable_B& operator+=(testFunctionCallable_B const& other) {
+  testFunctionCallable_B(testFunctionCallable_B const &) = delete;
+  testFunctionCallable_B(testFunctionCallable_B &&) = default;
+  constexpr testFunctionCallable_B &operator+=(testFunctionCallable_B const &other) {
     x += other.x;
     return *this;
   }
   int x;
 };
 
-constexpr testFunctionCallable_B operator+(testFunctionCallable_B const& a1, testFunctionCallable_B const& a2) {
+constexpr testFunctionCallable_B operator+(testFunctionCallable_B const &a1, testFunctionCallable_B const &a2) {
   return testFunctionCallable_B(a1.x + a2.x);
 }
 
-constexpr bool operator==(testFunctionCallable_B const& a1, testFunctionCallable_B const& a2) {
-  return a1.x == a2.x;
-}
+constexpr bool operator==(testFunctionCallable_B const &a1, testFunctionCallable_B const &a2) { return a1.x == a2.x; }
 
-constexpr int functionTakingB(testFunctionCallable_B const& b) {
-  return b.x;
-}
+constexpr int functionTakingB(testFunctionCallable_B const &b) { return b.x; }
 
 TEST_CASE("Function callable constexpr") {
   using B = testFunctionCallable_B;
@@ -679,17 +666,12 @@ TEST_CASE("Function callable constexpr") {
 TEST_CASE("Method callable") {
   class A {
   public:
-    A(int x_)
-        : x(x_) {}
-    A(A const&) = delete; // ensures that invoking a method doesn't make a copy
-    A(A&&) = default;
+    A(int x_) : x(x_) {}
+    A(A const &) = delete; // ensures that invoking a method doesn't make a copy
+    A(A &&) = default;
 
-    int method() {
-      return x;
-    }
-    int constMethod() const {
-      return x;
-    }
+    int method() { return x; }
+    int constMethod() const { return x; }
 
   private:
     int x;
@@ -706,17 +688,12 @@ TEST_CASE("Method callable") {
 TEST_CASE("Method callable constexpr C++17") {
   class A {
   public:
-    constexpr A(int x_)
-        : x(x_) {}
-    A(A const&) = delete; // ensures that invoking a method doesn't make a copy
-    A(A&&) = default;
+    constexpr A(int x_) : x(x_) {}
+    A(A const &) = delete; // ensures that invoking a method doesn't make a copy
+    A(A &&) = default;
 
-    constexpr int method() {
-      return x;
-    }
-    constexpr int constMethod() const {
-      return x;
-    }
+    constexpr int method() { return x; }
+    constexpr int constMethod() const { return x; }
 
   private:
     int x;
@@ -732,25 +709,18 @@ TEST_CASE("Method callable constexpr C++17") {
 TEST_CASE("Callable") {
   class A {
   public:
-    A(int x_)
-        : x(x_) {}
-    A(A const&) = delete; // ensures that invoking a method or function doesn't make a copy
-    A(A&&) = default;
+    A(int x_) : x(x_) {}
+    A(A const &) = delete; // ensures that invoking a method or function doesn't make a copy
+    A(A &&) = default;
 
-    int method() {
-      return x;
-    }
-    int constMethod() const {
-      return x;
-    }
+    int method() { return x; }
+    int constMethod() const { return x; }
 
   private:
     int x;
   };
 
-  auto functionTakingA = [](A const& a) {
-    return a.constMethod();
-  };
+  auto functionTakingA = [](A const &a) { return a.constMethod(); };
 
   using StrongA = csCore::namedType::NamedType<A, struct StrongATag, csCore::namedType::Callable>;
   StrongA strongA(A(42));
@@ -765,7 +735,7 @@ TEST_CASE("Named arguments") {
   using LastName = csCore::namedType::NamedType<std::string, struct LastNameTag>;
   static const FirstName::argument firstName;
   static const LastName::argument lastName;
-  auto getFullName = [](FirstName const& firstName_, LastName const& lastName_) //
+  auto getFullName = [](FirstName const &firstName_, LastName const &lastName_) //
   {
     return firstName_.get() + lastName_.get(); //
   };
@@ -780,10 +750,8 @@ TEST_CASE("Named arguments in any order") {
   static const FirstName::argument firstName;
   static const LastName::argument lastName;
 
-  auto getFullName =
-      csCore::namedType::make_named_arg_function<FirstName, LastName>([](FirstName const& firstName_, LastName const& lastName_) {
-        return firstName_.get() + lastName_.get();
-      });
+  auto getFullName = csCore::namedType::make_named_arg_function<FirstName, LastName>(
+      [](FirstName const &firstName_, LastName const &lastName_) { return firstName_.get() + lastName_.get(); });
 
   auto fullName = getFullName(lastName = "Bond", firstName = "James");
   REQUIRE(fullName == "JamesBond");
@@ -795,17 +763,13 @@ TEST_CASE("Named arguments in any order") {
 TEST_CASE("Named arguments with bracket constructor") {
   using Numbers = csCore::namedType::NamedType<std::vector<int>, struct NumbersTag>;
   static const Numbers::argument numbers;
-  auto getNumbers = [](Numbers const& numbers_) {
-    return numbers_.get();
-  };
+  auto getNumbers = [](Numbers const &numbers_) { return numbers_.get(); };
 
   auto vec = getNumbers(numbers = {1, 2, 3});
   REQUIRE(vec == std::vector<int>{1, 2, 3});
 }
 
-TEST_CASE("Empty base class optimization") {
-  REQUIRE(sizeof(Meter) == sizeof(double));
-}
+TEST_CASE("Empty base class optimization") { REQUIRE(sizeof(Meter) == sizeof(double)); }
 
 using strong_int = csCore::namedType::NamedType<int, struct IntTag>;
 
@@ -816,13 +780,9 @@ TEST_CASE("constexpr") {
 }
 
 struct throw_on_construction {
-  throw_on_construction() {
-    throw 42;
-  }
+  throw_on_construction() { throw 42; }
 
-  throw_on_construction(int) {
-    throw "exception";
-  }
+  throw_on_construction(int) { throw "exception"; }
 };
 
 using C = csCore::namedType::NamedType<throw_on_construction, struct throwTag>;
@@ -893,30 +853,26 @@ TEST_CASE("Dereferencable") {
 
   {
     StrongInt a{1};
-    int& value = *a;
+    int &value = *a;
     CHECK(value == 1);
   }
 
   {
     const StrongInt a{1};
-    const int& value = *a;
+    const int &value = *a;
     CHECK(value == 1);
   }
 
   {
     StrongInt a{1};
-    int& value = *a;
+    int &value = *a;
     value = 2;
     CHECK(a.get() == 2);
   }
 
   {
-    auto functionReturningStrongInt = []() {
-      return StrongInt{28};
-    };
-    auto functionTakingInt = [](int value) {
-      return value;
-    };
+    auto functionReturningStrongInt = []() { return StrongInt{28}; };
+    auto functionTakingInt = [](int value) { return value; };
 
     int value = functionTakingInt(*functionReturningStrongInt());
     CHECK(value == 28);

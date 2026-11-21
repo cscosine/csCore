@@ -54,9 +54,9 @@ TEST_CASE("Simple assignment", "[assignment.simple]") {
 TEST_CASE("Assignment deletion", "[assignment.deletion]") {
   struct has_all {
     has_all() = default;
-    has_all(const has_all&) = default;
-    has_all(has_all&&) noexcept = default;
-    has_all& operator=(const has_all&) = default;
+    has_all(const has_all &) = default;
+    has_all(has_all &&) noexcept = default;
+    has_all &operator=(const has_all &) = default;
   };
 
   csCore::language::expected<has_all, has_all> e1 = {};
@@ -65,9 +65,9 @@ TEST_CASE("Assignment deletion", "[assignment.deletion]") {
 
   struct except_move {
     except_move() = default;
-    except_move(const except_move&) = default;
-    except_move(except_move&&) noexcept(false) {};
-    except_move& operator=(const except_move&) = default;
+    except_move(const except_move &) = default;
+    except_move(except_move &&) noexcept(false) {};
+    except_move &operator=(const except_move &) = default;
   };
   csCore::language::expected<except_move, except_move> e3 = {};
   csCore::language::expected<except_move, except_move> e4 = {};

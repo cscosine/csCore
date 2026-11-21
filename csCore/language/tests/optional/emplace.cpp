@@ -13,9 +13,7 @@ TEST_CASE("Emplace", "[emplace]") {
 }
 
 struct A {
-  A() {
-    throw std::exception();
-  }
+  A() { throw std::exception(); }
 };
 
 TEST_CASE("Emplace with exception thrown", "[emplace]") {

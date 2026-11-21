@@ -37,9 +37,9 @@ TEST_CASE("Assignment reference", "[assignment.ref]") {
   auto i = 42;
   auto j = 12;
 
-  csCore::language::optional<int&> o1 = i;
-  csCore::language::optional<int&> o2 = j;
-  csCore::language::optional<int&> o3;
+  csCore::language::optional<int &> o1 = i;
+  csCore::language::optional<int &> o2 = j;
+  csCore::language::optional<int &> o3;
 
   o1 = o1;
   REQUIRE(*o1 == 42);

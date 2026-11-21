@@ -26,18 +26,14 @@ TEST_CASE("Noexcept", "[noexcept]") {
     REQUIRE(noexcept(swap(o1, o2)) == noexcept(o1.swap(o2)));
 
     struct nothrow_swappable {
-      nothrow_swappable& swap(const nothrow_swappable&) noexcept {
-        return *this;
-      }
+      nothrow_swappable &swap(const nothrow_swappable &) noexcept { return *this; }
     };
 
     struct throw_swappable {
       throw_swappable() = default;
-      throw_swappable(const throw_swappable&) {}
-      throw_swappable(throw_swappable&&) {}
-      throw_swappable& swap(const throw_swappable&) {
-        return *this;
-      }
+      throw_swappable(const throw_swappable &) {}
+      throw_swappable(throw_swappable &&) {}
+      throw_swappable &swap(const throw_swappable &) { return *this; }
     };
 
     csCore::language::optional<nothrow_swappable> ont;
@@ -55,11 +51,11 @@ TEST_CASE("Noexcept", "[noexcept]") {
     REQUIRE(noexcept(csCore::language::optional<int>{tl::nullopt}));
 
     struct nothrow_move {
-      nothrow_move(nothrow_move&&) noexcept = default;
+      nothrow_move(nothrow_move &&) noexcept = default;
     };
 
     struct throw_move {
-      throw_move(throw_move&&) {};
+      throw_move(throw_move &&) {};
     };
 
     using nothrow_opt = csCore::language::optional<nothrow_move>;
@@ -75,16 +71,14 @@ TEST_CASE("Noexcept", "[noexcept]") {
 
     struct nothrow_move_assign {
       nothrow_move_assign() = default;
-      nothrow_move_assign(nothrow_move_assign&&) noexcept = default;
-      nothrow_move_assign& operator=(const nothrow_move_assign&) = default;
+      nothrow_move_assign(nothrow_move_assign &&) noexcept = default;
+      nothrow_move_assign &operator=(const nothrow_move_assign &) = default;
     };
 
     struct throw_move_assign {
       throw_move_assign() = default;
-      throw_move_assign(throw_move_assign&&) {};
-      throw_move_assign& operator=(const throw_move_assign&) {
-        return *this;
-      }
+      throw_move_assign(throw_move_assign &&) {};
+      throw_move_assign &operator=(const throw_move_assign &) { return *this; }
     };
 
     using nothrow_opt = csCore::language::optional<nothrow_move_assign>;
@@ -99,7 +93,5 @@ TEST_CASE("Noexcept", "[noexcept]") {
     REQUIRE(noexcept(o1.has_value()));
   }
 
-  SECTION("modifiers") {
-    REQUIRE(noexcept(o1.reset()));
-  }
+  SECTION("modifiers") { REQUIRE(noexcept(o1.reset())); }
 }
