@@ -1,21 +1,21 @@
 include_guard(GLOBAL)
 include(GNUInstallDirs)
 
-# Important note: if you change the defaults of the assert values (eg csSetAssertDefaultOnForConfig) you need to remove the BUILD directory and build from scratch, otherwise the generated headers are not updated
+# Important note: if you change the defaults of the assert values (eg cs_assert_set_default_on_for_config) you need to remove the BUILD directory and build from scratch, otherwise the generated headers are not updated
 
-function(_csCreateDefineName CS_ASSERT_PROJECT_NAME DEFINE_TOPIC DEFINE_NAME OUTPUT_NAME)
+function(_cs_assert_define_name CS_ASSERT_PROJECT_NAME DEFINE_TOPIC DEFINE_NAME OUTPUT_NAME)
   set(FULL_NAME "${CS_ASSERT_PROJECT_NAME}_${DEFINE_TOPIC}_${DEFINE_NAME}")
   set(${OUTPUT_NAME} ${FULL_NAME} PARENT_SCOPE)
 endfunction()
 
-function(_csCreateDefineEnabledName CS_ASSERT_PROJECT_NAME DEFINE_TOPIC DEFINE_NAME OUTPUT_NAME)
-  _cscreatedefinename(${CS_ASSERT_PROJECT_NAME} ${DEFINE_TOPIC} ${DEFINE_NAME} FULL_NAME)
+function(_cs_assert_define_enabled_name CS_ASSERT_PROJECT_NAME DEFINE_TOPIC DEFINE_NAME OUTPUT_NAME)
+  _cs_assert_define_name(${CS_ASSERT_PROJECT_NAME} ${DEFINE_TOPIC} ${DEFINE_NAME} FULL_NAME)
   set(FULL_NAME "${FULL_NAME}_ENABLED")
   set(${OUTPUT_NAME} ${FULL_NAME} PARENT_SCOPE)
 endfunction()
 
 function(
-  csSetAssertDefaultOnForConfig
+  cs_assert_set_default_on_for_config
   PROJECT_NAME
   DEFINE_TOPIC
   DEFINE_NAME
@@ -32,31 +32,31 @@ function(
   )
 endfunction()
 
-function(csAssertGenerateProject PROJECT_NAME TARGET_NAMESPACE)
+function(cs_assert_generate_project PROJECT_NAME TARGET_NAMESPACE)
   string(TOUPPER ${PROJECT_NAME} CS_ASSERT_PROJECT_NAME)
 
   # define default values mapping for different (standard) build types
 
   # in Release enable only RELEASE
-  cssetassertdefaultonforconfig(${PROJECT_NAME} ASSERT RELEASE Release ON)
-  cssetassertdefaultonforconfig(${PROJECT_NAME} ASSERT RELWITHDEBINFO Release OFF)
-  cssetassertdefaultonforconfig(${PROJECT_NAME} ASSERT DEBUG Release OFF)
-  cssetassertdefaultonforconfig(${PROJECT_NAME} ASSERT PARANOID Release OFF)
-  cssetassertdefaultonforconfig(${PROJECT_NAME} ASSERT SAFE_MATH Release OFF)
+  cs_assert_set_default_on_for_config(${PROJECT_NAME} ASSERT RELEASE Release ON)
+  cs_assert_set_default_on_for_config(${PROJECT_NAME} ASSERT RELWITHDEBINFO Release OFF)
+  cs_assert_set_default_on_for_config(${PROJECT_NAME} ASSERT DEBUG Release OFF)
+  cs_assert_set_default_on_for_config(${PROJECT_NAME} ASSERT PARANOID Release OFF)
+  cs_assert_set_default_on_for_config(${PROJECT_NAME} ASSERT SAFE_MATH Release OFF)
 
   # in Debug enable RELEASE, RELWITHDEBINFO and DEBUG
-  cssetassertdefaultonforconfig(${PROJECT_NAME} ASSERT RELEASE Debug ON)
-  cssetassertdefaultonforconfig(${PROJECT_NAME} ASSERT RELWITHDEBINFO Debug ON)
-  cssetassertdefaultonforconfig(${PROJECT_NAME} ASSERT DEBUG Debug ON)
-  cssetassertdefaultonforconfig(${PROJECT_NAME} ASSERT PARANOID Debug OFF)
-  cssetassertdefaultonforconfig(${PROJECT_NAME} ASSERT SAFE_MATH Debug OFF)
+  cs_assert_set_default_on_for_config(${PROJECT_NAME} ASSERT RELEASE Debug ON)
+  cs_assert_set_default_on_for_config(${PROJECT_NAME} ASSERT RELWITHDEBINFO Debug ON)
+  cs_assert_set_default_on_for_config(${PROJECT_NAME} ASSERT DEBUG Debug ON)
+  cs_assert_set_default_on_for_config(${PROJECT_NAME} ASSERT PARANOID Debug OFF)
+  cs_assert_set_default_on_for_config(${PROJECT_NAME} ASSERT SAFE_MATH Debug OFF)
 
   # in RelWithDebInfo enable RELEASE and RELWITHDEBINFO
-  cssetassertdefaultonforconfig(${PROJECT_NAME} ASSERT RELEASE RelWithDebInfo ON)
-  cssetassertdefaultonforconfig(${PROJECT_NAME} ASSERT RELWITHDEBINFO RelWithDebInfo ON)
-  cssetassertdefaultonforconfig(${PROJECT_NAME} ASSERT DEBUG RelWithDebInfo OFF)
-  cssetassertdefaultonforconfig(${PROJECT_NAME} ASSERT PARANOID RelWithDebInfo OFF)
-  cssetassertdefaultonforconfig(${PROJECT_NAME} ASSERT SAFE_MATH RelWithDebInfo OFF)
+  cs_assert_set_default_on_for_config(${PROJECT_NAME} ASSERT RELEASE RelWithDebInfo ON)
+  cs_assert_set_default_on_for_config(${PROJECT_NAME} ASSERT RELWITHDEBINFO RelWithDebInfo ON)
+  cs_assert_set_default_on_for_config(${PROJECT_NAME} ASSERT DEBUG RelWithDebInfo OFF)
+  cs_assert_set_default_on_for_config(${PROJECT_NAME} ASSERT PARANOID RelWithDebInfo OFF)
+  cs_assert_set_default_on_for_config(${PROJECT_NAME} ASSERT SAFE_MATH RelWithDebInfo OFF)
 
   # get the relative path to the cmake source dir
   set(CURRENT_RELATIVE_PATH ${CMAKE_CURRENT_SOURCE_DIR})
@@ -81,11 +81,11 @@ function(csAssertGenerateProject PROJECT_NAME TARGET_NAMESPACE)
     foreach(DEFINE_TOPIC ${DEFINE_TOPICS})
       foreach(DEFINE_NAME ${DEFINE_NAMES})
         # retrieve the option name (equivalent to the define name)
-        _cscreatedefineenabledname(${CS_ASSERT_PROJECT_NAME} ${DEFINE_TOPIC} ${DEFINE_NAME} DEFINE_FULL_NAME_ENABLED)
+        _cs_assert_define_enabled_name(${CS_ASSERT_PROJECT_NAME} ${DEFINE_TOPIC} ${DEFINE_NAME} DEFINE_FULL_NAME_ENABLED)
 
         foreach(CONFIG_TYPE ${CMAKE_CONFIGURATION_TYPES})
           # retrieve default value
-          _cscreatedefinename(${CS_ASSERT_PROJECT_NAME} ${DEFINE_TOPIC} ${DEFINE_NAME} DEFINE_BASE_NAME)
+          _cs_assert_define_name(${CS_ASSERT_PROJECT_NAME} ${DEFINE_TOPIC} ${DEFINE_NAME} DEFINE_BASE_NAME)
           set(DEFAULT_VALUE_NAME "${DEFINE_BASE_NAME}_CONFIG_${CONFIG_TYPE}_DEFAULT")
 
           if(DEFINED ${DEFAULT_VALUE_NAME})
@@ -93,7 +93,7 @@ function(csAssertGenerateProject PROJECT_NAME TARGET_NAMESPACE)
           else()
             message(
               FATAL_ERROR
-              "no default value for configuration ${CONFIG_TYPE}, variable ${DEFINE_BASE_NAME}_CONFIG_${CONFIG_TYPE}_DEFAULT does not exist, maybe you forgot to use csSetAssertDefaultOnForConfig for ${CONFIG_TYPE} before calling csAssertGenerateProject"
+              "no default value for configuration ${CONFIG_TYPE}, variable ${DEFINE_BASE_NAME}_CONFIG_${CONFIG_TYPE}_DEFAULT does not exist, maybe you forgot to use cs_assert_set_default_on_for_config for ${CONFIG_TYPE} before calling cs_assert_generate_project"
             )
           endif()
 
@@ -111,10 +111,10 @@ function(csAssertGenerateProject PROJECT_NAME TARGET_NAMESPACE)
     foreach(DEFINE_TOPIC ${DEFINE_TOPICS})
       foreach(DEFINE_NAME ${DEFINE_NAMES})
         # retrieve the option name (equivalent to the define name)
-        _cscreatedefineenabledname(${CS_ASSERT_PROJECT_NAME} ${DEFINE_TOPIC} ${DEFINE_NAME} DEFINE_FULL_NAME_ENABLED)
+        _cs_assert_define_enabled_name(${CS_ASSERT_PROJECT_NAME} ${DEFINE_TOPIC} ${DEFINE_NAME} DEFINE_FULL_NAME_ENABLED)
 
         # retrieve default value (if any)
-        _cscreatedefinename(${CS_ASSERT_PROJECT_NAME} ${DEFINE_TOPIC} ${DEFINE_NAME} DEFINE_BASE_NAME)
+        _cs_assert_define_name(${CS_ASSERT_PROJECT_NAME} ${DEFINE_TOPIC} ${DEFINE_NAME} DEFINE_BASE_NAME)
         set(DEFAULT_VALUE_NAME "${DEFINE_BASE_NAME}_CONFIG_${CMAKE_BUILD_TYPE}_DEFAULT")
 
         if(${DEFAULT_VALUE_NAME})
@@ -138,7 +138,7 @@ function(csAssertGenerateProject PROJECT_NAME TARGET_NAMESPACE)
   set(ASSERT_COMPILE_DEFINITIONS "")
   foreach(DEFINE_TOPIC ${DEFINE_TOPICS})
     foreach(DEFINE_NAME ${DEFINE_NAMES})
-      _cscreatedefineenabledname(${CS_ASSERT_PROJECT_NAME} ${DEFINE_TOPIC} ${DEFINE_NAME} DEFINE_FULL_NAME)
+      _cs_assert_define_enabled_name(${CS_ASSERT_PROJECT_NAME} ${DEFINE_TOPIC} ${DEFINE_NAME} DEFINE_FULL_NAME)
 
       # the configurations of the level: $<$<CONFIG:c1,c2,...>:<define>>, evaluated in the configuration of the
       # build, also for the consumers of the installed package (in their own configuration)
@@ -153,7 +153,7 @@ function(csAssertGenerateProject PROJECT_NAME TARGET_NAMESPACE)
         # single config: the option of CMAKE_BUILD_TYPE, the defaults of the other configurations; every
         # configuration is installed in the same package (one targets file), so the definitions must not
         # depend on the configuration installed last
-        _cscreatedefinename(${CS_ASSERT_PROJECT_NAME} ${DEFINE_TOPIC} ${DEFINE_NAME} DEFINE_BASE_NAME)
+        _cs_assert_define_name(${CS_ASSERT_PROJECT_NAME} ${DEFINE_TOPIC} ${DEFINE_NAME} DEFINE_BASE_NAME)
         if(${${DEFINE_FULL_NAME}})
           list(APPEND ENABLED_CONFIGS ${CMAKE_BUILD_TYPE})
         endif()
@@ -201,3 +201,15 @@ function(csAssertGenerateProject PROJECT_NAME TARGET_NAMESPACE)
   # compile each single header in standalone, ensures includes are self contained
   cs_target_check_installed_headers(${TARGET_NAME} COMPILE_PROFILES cscmake_strict_warnings)
 endfunction()
+
+# the names before csfoundation v0.1.0 (camelCase): deprecated, kept until every consumer calls the ones above (macros,
+# so the variables they set stay in the caller's scope)
+macro(csSetAssertDefaultOnForConfig)
+  message(DEPRECATION "csSetAssertDefaultOnForConfig is deprecated: use cs_assert_set_default_on_for_config")
+  cs_assert_set_default_on_for_config(${ARGV})
+endmacro()
+
+macro(csAssertGenerateProject)
+  message(DEPRECATION "csAssertGenerateProject is deprecated: use cs_assert_generate_project")
+  cs_assert_generate_project(${ARGV})
+endmacro()

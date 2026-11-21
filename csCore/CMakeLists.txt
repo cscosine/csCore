@@ -5,13 +5,13 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/assert/cmake/")
 include(csAssert)
 
 # set defaults for Paranoid additional configuration
-cssetassertdefaultonforconfig(${PROJECT_NAME} ASSERT RELEASE Paranoid ON)
-cssetassertdefaultonforconfig(${PROJECT_NAME} ASSERT RELWITHDEBINFO Paranoid ON)
-cssetassertdefaultonforconfig(${PROJECT_NAME} ASSERT DEBUG Paranoid ON)
-cssetassertdefaultonforconfig(${PROJECT_NAME} ASSERT PARANOID Paranoid ON)
-cssetassertdefaultonforconfig(${PROJECT_NAME} ASSERT SAFE_MATH Paranoid ON)
+cs_assert_set_default_on_for_config(${PROJECT_NAME} ASSERT RELEASE Paranoid ON)
+cs_assert_set_default_on_for_config(${PROJECT_NAME} ASSERT RELWITHDEBINFO Paranoid ON)
+cs_assert_set_default_on_for_config(${PROJECT_NAME} ASSERT DEBUG Paranoid ON)
+cs_assert_set_default_on_for_config(${PROJECT_NAME} ASSERT PARANOID Paranoid ON)
+cs_assert_set_default_on_for_config(${PROJECT_NAME} ASSERT SAFE_MATH Paranoid ON)
 
-csassertgenerateproject(csCore csCore) #generate target csCore::csCoreAssert
+cs_assert_generate_project(csCore csCore) #generate target csCore::csCoreAssert
 list(POP_BACK CMAKE_MODULE_PATH)
 
 cs_add_library(csCore INTERFACE)
