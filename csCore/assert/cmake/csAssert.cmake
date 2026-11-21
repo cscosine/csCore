@@ -1,215 +1,184 @@
 include_guard(GLOBAL)
 include(GNUInstallDirs)
 
-# Important note: if you change the defaults of the assert values (eg cs_assert_set_default_on_for_config) you need to remove the BUILD directory and build from scratch, otherwise the generated headers are not updated
+# The assertion levels of a project: a cache option per level (and per configuration with a multi-config generator),
+# a generated header <project>Assert.hpp and an INTERFACE target <project>Assert with the compile definitions of the
+# levels enabled. Changing a default (cs_assert_set_default_on_for_config) needs a fresh build directory: the options
+# are already in the cache.
 
-function(_cs_assert_define_name CS_ASSERT_PROJECT_NAME DEFINE_TOPIC DEFINE_NAME OUTPUT_NAME)
-  set(FULL_NAME "${CS_ASSERT_PROJECT_NAME}_${DEFINE_TOPIC}_${DEFINE_NAME}")
-  set(${OUTPUT_NAME} ${FULL_NAME} PARENT_SCOPE)
-endfunction()
-
-function(_cs_assert_define_enabled_name CS_ASSERT_PROJECT_NAME DEFINE_TOPIC DEFINE_NAME OUTPUT_NAME)
-  _cs_assert_define_name(${CS_ASSERT_PROJECT_NAME} ${DEFINE_TOPIC} ${DEFINE_NAME} FULL_NAME)
-  set(FULL_NAME "${FULL_NAME}_ENABLED")
-  set(${OUTPUT_NAME} ${FULL_NAME} PARENT_SCOPE)
-endfunction()
-
-function(
-  cs_assert_set_default_on_for_config
-  PROJECT_NAME
-  DEFINE_TOPIC
-  DEFINE_NAME
-  CONFIG
-  VALUE
-)
-  string(TOUPPER ${PROJECT_NAME} CS_ASSERT_PROJECT_NAME)
+# Set out_var to the assertion levels (ASSERT topic): a new level here and in templates/ProjectAssert.hpp.in.
+function(_cs_assert_levels out_var)
   set(
-    ${CS_ASSERT_PROJECT_NAME}_${DEFINE_TOPIC}_${DEFINE_NAME}_CONFIG_${CONFIG}_DEFAULT
-    "${VALUE}"
-    CACHE BOOL
-    "${DEFINE_TOPIC} ${DEFINE_NAME} default value"
-    FORCE
-  )
-endfunction()
-
-function(cs_assert_generate_project PROJECT_NAME TARGET_NAMESPACE)
-  string(TOUPPER ${PROJECT_NAME} CS_ASSERT_PROJECT_NAME)
-
-  # define default values mapping for different (standard) build types
-
-  # in Release enable only RELEASE
-  cs_assert_set_default_on_for_config(${PROJECT_NAME} ASSERT RELEASE Release ON)
-  cs_assert_set_default_on_for_config(${PROJECT_NAME} ASSERT RELWITHDEBINFO Release OFF)
-  cs_assert_set_default_on_for_config(${PROJECT_NAME} ASSERT DEBUG Release OFF)
-  cs_assert_set_default_on_for_config(${PROJECT_NAME} ASSERT PARANOID Release OFF)
-  cs_assert_set_default_on_for_config(${PROJECT_NAME} ASSERT SAFE_MATH Release OFF)
-
-  # in Debug enable RELEASE, RELWITHDEBINFO and DEBUG
-  cs_assert_set_default_on_for_config(${PROJECT_NAME} ASSERT RELEASE Debug ON)
-  cs_assert_set_default_on_for_config(${PROJECT_NAME} ASSERT RELWITHDEBINFO Debug ON)
-  cs_assert_set_default_on_for_config(${PROJECT_NAME} ASSERT DEBUG Debug ON)
-  cs_assert_set_default_on_for_config(${PROJECT_NAME} ASSERT PARANOID Debug OFF)
-  cs_assert_set_default_on_for_config(${PROJECT_NAME} ASSERT SAFE_MATH Debug OFF)
-
-  # in RelWithDebInfo enable RELEASE and RELWITHDEBINFO
-  cs_assert_set_default_on_for_config(${PROJECT_NAME} ASSERT RELEASE RelWithDebInfo ON)
-  cs_assert_set_default_on_for_config(${PROJECT_NAME} ASSERT RELWITHDEBINFO RelWithDebInfo ON)
-  cs_assert_set_default_on_for_config(${PROJECT_NAME} ASSERT DEBUG RelWithDebInfo OFF)
-  cs_assert_set_default_on_for_config(${PROJECT_NAME} ASSERT PARANOID RelWithDebInfo OFF)
-  cs_assert_set_default_on_for_config(${PROJECT_NAME} ASSERT SAFE_MATH RelWithDebInfo OFF)
-
-  # get the relative path to the cmake source dir
-  set(CURRENT_RELATIVE_PATH ${CMAKE_CURRENT_SOURCE_DIR})
-  cmake_path(RELATIVE_PATH CURRENT_RELATIVE_PATH BASE_DIRECTORY ${CMAKE_SOURCE_DIR})
-
-  # lists to loop on
-  set(DEFINE_TOPICS ASSERT) # so far only ASSERT topic, but keep the list so that if we need to add a new topic (e.g. CONTRACTS) everything is already in place
-  set(
-    DEFINE_NAMES
+    ${out_var}
     RELEASE
     RELWITHDEBINFO
     DEBUG
     PARANOID
     SAFE_MATH
+    PARENT_SCOPE
   )
-
-  get_property(GENERATOR_IS_MULTI_CONFIG GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
-
-  # defines a set of option to allow user to personalize the single assert level enablement
-  if(GENERATOR_IS_MULTI_CONFIG)
-    # multi config, create all single variables and add a default level based on the default defined above,
-    foreach(DEFINE_TOPIC ${DEFINE_TOPICS})
-      foreach(DEFINE_NAME ${DEFINE_NAMES})
-        # retrieve the option name (equivalent to the define name)
-        _cs_assert_define_enabled_name(${CS_ASSERT_PROJECT_NAME} ${DEFINE_TOPIC} ${DEFINE_NAME} DEFINE_FULL_NAME_ENABLED)
-
-        foreach(CONFIG_TYPE ${CMAKE_CONFIGURATION_TYPES})
-          # retrieve default value
-          _cs_assert_define_name(${CS_ASSERT_PROJECT_NAME} ${DEFINE_TOPIC} ${DEFINE_NAME} DEFINE_BASE_NAME)
-          set(DEFAULT_VALUE_NAME "${DEFINE_BASE_NAME}_CONFIG_${CONFIG_TYPE}_DEFAULT")
-
-          if(DEFINED ${DEFAULT_VALUE_NAME})
-            set(DEFAULT_VALUE ${${DEFAULT_VALUE_NAME}})
-          else()
-            message(
-              FATAL_ERROR
-              "no default value for configuration ${CONFIG_TYPE}, variable ${DEFINE_BASE_NAME}_CONFIG_${CONFIG_TYPE}_DEFAULT does not exist, maybe you forgot to use cs_assert_set_default_on_for_config for ${CONFIG_TYPE} before calling cs_assert_generate_project"
-            )
-          endif()
-
-          # create a option in the cmake cache (configurable via GUI too)
-          option(
-            ${DEFINE_FULL_NAME_ENABLED}_CONFIG_${CONFIG_TYPE}
-            "enable definition of ${DEFINE_FULL_NAME_ENABLED} for config ${CONFIG_TYPE}"
-            ${DEFAULT_VALUE}
-          )
-        endforeach()
-      endforeach()
-    endforeach()
-
-  else()
-    foreach(DEFINE_TOPIC ${DEFINE_TOPICS})
-      foreach(DEFINE_NAME ${DEFINE_NAMES})
-        # retrieve the option name (equivalent to the define name)
-        _cs_assert_define_enabled_name(${CS_ASSERT_PROJECT_NAME} ${DEFINE_TOPIC} ${DEFINE_NAME} DEFINE_FULL_NAME_ENABLED)
-
-        # retrieve default value (if any)
-        _cs_assert_define_name(${CS_ASSERT_PROJECT_NAME} ${DEFINE_TOPIC} ${DEFINE_NAME} DEFINE_BASE_NAME)
-        set(DEFAULT_VALUE_NAME "${DEFINE_BASE_NAME}_CONFIG_${CMAKE_BUILD_TYPE}_DEFAULT")
-
-        if(${DEFAULT_VALUE_NAME})
-          set(DEFAULT_VALUE ${${DEFAULT_VALUE_NAME}})
-        else()
-          set(DEFAULT_VALUE OFF)
-        endif()
-
-        # create a option in the cmake cache (configurable via GUI too)
-        option(${DEFINE_FULL_NAME_ENABLED} "enable definition of ${DEFINE_FULL_NAME_ENABLED}" ${DEFAULT_VALUE})
-      endforeach()
-    endforeach()
-  endif()
-
-  # finally, generate the header (templates/ProjectAssert.hpp.in): the same for every configuration (no
-  # per-configuration source, which the Xcode generator does not support), the levels enabled are the compile
-  # definitions <PROJECT>_ASSERT_<LEVEL>_ENABLED of the target, per configuration (below); the header defines their
-  # <...>_ENABLED_VALUE (true / false). A new level: here (DEFINE_NAMES) and in the template.
-  set(CS_ASSERT_NAMESPACE ${PROJECT_NAME})
-
-  set(ASSERT_COMPILE_DEFINITIONS "")
-  foreach(DEFINE_TOPIC ${DEFINE_TOPICS})
-    foreach(DEFINE_NAME ${DEFINE_NAMES})
-      _cs_assert_define_enabled_name(${CS_ASSERT_PROJECT_NAME} ${DEFINE_TOPIC} ${DEFINE_NAME} DEFINE_FULL_NAME)
-
-      # the configurations of the level: $<$<CONFIG:c1,c2,...>:<define>>, evaluated in the configuration of the
-      # build, also for the consumers of the installed package (in their own configuration)
-      set(ENABLED_CONFIGS "")
-      if(GENERATOR_IS_MULTI_CONFIG)
-        foreach(CONFIG_TYPE ${CMAKE_CONFIGURATION_TYPES})
-          if(${${DEFINE_FULL_NAME}_CONFIG_${CONFIG_TYPE}})
-            list(APPEND ENABLED_CONFIGS ${CONFIG_TYPE})
-          endif()
-        endforeach()
-      else()
-        # single config: the option of CMAKE_BUILD_TYPE, the defaults of the other configurations; every
-        # configuration is installed in the same package (one targets file), so the definitions must not
-        # depend on the configuration installed last
-        _cs_assert_define_name(${CS_ASSERT_PROJECT_NAME} ${DEFINE_TOPIC} ${DEFINE_NAME} DEFINE_BASE_NAME)
-        if(${${DEFINE_FULL_NAME}})
-          list(APPEND ENABLED_CONFIGS ${CMAKE_BUILD_TYPE})
-        endif()
-        get_cmake_property(CACHE_VARIABLES CACHE_VARIABLES)
-        foreach(CACHE_VARIABLE ${CACHE_VARIABLES})
-          if(CACHE_VARIABLE MATCHES "^${DEFINE_BASE_NAME}_CONFIG_(.+)_DEFAULT$")
-            set(CONFIG_TYPE ${CMAKE_MATCH_1})
-            if(NOT CONFIG_TYPE STREQUAL CMAKE_BUILD_TYPE AND ${CACHE_VARIABLE})
-              list(APPEND ENABLED_CONFIGS ${CONFIG_TYPE})
-            endif()
-          endif()
-        endforeach()
-      endif()
-      if(ENABLED_CONFIGS)
-        list(SORT ENABLED_CONFIGS)
-        list(JOIN ENABLED_CONFIGS "," ENABLED_CONFIGS)
-        list(APPEND ASSERT_COMPILE_DEFINITIONS "$<$<CONFIG:${ENABLED_CONFIGS}>:${DEFINE_FULL_NAME}>")
-      endif()
-    endforeach()
-  endforeach()
-
-  cs_get_generated_dir(GENERATED_FILE_FOLDER)
-  set(GENERATED_FILE "${GENERATED_FILE_FOLDER}/${CURRENT_RELATIVE_PATH}/${PROJECT_NAME}Assert.hpp")
-  configure_file("${CMAKE_CURRENT_FUNCTION_LIST_DIR}/templates/ProjectAssert.hpp.in" "${GENERATED_FILE}")
-
-  # define a target with the generate header
-  set(TARGET_NAME ${PROJECT_NAME}Assert)
-  cs_add_library(${TARGET_NAME} INTERFACE)
-  cs_add_library(${TARGET_NAMESPACE}::${TARGET_NAME} ALIAS ${TARGET_NAME})
-
-  cs_find_package(${TARGET_NAME} PUBLIC libassert REQUIRED CONFIG)
-
-  cs_target_sources(${TARGET_NAME} PRIVATE_INSTALL_ABSOLUTE_PATH ${GENERATED_FILE} PRIVATE)
-
-  cs_target_link_libraries(${TARGET_NAME} INTERFACE libassert::assert)
-
-  # the levels enabled, per configuration (see the header above)
-  target_compile_definitions(${TARGET_NAME} INTERFACE ${ASSERT_COMPILE_DEFINITIONS})
-
-  target_include_directories(${TARGET_NAME} INTERFACE $<BUILD_INTERFACE:${GENERATED_FILE_FOLDER}>)
-
-  # install to a default component
-  cs_install_target(${TARGET_NAME} COMPONENT ${TARGET_NAME} DEFAULT)
-
-  # compile each single header in standalone, ensures includes are self contained
-  cs_target_check_installed_headers(${TARGET_NAME} COMPILE_PROFILES cscmake_strict_warnings)
 endfunction()
 
-# the names before csfoundation v0.1.0 (camelCase): deprecated, kept until every consumer calls the ones above (macros,
-# so the variables they set stay in the caller's scope)
-macro(csSetAssertDefaultOnForConfig)
-  message(DEPRECATION "csSetAssertDefaultOnForConfig is deprecated: use cs_assert_set_default_on_for_config")
-  cs_assert_set_default_on_for_config(${ARGV})
-endmacro()
+# Set out_var to the name of a define: <PROJECT>_<topic>_<name>.
+function(_cs_assert_define_name upper_project topic name out_var)
+  set(${out_var} "${upper_project}_${topic}_${name}" PARENT_SCOPE)
+endfunction()
 
-macro(csAssertGenerateProject)
-  message(DEPRECATION "csAssertGenerateProject is deprecated: use cs_assert_generate_project")
-  cs_assert_generate_project(${ARGV})
-endmacro()
+# Set out_var to the name of the option / compile definition enabling a level: <PROJECT>_<topic>_<name>_ENABLED.
+function(_cs_assert_define_enabled_name upper_project topic name out_var)
+  set(${out_var} "${upper_project}_${topic}_${name}_ENABLED" PARENT_SCOPE)
+endfunction()
+
+# Set the default (ON / OFF) of an assertion level of a project for a configuration, in the cache.
+function(
+  cs_assert_set_default_on_for_config
+  project_name
+  topic
+  name
+  config
+  value
+)
+  string(TOUPPER ${project_name} upper_project)
+  set(
+    ${upper_project}_${topic}_${name}_CONFIG_${config}_DEFAULT
+    "${value}"
+    CACHE BOOL
+    "${topic} ${name} default value"
+    FORCE
+  )
+endfunction()
+
+# The default levels of the standard configurations: Release enables RELEASE; Debug RELEASE, RELWITHDEBINFO and DEBUG;
+# RelWithDebInfo RELEASE and RELWITHDEBINFO.
+function(_cs_assert_set_standard_defaults project_name)
+  _cs_assert_levels(levels)
+  foreach(config Release Debug RelWithDebInfo)
+    if(config STREQUAL "Release")
+      set(enabled RELEASE)
+    elseif(config STREQUAL "Debug")
+      set(enabled RELEASE RELWITHDEBINFO DEBUG)
+    else()
+      set(enabled RELEASE RELWITHDEBINFO)
+    endif()
+    foreach(level ${levels})
+      set(value OFF)
+      if(level IN_LIST enabled)
+        set(value ON)
+      endif()
+      cs_assert_set_default_on_for_config(${project_name} ASSERT ${level} ${config} ${value})
+    endforeach()
+  endforeach()
+endfunction()
+
+# A cache option per assertion level, initialised from the defaults: per configuration (<option>_CONFIG_<config>) with
+# a multi-config generator, of CMAKE_BUILD_TYPE otherwise.
+function(_cs_assert_create_options upper_project)
+  _cs_assert_levels(levels)
+  get_property(multi_config GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
+  foreach(level ${levels})
+    _cs_assert_define_enabled_name(${upper_project} ASSERT ${level} option_name)
+    _cs_assert_define_name(${upper_project} ASSERT ${level} base_name)
+    if(multi_config)
+      foreach(config ${CMAKE_CONFIGURATION_TYPES})
+        set(default_name "${base_name}_CONFIG_${config}_DEFAULT")
+        if(NOT DEFINED ${default_name})
+          message(
+            FATAL_ERROR
+            "no default value for configuration ${config}: ${default_name} does not exist; call "
+            "cs_assert_set_default_on_for_config for ${config} before cs_assert_generate_project"
+          )
+        endif()
+        option(
+          ${option_name}_CONFIG_${config}
+          "enable definition of ${option_name} for config ${config}"
+          ${${default_name}}
+        )
+      endforeach()
+    else()
+      set(default_value OFF)
+      if(${base_name}_CONFIG_${CMAKE_BUILD_TYPE}_DEFAULT)
+        set(default_value ON)
+      endif()
+      option(${option_name} "enable definition of ${option_name}" ${default_value})
+    endif()
+  endforeach()
+endfunction()
+
+# Set out_var to the configurations an assertion level is enabled in: the options with a multi-config generator; with
+# a single-config one, the option of CMAKE_BUILD_TYPE and the defaults of the other configurations (every configuration
+# is installed in the same package, one targets file: the definitions must not depend on the last one installed).
+function(_cs_assert_enabled_configs upper_project level out_var)
+  _cs_assert_define_enabled_name(${upper_project} ASSERT ${level} option_name)
+  _cs_assert_define_name(${upper_project} ASSERT ${level} base_name)
+  set(configs "")
+  get_property(multi_config GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
+  if(multi_config)
+    foreach(config ${CMAKE_CONFIGURATION_TYPES})
+      if(${${option_name}_CONFIG_${config}})
+        list(APPEND configs ${config})
+      endif()
+    endforeach()
+  else()
+    if(${${option_name}})
+      list(APPEND configs ${CMAKE_BUILD_TYPE})
+    endif()
+    get_cmake_property(cache_variables CACHE_VARIABLES)
+    foreach(variable ${cache_variables})
+      if(variable MATCHES "^${base_name}_CONFIG_(.+)_DEFAULT$")
+        if(NOT CMAKE_MATCH_1 STREQUAL CMAKE_BUILD_TYPE AND ${variable})
+          list(APPEND configs ${CMAKE_MATCH_1})
+        endif()
+      endif()
+    endforeach()
+  endif()
+  set(${out_var} ${configs} PARENT_SCOPE)
+endfunction()
+
+# Set out_var to the compile definitions of the levels enabled: $<$<CONFIG:c1,c2,...>:<define>>, evaluated in the
+# configuration of the build, also for the consumers of the installed package (in their own configuration).
+function(_cs_assert_compile_definitions upper_project out_var)
+  _cs_assert_levels(levels)
+  set(definitions "")
+  foreach(level ${levels})
+    _cs_assert_define_enabled_name(${upper_project} ASSERT ${level} define)
+    _cs_assert_enabled_configs(${upper_project} ${level} configs)
+    if(configs)
+      list(SORT configs)
+      list(JOIN configs "," configs)
+      list(APPEND definitions "$<$<CONFIG:${configs}>:${define}>")
+    endif()
+  endforeach()
+  set(${out_var} ${definitions} PARENT_SCOPE)
+endfunction()
+
+# Generate the assertion header of a project and its INTERFACE target <project>Assert (alias
+# <namespace>::<project>Assert): the levels as cache options, the header (the same for every configuration: the
+# levels enabled are the compile definitions of the target, per configuration), libassert, installed in its own
+# component.
+function(cs_assert_generate_project project_name target_namespace)
+  string(TOUPPER ${project_name} upper_project)
+  _cs_assert_set_standard_defaults(${project_name})
+  _cs_assert_create_options(${upper_project})
+  _cs_assert_compile_definitions(${upper_project} definitions)
+
+  # the variables of the template
+  set(cs_assert_namespace ${project_name})
+  set(cs_assert_project_name ${upper_project})
+  set(relative_path ${CMAKE_CURRENT_SOURCE_DIR})
+  cmake_path(RELATIVE_PATH relative_path BASE_DIRECTORY ${CMAKE_SOURCE_DIR})
+  cs_get_generated_dir(generated_folder)
+  set(generated_file "${generated_folder}/${relative_path}/${project_name}Assert.hpp")
+  configure_file("${CMAKE_CURRENT_FUNCTION_LIST_DIR}/templates/ProjectAssert.hpp.in" "${generated_file}" @ONLY)
+
+  set(target ${project_name}Assert)
+  cs_add_library(${target} INTERFACE)
+  cs_add_library(${target_namespace}::${target} ALIAS ${target})
+  cs_find_package(${target} PUBLIC libassert REQUIRED CONFIG)
+  cs_target_sources(${target} PRIVATE_INSTALL_ABSOLUTE_PATH ${generated_file} PRIVATE)
+  cs_target_link_libraries(${target} INTERFACE libassert::assert)
+  target_compile_definitions(${target} INTERFACE ${definitions})
+  target_include_directories(${target} INTERFACE $<BUILD_INTERFACE:${generated_folder}>)
+  cs_install_target(${target} COMPONENT ${target} DEFAULT)
+  # compile each single header in standalone, ensures includes are self contained
+  cs_target_check_installed_headers(${target} COMPILE_PROFILES cscmake_strict_warnings)
+endfunction()

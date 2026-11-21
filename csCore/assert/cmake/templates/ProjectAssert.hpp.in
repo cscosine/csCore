@@ -30,53 +30,53 @@
 // use PARANOID asserts for extremely high cost overhead checks, which you can accept in Paranoid configs
 //    e.g., check if the vector used in a binary search is effectively sorted
 
-// the levels enabled: the compile definitions @CS_ASSERT_PROJECT_NAME@_ASSERT_<LEVEL>_ENABLED of the target
-// @CS_ASSERT_NAMESPACE@::@CS_ASSERT_NAMESPACE@Assert, per configuration (the CMake options of csAssert); the header is
+// the levels enabled: the compile definitions @cs_assert_project_name@_ASSERT_<LEVEL>_ENABLED of the target
+// @cs_assert_namespace@::@cs_assert_namespace@Assert, per configuration (the CMake options of csAssert); the header is
 // the same for every configuration
-#ifdef @CS_ASSERT_PROJECT_NAME@_ASSERT_RELEASE_ENABLED
-#define @CS_ASSERT_PROJECT_NAME@_ASSERT_RELEASE_ENABLED_VALUE true
+#ifdef @cs_assert_project_name@_ASSERT_RELEASE_ENABLED
+#define @cs_assert_project_name@_ASSERT_RELEASE_ENABLED_VALUE true
 #else
-#define @CS_ASSERT_PROJECT_NAME@_ASSERT_RELEASE_ENABLED_VALUE false
+#define @cs_assert_project_name@_ASSERT_RELEASE_ENABLED_VALUE false
 #endif
-#ifdef @CS_ASSERT_PROJECT_NAME@_ASSERT_RELWITHDEBINFO_ENABLED
-#define @CS_ASSERT_PROJECT_NAME@_ASSERT_RELWITHDEBINFO_ENABLED_VALUE true
+#ifdef @cs_assert_project_name@_ASSERT_RELWITHDEBINFO_ENABLED
+#define @cs_assert_project_name@_ASSERT_RELWITHDEBINFO_ENABLED_VALUE true
 #else
-#define @CS_ASSERT_PROJECT_NAME@_ASSERT_RELWITHDEBINFO_ENABLED_VALUE false
+#define @cs_assert_project_name@_ASSERT_RELWITHDEBINFO_ENABLED_VALUE false
 #endif
-#ifdef @CS_ASSERT_PROJECT_NAME@_ASSERT_DEBUG_ENABLED
-#define @CS_ASSERT_PROJECT_NAME@_ASSERT_DEBUG_ENABLED_VALUE true
+#ifdef @cs_assert_project_name@_ASSERT_DEBUG_ENABLED
+#define @cs_assert_project_name@_ASSERT_DEBUG_ENABLED_VALUE true
 #else
-#define @CS_ASSERT_PROJECT_NAME@_ASSERT_DEBUG_ENABLED_VALUE false
+#define @cs_assert_project_name@_ASSERT_DEBUG_ENABLED_VALUE false
 #endif
-#ifdef @CS_ASSERT_PROJECT_NAME@_ASSERT_PARANOID_ENABLED
-#define @CS_ASSERT_PROJECT_NAME@_ASSERT_PARANOID_ENABLED_VALUE true
+#ifdef @cs_assert_project_name@_ASSERT_PARANOID_ENABLED
+#define @cs_assert_project_name@_ASSERT_PARANOID_ENABLED_VALUE true
 #else
-#define @CS_ASSERT_PROJECT_NAME@_ASSERT_PARANOID_ENABLED_VALUE false
+#define @cs_assert_project_name@_ASSERT_PARANOID_ENABLED_VALUE false
 #endif
-#ifdef @CS_ASSERT_PROJECT_NAME@_ASSERT_SAFE_MATH_ENABLED
-#define @CS_ASSERT_PROJECT_NAME@_ASSERT_SAFE_MATH_ENABLED_VALUE true
+#ifdef @cs_assert_project_name@_ASSERT_SAFE_MATH_ENABLED
+#define @cs_assert_project_name@_ASSERT_SAFE_MATH_ENABLED_VALUE true
 #else
-#define @CS_ASSERT_PROJECT_NAME@_ASSERT_SAFE_MATH_ENABLED_VALUE false
+#define @cs_assert_project_name@_ASSERT_SAFE_MATH_ENABLED_VALUE false
 #endif
 
-namespace @CS_ASSERT_NAMESPACE@ {
+namespace @cs_assert_namespace@ {
 
   class Asserts {
     public:
     static constexpr bool isAssertReleaseEnabled() {
-      return @CS_ASSERT_PROJECT_NAME@_ASSERT_RELEASE_ENABLED_VALUE;
+      return @cs_assert_project_name@_ASSERT_RELEASE_ENABLED_VALUE;
     }
     static constexpr bool isAssertRelWithDebInfoEnabled() {
-      return @CS_ASSERT_PROJECT_NAME@_ASSERT_RELWITHDEBINFO_ENABLED_VALUE;
+      return @cs_assert_project_name@_ASSERT_RELWITHDEBINFO_ENABLED_VALUE;
     }
     static constexpr bool isAssertDebugEnabled() {
-      return @CS_ASSERT_PROJECT_NAME@_ASSERT_DEBUG_ENABLED_VALUE;
+      return @cs_assert_project_name@_ASSERT_DEBUG_ENABLED_VALUE;
     }
     static constexpr bool isAssertParanoidEnabled() {
-      return @CS_ASSERT_PROJECT_NAME@_ASSERT_PARANOID_ENABLED_VALUE;
+      return @cs_assert_project_name@_ASSERT_PARANOID_ENABLED_VALUE;
     }
     static constexpr bool isAssertSafeMathEnabled() {
-      return @CS_ASSERT_PROJECT_NAME@_ASSERT_SAFE_MATH_ENABLED_VALUE;
+      return @cs_assert_project_name@_ASSERT_SAFE_MATH_ENABLED_VALUE;
     }
 
   };
@@ -85,33 +85,33 @@ namespace @CS_ASSERT_NAMESPACE@ {
 
 // define project assert macros
 
-#ifdef @CS_ASSERT_PROJECT_NAME@_ASSERT_RELEASE_ENABLED
-    #define @CS_ASSERT_PROJECT_NAME@_ASSERT_RELEASE(expr, ...) LIBASSERT_INVOKE(expr, "DEBUG_ASSERT", debug_assertion, , __VA_ARGS__)
+#ifdef @cs_assert_project_name@_ASSERT_RELEASE_ENABLED
+    #define @cs_assert_project_name@_ASSERT_RELEASE(expr, ...) LIBASSERT_INVOKE(expr, "DEBUG_ASSERT", debug_assertion, , __VA_ARGS__)
 #else
-    #define @CS_ASSERT_PROJECT_NAME@_ASSERT_RELEASE(expr, ...) (void)0
+    #define @cs_assert_project_name@_ASSERT_RELEASE(expr, ...) (void)0
 #endif
 
-#ifdef @CS_ASSERT_PROJECT_NAME@_ASSERT_RELWITHDEBINFO_ENABLED
-    #define @CS_ASSERT_PROJECT_NAME@_ASSERT_RELWITHDEBINFO(expr, ...) LIBASSERT_INVOKE(expr, "DEBUG_ASSERT", debug_assertion, , __VA_ARGS__)
+#ifdef @cs_assert_project_name@_ASSERT_RELWITHDEBINFO_ENABLED
+    #define @cs_assert_project_name@_ASSERT_RELWITHDEBINFO(expr, ...) LIBASSERT_INVOKE(expr, "DEBUG_ASSERT", debug_assertion, , __VA_ARGS__)
 #else
-    #define @CS_ASSERT_PROJECT_NAME@_ASSERT_RELWITHDEBINFO(expr, ...) (void)0
+    #define @cs_assert_project_name@_ASSERT_RELWITHDEBINFO(expr, ...) (void)0
 #endif
 
-#ifdef @CS_ASSERT_PROJECT_NAME@_ASSERT_DEBUG_ENABLED
-    #define @CS_ASSERT_PROJECT_NAME@_ASSERT_DEBUG(expr, ...) LIBASSERT_INVOKE(expr, "DEBUG_ASSERT", debug_assertion, , __VA_ARGS__)
+#ifdef @cs_assert_project_name@_ASSERT_DEBUG_ENABLED
+    #define @cs_assert_project_name@_ASSERT_DEBUG(expr, ...) LIBASSERT_INVOKE(expr, "DEBUG_ASSERT", debug_assertion, , __VA_ARGS__)
 #else
-    #define @CS_ASSERT_PROJECT_NAME@_ASSERT_DEBUG(expr, ...) (void)0
+    #define @cs_assert_project_name@_ASSERT_DEBUG(expr, ...) (void)0
 #endif
 
-#ifdef @CS_ASSERT_PROJECT_NAME@_ASSERT_PARANOID_ENABLED
-    #define @CS_ASSERT_PROJECT_NAME@_ASSERT_PARANOID(expr, ...) LIBASSERT_INVOKE(expr, "DEBUG_ASSERT", debug_assertion, , __VA_ARGS__)
+#ifdef @cs_assert_project_name@_ASSERT_PARANOID_ENABLED
+    #define @cs_assert_project_name@_ASSERT_PARANOID(expr, ...) LIBASSERT_INVOKE(expr, "DEBUG_ASSERT", debug_assertion, , __VA_ARGS__)
 #else
-    #define @CS_ASSERT_PROJECT_NAME@_ASSERT_PARANOID(expr, ...) (void)0
+    #define @cs_assert_project_name@_ASSERT_PARANOID(expr, ...) (void)0
 #endif
 
 
-#ifdef @CS_ASSERT_PROJECT_NAME@_ASSERT_SAFE_MATH_ENABLED
-    #define @CS_ASSERT_PROJECT_NAME@_ASSERT_SAFE_MATH(expr, ...) LIBASSERT_INVOKE(expr, "DEBUG_ASSERT", debug_assertion, , __VA_ARGS__)
+#ifdef @cs_assert_project_name@_ASSERT_SAFE_MATH_ENABLED
+    #define @cs_assert_project_name@_ASSERT_SAFE_MATH(expr, ...) LIBASSERT_INVOKE(expr, "DEBUG_ASSERT", debug_assertion, , __VA_ARGS__)
 #else
-    #define @CS_ASSERT_PROJECT_NAME@_ASSERT_SAFE_MATH(expr, ...) (void)0
+    #define @cs_assert_project_name@_ASSERT_SAFE_MATH(expr, ...) (void)0
 #endif

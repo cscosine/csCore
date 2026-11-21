@@ -1,10 +1,11 @@
 cmake_minimum_required(VERSION 3.31)
 
-# before project(): the oldest macOS the binaries run on (the floating-point std::to_chars of Apple's libc++ (cpptrace, libassert))
+# before project(): the oldest macOS the binaries run on (the floating-point std::to_chars of Apple's libc++, used
+# by cpptrace and libassert)
 include(csCMakeSetup)
 cs_macos_deployment_target(13.3)
 
-project(csCoreSol VERSION 1.0.0 LANGUAGES CXX)
+project(csCoreSol VERSION 0.1.0 LANGUAGES CXX)
 
 # add the csCMake system
 include(csCMake)
