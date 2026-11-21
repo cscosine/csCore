@@ -1,4 +1,4 @@
-project(eigenUtilsTest  LANGUAGES CXX)
+project(eigenUtilsTest LANGUAGES CXX)
 
 cs_add_executable(eigenUtilsTest)
 
@@ -6,19 +6,11 @@ include(CTest)
 cs_find_package(eigenUtilsTest PRIVATE Catch2 3 REQUIRED CONFIG)
 include(Catch)
 
-cs_target_sources(eigenUtilsTest
-	PRIVATE
-  TestMatrixShape.cpp
-  TestRotationMatrix.cpp
-  TestIsometryMatrix.cpp
-)
+cs_target_sources(eigenUtilsTest PRIVATE TestMatrixShape.cpp TestRotationMatrix.cpp TestIsometryMatrix.cpp)
 
-cs_target_link_libraries(eigenUtilsTest
-  PRIVATE
-  csCore::core
-  csCore::eigenUtils
-  csCore::testUtils
-  Catch2::Catch2WithMain
+cs_target_link_libraries(
+  eigenUtilsTest
+  PRIVATE csCore::core csCore::eigenUtils csCore::testUtils Catch2::Catch2WithMain
 )
 
 # add to tests

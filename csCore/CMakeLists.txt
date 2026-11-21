@@ -5,27 +5,21 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/assert/cmake/")
 include(csAssert)
 
 # set defaults for Paranoid additional configuration
-csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT RELEASE Paranoid ON)
-csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT RELWITHDEBINFO Paranoid ON)
-csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT DEBUG Paranoid ON)
-csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT PARANOID Paranoid ON)
-csSetAssertDefaultOnForConfig(${PROJECT_NAME} ASSERT SAFE_MATH Paranoid ON)
+cssetassertdefaultonforconfig(${PROJECT_NAME} ASSERT RELEASE Paranoid ON)
+cssetassertdefaultonforconfig(${PROJECT_NAME} ASSERT RELWITHDEBINFO Paranoid ON)
+cssetassertdefaultonforconfig(${PROJECT_NAME} ASSERT DEBUG Paranoid ON)
+cssetassertdefaultonforconfig(${PROJECT_NAME} ASSERT PARANOID Paranoid ON)
+cssetassertdefaultonforconfig(${PROJECT_NAME} ASSERT SAFE_MATH Paranoid ON)
 
-csAssertGenerateProject(csCore csCore) #generate target csCore::csCoreAssert
+csassertgenerateproject(csCore csCore) #generate target csCore::csCoreAssert
 list(POP_BACK CMAKE_MODULE_PATH)
 
 cs_add_library(csCore INTERFACE)
 cs_add_library(csCore::csCore ALIAS csCore)
 
-cs_target_sources(csCore
-	PRIVATE_INSTALL
-)
+cs_target_sources(csCore PRIVATE_INSTALL)
 
-cs_target_link_libraries(csCore
-	INTERFACE
-		csCore::cscmake_base_include
-)
-
+cs_target_link_libraries(csCore INTERFACE csCore::cscmake_base_include)
 
 cs_install_target(csCore COMPONENT csCore)
 
