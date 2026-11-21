@@ -4,8 +4,8 @@
 
 struct foo {
   foo() = default;
-  foo(foo&) = delete;
-  foo(foo&&) {};
+  foo(foo &) = delete;
+  foo(foo &&) {};
 };
 
 TEST_CASE("Constructors", "[constructors]") {
@@ -37,20 +37,20 @@ TEST_CASE("Constructors", "[constructors]") {
   REQUIRE(*o9 == 42);
 
   {
-    csCore::language::optional<int&> o;
+    csCore::language::optional<int &> o;
     REQUIRE(!o);
 
-    csCore::language::optional<int&> oo = o;
+    csCore::language::optional<int &> oo = o;
     REQUIRE(!oo);
   }
 
   {
     auto i = 42;
-    csCore::language::optional<int&> o = i;
+    csCore::language::optional<int &> o = i;
     REQUIRE(o);
     REQUIRE(*o == 42);
 
-    csCore::language::optional<int&> oo = o;
+    csCore::language::optional<int &> oo = o;
     REQUIRE(oo);
     REQUIRE(*oo == 42);
   }

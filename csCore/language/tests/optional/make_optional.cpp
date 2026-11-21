@@ -8,9 +8,7 @@ struct takes_init_and_variadic {
   std::vector<int> v;
   std::tuple<int, int> t;
   template <class... Args>
-  takes_init_and_variadic(std::initializer_list<int> l, Args&&... args)
-      : v(l)
-      , t(std::forward<Args>(args)...) {}
+  takes_init_and_variadic(std::initializer_list<int> l, Args &&...args) : v(l), t(std::forward<Args>(args)...) {}
 };
 
 TEST_CASE("Make optional", "[make_optional]") {
@@ -40,8 +38,8 @@ TEST_CASE("Make optional", "[make_optional]") {
   REQUIRE(std::get<1>(o5->t) == 3);
 
   auto i = 42;
-  auto o6 = tl::make_optional<int&>(i);
-  REQUIRE((std::is_same<decltype(o6), csCore::language::optional<int&>>::value));
+  auto o6 = tl::make_optional<int &>(i);
+  REQUIRE((std::is_same<decltype(o6), csCore::language::optional<int &>>::value));
   REQUIRE(o6);
   REQUIRE(*o6 == 42);
 }

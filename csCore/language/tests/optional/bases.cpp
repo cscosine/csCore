@@ -14,10 +14,10 @@ TEST_CASE("Triviality", "[bases.triviality]") {
 
   {
     struct T {
-      T(const T&) = default;
-      T(T&&) = default;
-      T& operator=(const T&) = default;
-      T& operator=(T&&) = default;
+      T(const T &) = default;
+      T(T &&) = default;
+      T &operator=(const T &) = default;
+      T &operator=(T &&) = default;
       ~T() = default;
     };
     REQUIRE(std::is_trivially_copy_constructible<csCore::language::optional<T>>::value);
@@ -29,14 +29,10 @@ TEST_CASE("Triviality", "[bases.triviality]") {
 
   {
     struct T {
-      T(const T&) {}
-      T(T&&) {};
-      T& operator=(const T&) {
-        return *this;
-      }
-      T& operator=(T&&) {
-        return *this;
-      };
+      T(const T &) {}
+      T(T &&) {};
+      T &operator=(const T &) { return *this; }
+      T &operator=(T &&) { return *this; };
       ~T() {}
     };
     REQUIRE(!std::is_trivially_copy_constructible<csCore::language::optional<T>>::value);
@@ -56,10 +52,10 @@ TEST_CASE("Deletion", "[bases.deletion]") {
 
   {
     struct T {
-      T(const T&) = default;
-      T(T&&) = default;
-      T& operator=(const T&) = default;
-      T& operator=(T&&) = default;
+      T(const T &) = default;
+      T(T &&) = default;
+      T &operator=(const T &) = default;
+      T &operator=(T &&) = default;
       ~T() = default;
     };
     REQUIRE(std::is_copy_constructible<csCore::language::optional<T>>::value);
@@ -71,10 +67,10 @@ TEST_CASE("Deletion", "[bases.deletion]") {
 
   {
     struct T {
-      T(const T&) = delete;
-      T(T&&) = delete;
-      T& operator=(const T&) = delete;
-      T& operator=(T&&) = delete;
+      T(const T &) = delete;
+      T(T &&) = delete;
+      T &operator=(const T &) = delete;
+      T &operator=(T &&) = delete;
     };
     REQUIRE(!std::is_copy_constructible<csCore::language::optional<T>>::value);
     REQUIRE(!std::is_copy_assignable<csCore::language::optional<T>>::value);
@@ -84,10 +80,10 @@ TEST_CASE("Deletion", "[bases.deletion]") {
 
   {
     struct T {
-      T(const T&) = delete;
-      T(T&&) = default;
-      T& operator=(const T&) = delete;
-      T& operator=(T&&) = default;
+      T(const T &) = delete;
+      T(T &&) = default;
+      T &operator=(const T &) = delete;
+      T &operator=(T &&) = default;
     };
     REQUIRE(!std::is_copy_constructible<csCore::language::optional<T>>::value);
     REQUIRE(!std::is_copy_assignable<csCore::language::optional<T>>::value);
@@ -97,10 +93,10 @@ TEST_CASE("Deletion", "[bases.deletion]") {
 
   {
     struct T {
-      T(const T&) = default;
-      T(T&&) = delete;
-      T& operator=(const T&) = default;
-      T& operator=(T&&) = delete;
+      T(const T &) = default;
+      T(T &&) = delete;
+      T &operator=(const T &) = default;
+      T &operator=(T &&) = delete;
     };
     REQUIRE(std::is_copy_constructible<csCore::language::optional<T>>::value);
     REQUIRE(std::is_copy_assignable<csCore::language::optional<T>>::value);

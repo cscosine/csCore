@@ -2,17 +2,14 @@
 #include <csCore/language/Expected.hpp>
 
 struct no_throw {
-  no_throw(std::string i)
-      : i(i) {}
+  no_throw(std::string i) : i(i) {}
   std::string i;
 };
 struct canthrow_move {
-  canthrow_move(std::string i)
-      : i(i) {}
-  canthrow_move(canthrow_move const&) = default;
-  canthrow_move(canthrow_move&& other) noexcept(false)
-      : i(other.i) {}
-  canthrow_move& operator=(canthrow_move&&) = default;
+  canthrow_move(std::string i) : i(i) {}
+  canthrow_move(canthrow_move const &) = default;
+  canthrow_move(canthrow_move &&other) noexcept(false) : i(other.i) {}
+  canthrow_move &operator=(canthrow_move &&) = default;
   std::string i;
 };
 
@@ -20,23 +17,20 @@ bool should_throw = false;
 
 #ifdef TL_EXPECTED_EXCEPTIONS_ENABLED
 struct willthrow_move {
-  willthrow_move(std::string i)
-      : i(i) {}
-  willthrow_move(willthrow_move const&) = default;
-  willthrow_move(willthrow_move&& other)
-      : i(other.i) {
+  willthrow_move(std::string i) : i(i) {}
+  willthrow_move(willthrow_move const &) = default;
+  willthrow_move(willthrow_move &&other) : i(other.i) {
     if (should_throw)
       throw 0;
   }
-  willthrow_move& operator=(willthrow_move&&) = default;
+  willthrow_move &operator=(willthrow_move &&) = default;
   std::string i;
 };
 #endif // TL_EXPECTED_EXCEPTIONS_ENABLED
 
 static_assert(tl::detail::is_swappable<no_throw>::value, "");
 
-template <class T1, class T2>
-void swap_test() {
+template <class T1, class T2> void swap_test() {
   std::string s1 = "abcdefghijklmnopqrstuvwxyz";
   std::string s2 = "zyxwvutsrqponmlkjihgfedcba";
 
@@ -102,10 +96,10 @@ TEST_CASE("swap") {
   csCore::language::expected<no_throw, willthrow_move> b{tl::unexpect, s2};
   should_throw = 1;
 
-#  ifdef _MSC_VER
+#ifdef _MSC_VER
   // this seems to break catch on GCC and Clang
   REQUIRE_THROWS(swap(a, b));
-#  endif
+#endif
 
   REQUIRE(a->i == s1);
   REQUIRE(b.error().i == s2);

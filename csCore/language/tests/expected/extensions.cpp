@@ -4,18 +4,14 @@
 #define TOKENPASTE(x, y) x##y
 #define TOKENPASTE2(x, y) TOKENPASTE(x, y)
 #undef STATIC_REQUIRE
-#define STATIC_REQUIRE(e)                          \
-  constexpr bool TOKENPASTE2(rqure, __LINE__) = e; \
-  (void)TOKENPASTE2(rqure, __LINE__);              \
+#define STATIC_REQUIRE(e)                                                                                              \
+  constexpr bool TOKENPASTE2(rqure, __LINE__) = e;                                                                     \
+  (void)TOKENPASTE2(rqure, __LINE__);                                                                                  \
   REQUIRE(e);
 
 TEST_CASE("Map extensions", "[extensions.map]") {
-  auto mul2 = [](int a) {
-    return a * 2;
-  };
-  auto ret_void = [](int a) {
-    (void)a;
-  };
+  auto mul2 = [](int a) { return a * 2; };
+  auto ret_void = [](int a) { (void)a; };
 
   {
     csCore::language::expected<int, int> e = 21;
@@ -132,21 +128,15 @@ TEST_CASE("Map extensions", "[extensions.map]") {
   // mapping functions which return references
   {
     csCore::language::expected<int, int> e(42);
-    auto ret = e.map([](int& i) -> int& {
-      return i;
-    });
+    auto ret = e.map([](int &i) -> int & { return i; });
     REQUIRE(ret);
     REQUIRE(ret == 42);
   }
 }
 
 TEST_CASE("Map error extensions", "[extensions.map_error]") {
-  auto mul2 = [](int a) {
-    return a * 2;
-  };
-  auto ret_void = [](int a) {
-    (void)a;
-  };
+  auto mul2 = [](int a) { return a * 2; };
+  auto ret_void = [](int a) { (void)a; };
 
   {
     csCore::language::expected<int, int> e = 21;
@@ -395,11 +385,9 @@ TEST_CASE("or_else", "[extensions.or_else]") {
     return csCore::language::expected<int, eptr>(tl::unexpect, std::move(e));
   };
   auto failvoid = [](int) {};
-  auto failvoidptr = [](const eptr&) { /* don't consume */ };
+  auto failvoidptr = [](const eptr &) { /* don't consume */ };
   auto consumeptr = [](eptr) {};
-  auto make_u_int = [](int n) {
-    return std::unique_ptr<int>(new int(n));
-  };
+  auto make_u_int = [](int n) { return std::unique_ptr<int>(new int(n)); };
 
   {
     csCore::language::expected<int, int> e = 21;
@@ -578,12 +566,8 @@ TEST_CASE("or_else", "[extensions.or_else]") {
 }
 
 TEST_CASE("Transform extensions", "[extensions.tronsfarm]") {
-  auto mul2 = [](int a) {
-    return a * 2;
-  };
-  auto ret_void = [](int a) {
-    (void)a;
-  };
+  auto mul2 = [](int a) { return a * 2; };
+  auto ret_void = [](int a) { (void)a; };
 
   {
     csCore::language::expected<int, int> e = 21;
@@ -700,21 +684,15 @@ TEST_CASE("Transform extensions", "[extensions.tronsfarm]") {
   // mapping functions which return references
   {
     csCore::language::expected<int, int> e(42);
-    auto ret = e.transform([](int& i) -> int& {
-      return i;
-    });
+    auto ret = e.transform([](int &i) -> int & { return i; });
     REQUIRE(ret);
     REQUIRE(ret == 42);
   }
 }
 
 TEST_CASE("Transform error extensions", "[extensions.transform_error]") {
-  auto mul2 = [](int a) {
-    return a * 2;
-  };
-  auto ret_void = [](int a) {
-    (void)a;
-  };
+  auto mul2 = [](int a) { return a * 2; };
+  auto ret_void = [](int a) { (void)a; };
 
   {
     csCore::language::expected<int, int> e = 21;
@@ -832,21 +810,15 @@ struct F {
 TEST_CASE("14", "[issue.14]") {
   auto res = csCore::language::expected<S, F>{tl::unexpect, F{}};
 
-  (void)res.map_error([](F f) {
-    (void)f;
-  });
+  (void)res.map_error([](F f) { (void)f; });
 }
 
 TEST_CASE("32", "[issue.32]") {
   int i = 0;
   csCore::language::expected<void, int> a;
-  (void)a.map([&i] {
-    i = 42;
-  });
+  (void)a.map([&i] { i = 42; });
   REQUIRE(i == 42);
 
-  auto x = a.map([] {
-    return 42;
-  });
+  auto x = a.map([] { return 42; });
   REQUIRE(*x == 42);
 }

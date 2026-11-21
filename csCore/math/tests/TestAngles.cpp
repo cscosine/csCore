@@ -53,16 +53,24 @@ TEMPLATE_TEST_CASE("Angles Conversion", "[math]", float32_t, float64_t) {
   REQUIRE_THAT(wrapToPi<S>(degToRad<S>(-359)), Catch::Matchers::WithinAbs(degToRad<S>(1), PRECISION));
   REQUIRE_THAT(wrapToPi<S>(degToRad<S>(-539)), Catch::Matchers::WithinAbs(degToRad<S>(-179), PRECISION));
 
-  REQUIRE_THAT(angleDistance<S>(degToRad<S>(0), degToRad<S>(30)), Catch::Matchers::WithinAbs(degToRad<S>(30), PRECISION));
-  REQUIRE_THAT(angleDistance<S>(degToRad<S>(0), degToRad<S>(-30)), Catch::Matchers::WithinAbs(degToRad<S>(-30), PRECISION));
+  REQUIRE_THAT(angleDistance<S>(degToRad<S>(0), degToRad<S>(30)),
+               Catch::Matchers::WithinAbs(degToRad<S>(30), PRECISION));
+  REQUIRE_THAT(angleDistance<S>(degToRad<S>(0), degToRad<S>(-30)),
+               Catch::Matchers::WithinAbs(degToRad<S>(-30), PRECISION));
 
-  REQUIRE_THAT(angleDistance<S>(degToRad<S>(30), degToRad<S>(30)), Catch::Matchers::WithinAbs(degToRad<S>(0), PRECISION));
-  REQUIRE_THAT(angleDistance<S>(degToRad<S>(30), degToRad<S>(-30)), Catch::Matchers::WithinAbs(degToRad<S>(-60), PRECISION));
-  REQUIRE_THAT(angleDistance<S>(degToRad<S>(30), degToRad<S>(60)), Catch::Matchers::WithinAbs(degToRad<S>(30), PRECISION));
-  REQUIRE_THAT(angleDistance<S>(degToRad<S>(60), degToRad<S>(30)), Catch::Matchers::WithinAbs(degToRad<S>(-30), PRECISION));
+  REQUIRE_THAT(angleDistance<S>(degToRad<S>(30), degToRad<S>(30)),
+               Catch::Matchers::WithinAbs(degToRad<S>(0), PRECISION));
+  REQUIRE_THAT(angleDistance<S>(degToRad<S>(30), degToRad<S>(-30)),
+               Catch::Matchers::WithinAbs(degToRad<S>(-60), PRECISION));
+  REQUIRE_THAT(angleDistance<S>(degToRad<S>(30), degToRad<S>(60)),
+               Catch::Matchers::WithinAbs(degToRad<S>(30), PRECISION));
+  REQUIRE_THAT(angleDistance<S>(degToRad<S>(60), degToRad<S>(30)),
+               Catch::Matchers::WithinAbs(degToRad<S>(-30), PRECISION));
 
-  REQUIRE_THAT(angleDistance<S>(degToRad<S>(30), degToRad<S>(360 + 30)), Catch::Matchers::WithinAbs(degToRad<S>(0), PRECISION));
-  REQUIRE_THAT(angleDistance<S>(degToRad<S>(30 + 720), degToRad<S>(360 + 60)), Catch::Matchers::WithinAbs(degToRad<S>(30), PRECISION));
+  REQUIRE_THAT(angleDistance<S>(degToRad<S>(30), degToRad<S>(360 + 30)),
+               Catch::Matchers::WithinAbs(degToRad<S>(0), PRECISION));
+  REQUIRE_THAT(angleDistance<S>(degToRad<S>(30 + 720), degToRad<S>(360 + 60)),
+               Catch::Matchers::WithinAbs(degToRad<S>(30), PRECISION));
 }
 
 TEMPLATE_TEST_CASE("Angles Conversion Safe Math", "[math]", float32_t, float64_t) {

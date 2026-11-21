@@ -7,25 +7,15 @@
 
 using std::string;
 
-csCore::language::expected<int, string> getInt3(int val) {
-  return val;
-}
+csCore::language::expected<int, string> getInt3(int val) { return val; }
 
-csCore::language::expected<int, string> getInt2(int val) {
-  return val;
-}
+csCore::language::expected<int, string> getInt2(int val) { return val; }
 
-csCore::language::expected<int, string> getInt1() {
-  return getInt2(5).and_then(getInt3);
-}
+csCore::language::expected<int, string> getInt1() { return getInt2(5).and_then(getInt3); }
 
-TEST_CASE("Issue 1", "[issues.1]") {
-  (void)getInt1();
-}
+TEST_CASE("Issue 1", "[issues.1]") { (void)getInt1(); }
 
-csCore::language::expected<int, int> operation1() {
-  return 42;
-}
+csCore::language::expected<int, int> operation1() { return 42; }
 
 csCore::language::expected<std::string, int> operation2(int const val) {
   (void)val;
@@ -41,9 +31,7 @@ TEST_CASE("Issue 17", "[issues.17]") {
 struct a {};
 struct b : a {};
 
-auto doit() -> csCore::language::expected<std::unique_ptr<b>, int> {
-  return tl::make_unexpected(0);
-}
+auto doit() -> csCore::language::expected<std::unique_ptr<b>, int> { return tl::make_unexpected(0); }
 
 TEST_CASE("Issue 23", "[issues.23]") {
   csCore::language::expected<std::unique_ptr<a>, int> msg = doit();
@@ -57,8 +45,8 @@ TEST_CASE("Issue 26", "[issues.26]") {
 
 struct foo {
   foo() = default;
-  foo(foo&) = delete;
-  foo(foo&&) {};
+  foo(foo &) = delete;
+  foo(foo &&) {};
 };
 
 TEST_CASE("Issue 29", "[issues.29]") {
@@ -68,16 +56,10 @@ TEST_CASE("Issue 29", "[issues.29]") {
   REQUIRE(ov->size() == 1);
 }
 
-csCore::language::expected<int, std::string> error() {
-  return tl::make_unexpected(std::string("error1 "));
-}
-std::string maperror(std::string s) {
-  return s + "maperror ";
-}
+csCore::language::expected<int, std::string> error() { return tl::make_unexpected(std::string("error1 ")); }
+std::string maperror(std::string s) { return s + "maperror "; }
 
-TEST_CASE("Issue 30", "[issues.30]") {
-  (void)error().map_error(maperror);
-}
+TEST_CASE("Issue 30", "[issues.30]") { (void)error().map_error(maperror); }
 
 struct i31 {
   int i;
@@ -101,24 +83,18 @@ TEST_CASE("Issue 33", "[issues.33]") {
   REQUIRE(res.error() == 42);
 }
 
-csCore::language::expected<void, std::string> voidWork() {
-  return {};
-}
-csCore::language::expected<int, std::string> work2() {
-  return 42;
-}
+csCore::language::expected<void, std::string> voidWork() { return {}; }
+csCore::language::expected<int, std::string> work2() { return 42; }
 void errorhandling(std::string) {}
 
 TEST_CASE("Issue 34", "[issues.34]") {
   csCore::language::expected<int, std::string> result = voidWork().and_then(work2);
-  (void)result.map_error([&](std::string result) {
-    errorhandling(result);
-  });
+  (void)result.map_error([&](std::string result) { errorhandling(result); });
 }
 
 struct non_copyable {
-  non_copyable(non_copyable&&) = default;
-  non_copyable(non_copyable const&) = delete;
+  non_copyable(non_copyable &&) = default;
+  non_copyable(non_copyable const &) = delete;
   non_copyable() = default;
 };
 
@@ -132,43 +108,32 @@ TEST_CASE("Issue 43", "[issues.43]") {
 }
 
 #if !(__GNUC__ <= 5)
-#  include <memory>
+#include <memory>
 
 using MaybeDataPtr = csCore::language::expected<int, std::unique_ptr<int>>;
 
-MaybeDataPtr test(int i) noexcept {
-  return std::move(i);
-}
+MaybeDataPtr test(int i) noexcept { return std::move(i); }
 
-MaybeDataPtr test2(int i) noexcept {
-  return std::move(i);
-}
+MaybeDataPtr test2(int i) noexcept { return std::move(i); }
 
-TEST_CASE("Issue 49", "[issues.49]") {
-  auto m = test(10).and_then(test2);
-}
+TEST_CASE("Issue 49", "[issues.49]") { auto m = test(10).and_then(test2); }
 #endif
 
-csCore::language::expected<int, std::unique_ptr<std::string>> func() {
-  return 1;
-}
+csCore::language::expected<int, std::unique_ptr<std::string>> func() { return 1; }
 
-TEST_CASE("Issue 61", "[issues.61]") {
-  REQUIRE(func().value() == 1);
-}
+TEST_CASE("Issue 61", "[issues.61]") { REQUIRE(func().value() == 1); }
 
 struct move_tracker {
   int moved = 0;
 
   move_tracker() = default;
 
-  move_tracker(move_tracker const& other) noexcept;
-  move_tracker(move_tracker&& orig) noexcept
-      : moved(orig.moved + 1) {}
+  move_tracker(move_tracker const &other) noexcept;
+  move_tracker(move_tracker &&orig) noexcept : moved(orig.moved + 1) {}
 
-  move_tracker& operator=(move_tracker const& other) noexcept;
+  move_tracker &operator=(move_tracker const &other) noexcept;
 
-  move_tracker& operator=(move_tracker&& orig) noexcept {
+  move_tracker &operator=(move_tracker &&orig) noexcept {
     moved = orig.moved + 1;
     return *this;
   }
@@ -190,11 +155,8 @@ TEST_CASE("Issue 89", "[issues.89]") {
 struct S {
   int i = 0;
   int j = 0;
-  S(int i)
-      : i(i) {}
-  S(int i, int j)
-      : i(i)
-      , j(j) {}
+  S(int i) : i(i) {}
+  S(int i, int j) : i(i), j(j) {}
 };
 
 TEST_CASE("Issue 107", "[issues.107]") {
@@ -229,12 +191,12 @@ public:
   MoveOnly() = default;
 
   // Non-copyable
-  MoveOnly(const MoveOnly&) = delete;
-  MoveOnly& operator=(const MoveOnly&) = delete;
+  MoveOnly(const MoveOnly &) = delete;
+  MoveOnly &operator=(const MoveOnly &) = delete;
 
   // Movable trivially
-  MoveOnly(MoveOnly&&) = default;
-  MoveOnly& operator=(MoveOnly&&) = default;
+  MoveOnly(MoveOnly &&) = default;
+  MoveOnly &operator=(MoveOnly &&) = default;
 };
 
 TEST_CASE("Issue 145", "[issues.145]") {

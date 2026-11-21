@@ -10,8 +10,9 @@ namespace eigenUtils {
 /// @param precision the tolerance
 /// @throw if rot is not a 2x2 matrix or precision < 0 (DEBUG only)
 template <class Derived>
-bool isValidRotationMatrix2D(Eigen::MatrixBase<Derived> const& rot,
-                             typename Derived::Scalar precision = Eigen::NumTraits<typename Derived::Scalar>::dummy_precision());
+bool isValidRotationMatrix2D(
+    Eigen::MatrixBase<Derived> const &rot,
+    typename Derived::Scalar precision = Eigen::NumTraits<typename Derived::Scalar>::dummy_precision());
 
 /// @brief check if a matrix is a valid 3D rotation matrix, i.e., det(R) = 1,
 /// R*R^T = I and R^T*R = I, withing a tolerance
@@ -19,8 +20,9 @@ bool isValidRotationMatrix2D(Eigen::MatrixBase<Derived> const& rot,
 /// @param precision the tolerance
 /// @throw if rot is not a 3x3 matrix or precision < 0 (DEBUG only)
 template <class Derived>
-bool isValidRotationMatrix3D(Eigen::MatrixBase<Derived> const& rot,
-                             typename Derived::Scalar precision = Eigen::NumTraits<typename Derived::Scalar>::dummy_precision());
+bool isValidRotationMatrix3D(
+    Eigen::MatrixBase<Derived> const &rot,
+    typename Derived::Scalar precision = Eigen::NumTraits<typename Derived::Scalar>::dummy_precision());
 
 } // namespace eigenUtils
 } // namespace csCore
