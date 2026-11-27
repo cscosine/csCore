@@ -18,3 +18,5 @@ cs_install_target(testUtils COMPONENT testUtils)
 
 # compile each single header in standalone, ensures includes are self contained
 cs_target_check_installed_headers(testUtils COMPILE_PROFILES cscmake_strict_warnings)
+
+add_subdirectory(tests)

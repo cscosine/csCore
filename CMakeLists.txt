@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 3.31)
 include(csCMakeSetup)
 cs_macos_deployment_target(13.3)
 
-project(csCoreSol VERSION 0.1.1 LANGUAGES CXX)
+project(csCoreSol VERSION 0.1.2 LANGUAGES CXX)
 
 # add the csCMake system
 include(csCMake)
